@@ -39,7 +39,6 @@
       <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
       <PackageReference Include="Serilog.Sinks.Discord" Version="1.2.1" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-      <PackageReference Include="Serilog.Sinks.SyslogMessages" Version="2.0.7" />
       <PackageReference Include="TwitchLib" Version="3.5.3" />
       <PackageReference Include="TwitchLib.EventSub.Websockets" Version="0.3.0" />
       <PackageReference Include="VRCOscLib" Version="1.4.3" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Authentication;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Figgle;
@@ -12,7 +11,6 @@ using Serilog;
 using Serilog.Context;
 using Serilog.Events;
 using Serilog.Sinks.Discord;
-using Serilog.Sinks.Syslog;
 using TwitchLib.EventSub.Websockets.Extensions;
 
 namespace xyz.yewnyx.SubLink;
@@ -86,17 +84,7 @@ internal class Program {
                     .MinimumLevel.Verbose()
                     .WriteTo.File("log/log_.txt", outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
                     .WriteTo.Console(outputTemplate: outputTemplate,
-                        restrictedToMinimumLevel: LogEventLevel.Information)
-                    .WriteTo.TcpSyslog(
-                        host: "log.sublink.tech",
-                        port: 8514,
-                        appName: "SubLink",
-                        framingType: FramingType.OCTET_COUNTING,
-                        facility: Facility.Local6,
-                        secureProtocols: SslProtocols.Tls12 | SslProtocols.Tls13,
-                        restrictedToMinimumLevel: LogEventLevel.Information,
-                        messageIdPropertyName: "ChannelName"
-                    );
+                        restrictedToMinimumLevel: LogEventLevel.Information);
 
                 if (!string.IsNullOrWhiteSpace(webhook.WebhookToken) && webhook.WebhookId != 0) {
                     configuration.WriteTo.Async(a =>
