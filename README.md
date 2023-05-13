@@ -8,6 +8,10 @@ SubLink is an application that helps you create scriptable integrations between 
 
 A big thank you to [CatGirlEddie](https://www.twitch.tv/catgirleddie), my collaborator on the avatar side of SubLink, for her invaluable contributions and expertise to SubLink-compatible avatar creation.
 
+## Discord
+
+If you need help, feel free to reach out on Twitter or on Discord!
+
 ## Featured Streamers
 
 SubLink is used by the following notable streamers (and more):
