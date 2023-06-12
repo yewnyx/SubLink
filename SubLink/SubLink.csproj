@@ -11,7 +11,7 @@
         <Authors>yewnyx</Authors>
         <Product>SubLink</Product>
         <Description>SubLink programmable streamer app</Description>
-        <Copyright>©2022 Yewnyx</Copyright>
+        <Copyright>©2022-present Yewnyx</Copyright>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
