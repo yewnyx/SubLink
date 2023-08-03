@@ -81,6 +81,9 @@ namespace xyz.yewnyx {
                     "BuildSoft.VRChat.Osc.Input",
                     "BuildSoft.VRChat.Osc.Tracking",
                     "BuildSoft.VRChat.Osc.Utility",
+                    "XSNotifications.Enum",
+                    "XSNotifications.Exception",
+                    "XSNotifications.Helpers",
                     "xyz.yewnyx.Globals"
                 );
 
@@ -105,6 +108,7 @@ namespace xyz.yewnyx {
                 Assembly.Load("TwitchLib.EventSub.Core"),
                 Assembly.Load("TwitchLib.EventSub.Websockets"),
                 Assembly.Load("TwitchLib.PubSub"),
+                Assembly.Load("XSNotifications")
             };
 
             foreach (var assembly in additionalAssemblies) {
