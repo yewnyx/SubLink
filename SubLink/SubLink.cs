@@ -4,6 +4,8 @@ using System.Threading.Channels;
 
 logger.Information("Test (delete me)");
 
+var notifier = new XSNotifier();
+
 rules.Twitch.ReactToJoinedChannel(async (channel, botUsername) => {
     logger.Information("User {BotUsername} joined channel {ChannelName}", botUsername, channel);
 });

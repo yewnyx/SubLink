@@ -81,6 +81,7 @@ namespace xyz.yewnyx {
                     "BuildSoft.VRChat.Osc.Input",
                     "BuildSoft.VRChat.Osc.Tracking",
                     "BuildSoft.VRChat.Osc.Utility",
+                    "XSNotifications",
                     "XSNotifications.Enum",
                     "XSNotifications.Exception",
                     "XSNotifications.Helpers",
