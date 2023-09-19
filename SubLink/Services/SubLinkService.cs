@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Scripting.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Serilog;
 using xyz.yewnyx;
 using xyz.yewnyx.SubLink;
@@ -25,10 +26,29 @@ internal class SubLinkService : BackgroundService {
         var provider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
         var script = provider.GetFileInfo("SubLink.cs");
         var scriptFunc = await compiler.CompileSource(script, stoppingToken);
-        
+
+        var ts = sublinkScope.ServiceProvider.GetService<IOptions<TwitchSettings>>();
+        var sps = sublinkScope.ServiceProvider.GetService<IOptions<StreamPadSettings>>();
+        bool twitchConfigured = !string.IsNullOrWhiteSpace(ts!.Value.ClientId) && !string.IsNullOrWhiteSpace(ts.Value.ClientSecret);
+        bool streamPadConfigured = !string.IsNullOrWhiteSpace(sps!.Value.WebSocketUrl) && !string.IsNullOrWhiteSpace(sps.Value.ChannelId);
+        if (!twitchConfigured && !streamPadConfigured)
+        {
+            _logger.Error("You need to set up TwitchService and/or StreamPadService, check settings.json.");
+            return;
+        }
+
+        var streamPadService = sublinkScope.ServiceProvider.GetService<StreamPadService>()!;
         var twitchService = sublinkScope.ServiceProvider.GetService<TwitchService>()!;
+        
         try {
-            await twitchService.Start();
+            if (twitchConfigured)
+            {
+                await twitchService.Start();
+            }
+            if (streamPadConfigured)
+            {
+                await streamPadService.Start();
+            }
             var returnValue = await scriptFunc();
             if (returnValue != null) {
                 _logger.Debug("Return value: {ReturnValue}", CSharpObjectFormatter.Instance.FormatObject(returnValue));
@@ -39,7 +59,14 @@ internal class SubLinkService : BackgroundService {
                 await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken);
             }
         } finally {
-            await twitchService.Stop();
+            if (twitchConfigured)
+            {
+                await twitchService.Stop();
+            }
+            if (streamPadConfigured)
+            {
+                await streamPadService.Stop();
+            }
         }
     }
 }

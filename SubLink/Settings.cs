@@ -12,18 +12,23 @@ public sealed class Settings {
     [JsonPropertyName("Discord"), ConfigurationKeyName("Discord")]
     public DiscordSettings discord { get; init; }
 
+    [JsonPropertyName("StreamPad"), ConfigurationKeyName("StreamPad")]
+    public StreamPadSettings streampad { get; init; }
+
     [JsonPropertyName("SubLink"), ConfigurationKeyName("SubLink")]
     public SubLinkSettings sublink { get; init; }
 
-    
+
     public Settings() {
         twitch = new();
         discord = new();
+        streampad = new();
         sublink = new();
     }
-    public Settings(TwitchSettings twitch, DiscordSettings discord, SubLinkSettings sublink) {
+    public Settings(TwitchSettings twitch, DiscordSettings discord, StreamPadSettings streampad, SubLinkSettings sublink) {
         this.twitch = twitch;
         this.discord = discord;
+        this.streampad = streampad;
         this.sublink = sublink;
     }
 }
@@ -39,7 +44,20 @@ public sealed class DiscordSettings {
     public DiscordSettings(string webhook) => Webhook = webhook;
 }
 
+public sealed class StreamPadSettings
+{
+    [JsonPropertyName("WebSocketUrl"), ConfigurationKeyName("WebSocketUrl")]
+    public string WebSocketUrl { get; init; }
 
+    [JsonPropertyName("ChannelId"), ConfigurationKeyName("ChannelId")]
+    public string ChannelId { get; init; }
+
+    public StreamPadSettings() { }
+
+    public StreamPadSettings(string webSocketUrl, string channelId) =>
+        (WebSocketUrl, ChannelId) = (webSocketUrl, channelId);
+   
+}
 public sealed class SubLinkSettings {
     [JsonPropertyName("Discriminator"), ConfigurationKeyName("Discriminator")]
     public string Discriminator { get; init; }

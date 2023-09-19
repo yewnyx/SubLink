@@ -30,7 +30,8 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 
 1. On the first run, the application will create a `settings.json` file.
 2. Add your `clientid` and `clientsecret` obtained from your Twitch Developer account (or provided to you by CatGirlEddie to the `settings.json` file).
-3. On the second run, the application will automatically authorize through Twitch and save an access token and refresh token to `settings.json`.
+3. Ensure oauth callback is set to http://localhost:50666/authorize/ (see `Services\TwitchService.cs`
+4. On the second run, the application will automatically authorize through Twitch and save an access token and refresh token to `settings.json`.
 
 ```json
 {

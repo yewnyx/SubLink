@@ -43,6 +43,10 @@ internal class Program {
   "Discord": {
     "Webhook": ""
   },
+  "StreamPad": {
+    "WebSocketUrl": "",
+    "ChannelId": "",
+  },
   "SubLink": {
     "Discriminator": {discriminator}
   }
@@ -67,12 +71,14 @@ internal class Program {
                     .Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true)
                     .Configure<TwitchSettings>(context.Configuration.GetSection("Twitch"))
                     .Configure<DiscordSettings>(context.Configuration.GetSection("Discord"))
+                    .Configure<StreamPadSettings>(context.Configuration.GetSection("StreamPad"))
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
                     .AddTwitchLibEventSubWebsockets()
                     .AddHostedService<SubLinkService>()
                     .AddScoped<IRules, Rules>()
                     .AddScoped<ITwitchRules, TwitchRules>()
                     .AddScoped<TwitchService>()
+                    .AddScoped<StreamPadService>()
                     .AddScoped<CompilerService>();
             })
             .UseSerilog((context, configuration) => {
@@ -120,12 +126,7 @@ and                  /____/
 \____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/");
         
         using (var host = CreateHostBuilder(args).Build()) {
-            var ts = host.Services.GetService<IOptions<TwitchSettings>>();
-            if (string.IsNullOrWhiteSpace(ts!.Value.ClientId) || string.IsNullOrWhiteSpace(ts.Value.ClientSecret)) {
-                Console.WriteLine("Your Twitch Client ID and secret are set up incorrectly.");
-                return;
-            }
-            
+            // Start Sublink service, conditionally starting TwitchService and/or StreamPadService
             await host.StartAsync();
             await host.WaitForShutdownAsync();
         }
