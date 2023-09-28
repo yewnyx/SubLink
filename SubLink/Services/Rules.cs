@@ -1,96 +1,47 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TwitchLib.Client.Models;
-using TwitchLib.EventSub.Core.SubscriptionTypes.Channel;
-using TwitchLib.EventSub.Core.SubscriptionTypes.Stream;
+using xyz.yewnyx.SubLink.Kick.Events;
 
 namespace xyz.yewnyx.SubLink;
 
 class Rules : IRules {
-    public ITwitchRules Twitch { get; }
+    public IKickRules Kick { get; }
 
-    public Rules(ITwitchRules twitch) { Twitch = twitch; }
+    public Rules(IKickRules kick) { Kick = kick; }
 }
 
-internal sealed class TwitchRules : ITwitchRules {
-    internal Func<string, string, Task>? OnJoinedChannel;
-    internal Func<ChatMessage, Task>? OnMessageReceived;
-    internal Func<ChannelCheer, Task>? OnCheer;
-    internal Func<ChannelFollow, Task>? OnFollow;
-    internal Func<HypeTrainBegin, Task>? OnHypeTrainBegin;
-    internal Func<HypeTrainEnd, Task>? OnHypeTrainEnd;
-    internal Func<HypeTrainProgress, Task>? OnHypeTrainProgress;
-    internal Func<ChannelPointsCustomRewardRedemption, Task>? OnPointsCustomRewardRedemptionAdd;
-    internal Func<ChannelPointsCustomRewardRedemption, Task>? OnPointsCustomRewardRedemptionUpdate;
-    internal Func<ChannelPollBegin, Task>? OnPollBegin;
-    internal Func<ChannelPollEnd, Task>? OnPollEnd;
-    internal Func<ChannelPollProgress, Task>? OnPollProgress;
-    internal Func<ChannelPredictionBegin, Task>? OnPredictionBegin;
-    internal Func<ChannelPredictionEnd, Task>? OnPredictionEnd;
-    internal Func<ChannelPredictionLock, Task>? OnPredictionLock;
-    internal Func<ChannelPredictionProgress, Task>? OnPredictionProgress;
-    internal Func<ChannelRaid, Task>? OnRaid;
-    internal Func<ChannelSubscribe, Task>? OnSubscribe;
-    internal Func<ChannelSubscriptionEnd, Task>? OnSubscriptionEnd;
-    internal Func<ChannelSubscriptionGift, Task>? OnSubscriptionGift;
-    internal Func<ChannelSubscriptionMessage, Task>? OnSubscriptionMessage;
-    internal Func<ChannelUpdate, Task>? OnChannelUpdate;
-    internal Func<StreamOffline, Task>? OnStreamOffline;
-    internal Func<StreamOnline, Task>? OnStreamOnline;
+internal sealed class KickRules : IKickRules {
+    internal Func<ChatMessageEvent, Task>? OnChatMessage;
+    internal Func<GiftedSubscriptionsEvent, Task>? OnGiftedSubscriptions;
+    internal Func<SubscriptionEvent, Task>? OnSubscription;
+    internal Func<StreamHostEvent, Task>? OnStreamHost;
+    internal Func<UserBannedEvent, Task>? OnUserBanned;
+    internal Func<UserUnbannedEvent, Task>? OnUserUnbanned;
+    internal Func<MessageDeletedEvent, Task>? OnMessageDeleted;
+    internal Func<ChatroomClearEvent, Task>? OnChatroomClear;
+    internal Func<ChatroomUpdatedEvent, Task>? OnChatroomUpdated;
+    internal Func<PollUpdateEvent, Task>? OnPollUpdate;
+    internal Func<PollDeleteEvent, Task>? OnPollDelete;
+    internal Func<PinnedMessageCreatedEvent, Task>? OnPinnedMessageCreated;
+    internal Func<PinnedMessageDeletedEvent, Task>? OnPinnedMessageDeleted;
 
-    void ITwitchRules.ReactToJoinedChannel(Func<string, string, Task> with) { OnJoinedChannel = with; }
-
-    void ITwitchRules.ReactToMessageReceived(Func<ChatMessage, Task> with) { OnMessageReceived = with; }
-
-    void ITwitchRules.ReactToCheer(Func<ChannelCheer, Task> with) { OnCheer = with; }
-
-    void ITwitchRules.ReactToFollow(Func<ChannelFollow, Task> with) { OnFollow = with; }
-
-    void ITwitchRules.ReactToHypeTrainBegin(Func<HypeTrainBegin, Task> with) { OnHypeTrainBegin = with; }
-
-    void ITwitchRules.ReactToHypeTrainEnd(Func<HypeTrainEnd, Task> with) { OnHypeTrainEnd = with; }
-
-    void ITwitchRules.ReactToHypeTrainProgress(Func<HypeTrainProgress, Task> with) { OnHypeTrainProgress = with; }
-
-    void ITwitchRules.ReactToPointsCustomRewardRedemptionAdd(Func<ChannelPointsCustomRewardRedemption, Task> with) {
-        OnPointsCustomRewardRedemptionAdd = with;
+    void IKickRules.ReactToChatMessage(Func<ChatMessageEvent, Task> with) { OnChatMessage = with; }
+    void IKickRules.ReactToGiftedSubscriptions(Func<GiftedSubscriptionsEvent, Task> with) {
+        OnGiftedSubscriptions = with;
     }
-
-    void ITwitchRules.ReactToPointsCustomRewardRedemptionUpdate(Func<ChannelPointsCustomRewardRedemption, Task> with) {
-        OnPointsCustomRewardRedemptionUpdate = with;
+    void IKickRules.ReactToSubscription(Func<SubscriptionEvent, Task> with) { OnSubscription = with; }
+    void IKickRules.ReactToStreamHost(Func<StreamHostEvent, Task> with) { OnStreamHost = with; }
+    void IKickRules.ReactToUserBanned(Func<UserBannedEvent, Task> with) { OnUserBanned = with; }
+    void IKickRules.ReactToUserUnbanned(Func<UserUnbannedEvent, Task> with) { OnUserUnbanned = with; }
+    void IKickRules.ReactToMessageDeleted(Func<MessageDeletedEvent, Task> with) { OnMessageDeleted = with; }
+    void IKickRules.ReactToChatroomClear(Func<ChatroomClearEvent, Task> with) { OnChatroomClear = with; }
+    void IKickRules.ReactToChatroomUpdated(Func<ChatroomUpdatedEvent, Task> with) { OnChatroomUpdated = with; }
+    void IKickRules.ReactToPollUpdate(Func<PollUpdateEvent, Task> with) { OnPollUpdate = with; }
+    void IKickRules.ReactToPollDelete(Func<PollDeleteEvent, Task> with) { OnPollDelete = with; }
+    void IKickRules.ReactToPinnedMessageCreated(Func<PinnedMessageCreatedEvent, Task> with) {
+        OnPinnedMessageCreated = with;
     }
-
-    void ITwitchRules.ReactToPollBegin(Func<ChannelPollBegin, Task> with) { OnPollBegin = with; }
-
-    void ITwitchRules.ReactToPollEnd(Func<ChannelPollEnd, Task> with) { OnPollEnd = with; }
-
-    void ITwitchRules.ReactToPollProgress(Func<ChannelPollProgress, Task> with) { OnPollProgress = with; }
-
-    void ITwitchRules.ReactToPredictionBegin(Func<ChannelPredictionBegin, Task> with) { OnPredictionBegin = with; }
-
-    void ITwitchRules.ReactToPredictionEnd(Func<ChannelPredictionEnd, Task> with) { OnPredictionEnd = with; }
-
-    void ITwitchRules.ReactToPredictionLock(Func<ChannelPredictionLock, Task> with) { OnPredictionLock = with; }
-
-    void ITwitchRules.ReactToPredictionProgress(Func<ChannelPredictionProgress, Task> with) {
-        OnPredictionProgress = with;
+    void IKickRules.ReactToPinnedMessageDeleted(Func<PinnedMessageDeletedEvent, Task> with) {
+        OnPinnedMessageDeleted = with;
     }
-
-    void ITwitchRules.ReactToRaid(Func<ChannelRaid, Task> with) { OnRaid = with; }
-
-    void ITwitchRules.ReactToSubscribe(Func<ChannelSubscribe, Task> with) { OnSubscribe = with; }
-
-    void ITwitchRules.ReactToSubscriptionEnd(Func<ChannelSubscriptionEnd, Task> with) { OnSubscriptionEnd = with; }
-
-    void ITwitchRules.ReactToSubscriptionGift(Func<ChannelSubscriptionGift, Task> with) { OnSubscriptionGift = with; }
-
-    void ITwitchRules.ReactToSubscriptionMessage(Func<ChannelSubscriptionMessage, Task> with) {
-        OnSubscriptionMessage = with;
-    }
-
-    void ITwitchRules.ReactToChannelUpdate(Func<ChannelUpdate, Task> with) { OnChannelUpdate = with; }
-
-    void ITwitchRules.ReactToStreamOffline(Func<StreamOffline, Task> with) { OnStreamOffline = with; }
-
-    void ITwitchRules.ReactToStreamOnline(Func<StreamOnline, Task> with) { OnStreamOnline = with; }
 }

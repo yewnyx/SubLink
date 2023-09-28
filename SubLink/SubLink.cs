@@ -6,20 +6,17 @@ logger.Information("Test (delete me)");
 
 var notifier = new XSNotifier();
 
-rules.Twitch.ReactToJoinedChannel(async (channel, botUsername) => {
-    logger.Information("User {BotUsername} joined channel {ChannelName}", botUsername, channel);
-});
-
-rules.Twitch.ReactToMessageReceived(async chatMessage => {
-    if ("yewnyx".Equals(chatMessage.Username, StringComparison.InvariantCultureIgnoreCase)) {
+rules.Kick.ReactToChatMessage(async chatMessage => {
+    if ("yewnyx".Equals(chatMessage.Sender.Slug, StringComparison.InvariantCultureIgnoreCase)) {
         OscParameter.SendAvatarParameter("JacketToggle", false);
         OscParameter.SendAvatarParameter("Sus", true);
     }
     logger.Information(
-        "Username: {UserName}, Display name: {DisplayName}, User Type: {UserType}, Message: {Message}",
-        chatMessage.Username, chatMessage.DisplayName, chatMessage.UserType, chatMessage.Message);
+        "Username: {UserName}, Slug: {Slug}, Created At: {CreatedAt}, Content: {Content}",
+        chatMessage.Sender.Username, chatMessage.Sender.Slug, chatMessage.CreatedAt, chatMessage.Content);
 });
 
+/*
 rules.Twitch.ReactToCheer(async channelCheer => {
     logger.Information(
         "{UserName} cheered {Bits} bits to {BroadcasterUserName} with {Message}",
@@ -89,3 +86,4 @@ rules.Twitch.ReactToStreamOffline(async streamOffline => {
 rules.Twitch.ReactToStreamOnline(async streamOnline => {
     logger.Information("Streamer {UserName} started a {Type} stream at {StartedAt}", streamOnline.BroadcasterUserName, streamOnline.Type, streamOnline.StartedAt.ToString("F"));
 });
+*/
