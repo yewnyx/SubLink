@@ -2,7 +2,7 @@
 
 # SubLink
 
-SubLink is an application that helps you create scriptable integrations between Twitch and VRChat through OSC. You can customize your `SubLink.cs` file (included with the build) to respond to Twitch events with OSC and more
+SubLink is an application that helps you create scriptable integrations between Kick and VRChat through OSC. You can customize your `SubLink.cs` file (included with the build) to respond to Kick events with OSC and more
 
 ## Special Thanks
 
@@ -14,7 +14,7 @@ If you need help, feel free to reach out on Twitter or on Discord!
 
 ## Featured Streamers
 
-SubLink is used by the following notable streamers (and more):
+[SubLink](https://github.com/yewnyx/SubLink) for Twitch is used by the following notable streamers (and more):
 
 - [Roflgator](https://www.twitch.tv/roflgator)
 - [MurderCrumpet](https://www.twitch.tv/murdercrumpet)
@@ -29,23 +29,28 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 ## Setup
 
 1. On the first run, the application will create a `settings.json` file.
-2. Add your `clientid` and `clientsecret` obtained from your Twitch Developer account (or provided to you by CatGirlEddie to the `settings.json` file).
-3. On the second run, the application will automatically authorize through Twitch and save an access token and refresh token to `settings.json`.
+2. Retrieve your Chatroom ID, using an in-private browser, from the following URL: https://kick.com/api/v2/channels/YOUR_USER_NAME/chatroom
+3. Add the numbers behind `id` in your browser to the `settings.json` file's `ChatroomId` setting.
+4. On the second run, the application will automatically connect to Kick's event API and start receiving events.
 
 ```json
 {
-  "Clientid": "your-client-id",
-  "Clientsecret": "your-client-secret"
+  "ChatroomId": "your-chatroom-id"
 }
 ```
 
 ## Adding Support to Avatars
 
-To add support for SubLink integrations to your VRChat avatars, I recommend using VRChat's avatar parameter drivers to increment an avatar parameter. For instance, when gift subs or bits come in, OSC will set an avatar parameter such as `TwitchCommunityGift` or `TwitchCheer` to the number gifted or cheered.
-
+To add support for SubLink integrations to your VRChat avatars, I recommend using VRChat's avatar parameter drivers to increment an avatar parameter. For instance, when gift subs or bits come in, OSC will set an avatar parameter such as `KickCommunityGift` to the number gifted.
 You can then create an animator layer with a resting state that transitions to a state with a parameter driver using the respective avatar parameter (e.g., `ExplosionQueue`). This animator layer will increment an internal parameter accordingly and reset the (OSC-set) avatar parameter to zero, allowing for manual radial menu fallback triggers.
 
 From there, you can enqueue animations as needed based on the secondary parameters incremented by the parameter driver.
+
+## Events and data types
+
+For more information on the events see [Events.md](https://github.com/LauraRozier/SubLink-Kick/blob/master/Events.md)
+
+For more information on the data types see [Types.md](https://github.com/LauraRozier/SubLink-Kick/blob/master/Types.md)
 
 ## Support
 

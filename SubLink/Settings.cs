@@ -6,8 +6,8 @@ using Microsoft.Extensions.Configuration;
 namespace xyz.yewnyx.SubLink;
 
 public sealed class Settings {
-    [JsonPropertyName("Twitch"), ConfigurationKeyName("Twitch")]
-    public TwitchSettings twitch { get; init; }
+    [JsonPropertyName("Kick"), ConfigurationKeyName("Kick")]
+    public KickSettings kick { get; init; }
 
     [JsonPropertyName("Discord"), ConfigurationKeyName("Discord")]
     public DiscordSettings discord { get; init; }
@@ -15,14 +15,14 @@ public sealed class Settings {
     [JsonPropertyName("SubLink"), ConfigurationKeyName("SubLink")]
     public SubLinkSettings sublink { get; init; }
 
-    
+
     public Settings() {
-        twitch = new();
+        kick = new();
         discord = new();
         sublink = new();
     }
-    public Settings(TwitchSettings twitch, DiscordSettings discord, SubLinkSettings sublink) {
-        this.twitch = twitch;
+    public Settings(KickSettings kick, DiscordSettings discord, SubLinkSettings sublink) {
+        this.kick = kick;
         this.discord = discord;
         this.sublink = sublink;
     }
@@ -49,21 +49,18 @@ public sealed class SubLinkSettings {
     public SubLinkSettings(string discriminator) => Discriminator = discriminator;
 }
 
-public sealed class TwitchSettings {
-    [JsonPropertyName("ClientId"), ConfigurationKeyName("ClientId")]
-    public string ClientId { get; init; }
+public sealed class KickSettings {
+    [JsonPropertyName("PusherKey"), ConfigurationKeyName("PusherKey")]
+    public string PusherKey { get; init; }
 
-    [JsonPropertyName("ClientSecret"), ConfigurationKeyName("ClientSecret")]
-    public string ClientSecret { get; init; }
+    [JsonPropertyName("PusherCluster"), ConfigurationKeyName("PusherCluster")]
+    public string PusherCluster { get; init; }
     
-    [JsonPropertyName("AccessToken"), ConfigurationKeyName("AccessToken")]
-    public string AccessToken { get; init; }
+    [JsonPropertyName("ChatroomId"), ConfigurationKeyName("ChatroomId")]
+    public string ChatroomId { get; init; }
 
-    [JsonPropertyName("RefreshToken"), ConfigurationKeyName("RefreshToken")]
-    public string RefreshToken { get; init; }
+    public KickSettings() { }
 
-    public TwitchSettings() { }
-
-    public TwitchSettings(string clientId, string clientSecret, string accessToken, string refreshToken) => 
-        (ClientId, ClientSecret, AccessToken, RefreshToken) = (clientId, clientSecret, accessToken, refreshToken);
+    public KickSettings(string pusherKey, string pusherCluster, string chatroomId) =>
+        (PusherKey, PusherCluster, ChatroomId) = (pusherKey, pusherCluster, chatroomId);
 }

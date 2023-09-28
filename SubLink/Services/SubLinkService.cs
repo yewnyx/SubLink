@@ -26,9 +26,9 @@ internal class SubLinkService : BackgroundService {
         var script = provider.GetFileInfo("SubLink.cs");
         var scriptFunc = await compiler.CompileSource(script, stoppingToken);
         
-        var twitchService = sublinkScope.ServiceProvider.GetService<TwitchService>()!;
+        var kickService = sublinkScope.ServiceProvider.GetService<KickService>()!;
         try {
-            await twitchService.Start();
+            await kickService.Start();
             var returnValue = await scriptFunc();
             if (returnValue != null) {
                 _logger.Debug("Return value: {ReturnValue}", CSharpObjectFormatter.Instance.FormatObject(returnValue));
@@ -39,7 +39,7 @@ internal class SubLinkService : BackgroundService {
                 await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken);
             }
         } finally {
-            await twitchService.Stop();
+            await kickService.Stop();
         }
     }
 }
