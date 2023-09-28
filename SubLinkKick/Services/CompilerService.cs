@@ -61,19 +61,6 @@ namespace xyz.yewnyx {
                 .WithOptimizationLevel(OptimizationLevel.Debug)
                 .WithDeterministic(true)
                 .WithUsings(
-                    "TwitchLib.EventSub.Core.Models.ChannelGoals",
-                    "TwitchLib.EventSub.Core.Models.ChannelPoints",
-                    "TwitchLib.EventSub.Core.Models.Charity",
-                    "TwitchLib.EventSub.Core.Models.Extensions",
-                    "TwitchLib.EventSub.Core.Models.HypeTrain",
-                    "TwitchLib.EventSub.Core.Models.Polls",
-                    "TwitchLib.EventSub.Core.Models.Predictions",
-                    "TwitchLib.EventSub.Core.Models.Subscriptions",
-                    "TwitchLib.EventSub.Core.SubscriptionTypes.Channel",
-                    "TwitchLib.EventSub.Core.SubscriptionTypes.Drop",
-                    "TwitchLib.EventSub.Core.SubscriptionTypes.Extension",
-                    "TwitchLib.EventSub.Core.SubscriptionTypes.Stream",
-                    "TwitchLib.EventSub.Core.SubscriptionTypes.User",
                     "BuildSoft.VRChat.Osc",
                     "BuildSoft.VRChat.Osc.Avatar",
                     "BuildSoft.VRChat.Osc.Chatbox",
@@ -85,7 +72,9 @@ namespace xyz.yewnyx {
                     "XSNotifications.Enum",
                     "XSNotifications.Exception",
                     "XSNotifications.Helpers",
-                    "xyz.yewnyx.Globals"
+                    "xyz.yewnyx.Globals",
+                    "xyz.yewnyx.SubLink.Kick",
+                    "xyz.yewnyx.SubLink.Kick.Events"
                 );
 
             var assemblyReferences = Net70.References.All.ToList();
@@ -95,20 +84,6 @@ namespace xyz.yewnyx {
                 typeof(Globals).Assembly,
                 Assembly.Load("vrcosclib"),
                 Assembly.Load("BuildSoft.OscCore"),
-                Assembly.Load("TwitchLib.Api"),
-                Assembly.Load("TwitchLib.Api.Core"),
-                Assembly.Load("TwitchLib.Api.Core.Enums"),
-                Assembly.Load("TwitchLib.Api.Core.Interfaces"),
-                Assembly.Load("TwitchLib.Api.Core.Models"),
-                Assembly.Load("TwitchLib.Api.Helix"),
-                Assembly.Load("TwitchLib.Api.Helix.Models"),
-                Assembly.Load("TwitchLib.Client"),
-                Assembly.Load("TwitchLib.Client.Enums"),
-                Assembly.Load("TwitchLib.Client.Models"),
-                Assembly.Load("TwitchLib.Communication"),
-                Assembly.Load("TwitchLib.EventSub.Core"),
-                Assembly.Load("TwitchLib.EventSub.Websockets"),
-                Assembly.Load("TwitchLib.PubSub"),
                 Assembly.Load("XSNotifications")
             };
 

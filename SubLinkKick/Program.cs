@@ -11,7 +11,7 @@ using Serilog;
 using Serilog.Context;
 using Serilog.Events;
 using Serilog.Sinks.Discord;
-using TwitchLib.EventSub.Websockets.Extensions;
+using xyz.yewnyx.SubLink.Kick;
 
 namespace xyz.yewnyx.SubLink;
 
@@ -22,23 +22,10 @@ internal class Program {
             
             var settingsTemplate = """
 {
-  "Twitch": {
-    "ClientId": "",
-    "ClientSecret": "",
-    "AccessToken": "",
-    "RefreshToken": "",
-    "Scopes": [
-      "bits:read",
-      "channel:manage:polls",
-      "channel:manage:redemptions",
-      "channel:read:hype_train",
-      "channel:read:polls",
-      "channel:read:redemptions",
-      "channel:read:subscriptions",
-      "channel:read:vips",
-      "chat:edit",
-      "chat:read"
-    ]
+  "Kick": {
+    "PusherKey": "",
+    "PusherCluster": "",
+    "ChatroomId": ""
   },
   "Discord": {
     "Webhook": ""
@@ -65,14 +52,14 @@ internal class Program {
             .ConfigureServices((context, services) => {
                 services
                     .Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true)
-                    .Configure<TwitchSettings>(context.Configuration.GetSection("Twitch"))
+                    .Configure<KickSettings>(context.Configuration.GetSection("Kick"))
                     .Configure<DiscordSettings>(context.Configuration.GetSection("Discord"))
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
-                    .AddTwitchLibEventSubWebsockets()
+                    .AddSingleton<KickPusherClient>()
                     .AddHostedService<SubLinkService>()
                     .AddScoped<IRules, Rules>()
-                    .AddScoped<ITwitchRules, TwitchRules>()
-                    .AddScoped<TwitchService>()
+                    .AddScoped<IKickRules, KickRules>()
+                    .AddScoped<KickService>()
                     .AddScoped<CompilerService>();
             })
             .UseSerilog((context, configuration) => {
@@ -120,12 +107,16 @@ and                  /____/
 \____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/");
         
         using (var host = CreateHostBuilder(args).Build()) {
-            var ts = host.Services.GetService<IOptions<TwitchSettings>>();
-            if (string.IsNullOrWhiteSpace(ts!.Value.ClientId) || string.IsNullOrWhiteSpace(ts.Value.ClientSecret)) {
-                Console.WriteLine("Your Twitch Client ID and secret are set up incorrectly.");
+            var ks = host.Services.GetService<IOptions<KickSettings>>();
+
+            if (
+                string.IsNullOrWhiteSpace(ks!.Value.PusherKey) ||
+                string.IsNullOrWhiteSpace(ks!.Value.PusherCluster) ||
+                string.IsNullOrWhiteSpace(ks!.Value.ChatroomId)) {
+                Console.WriteLine("Your Kick settings are set up incorrectly.");
                 return;
             }
-            
+
             await host.StartAsync();
             await host.WaitForShutdownAsync();
         }

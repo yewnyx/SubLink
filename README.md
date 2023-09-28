@@ -2,7 +2,7 @@
 
 # SubLink
 
-SubLink is an application that helps you create scriptable integrations between Twitch and VRChat through OSC. You can customize your `SubLink.cs` file (included with the build) to respond to Twitch events with OSC and more
+SubLink is an application for creating scriptable integrations between VRChat and streaming platforms (like Twitch and Kick) through OSC. You can customize your `SubLink.cs` file (included with the build) to respond to stream events with OSC and more.
 
 ## Special Thanks
 
@@ -14,7 +14,7 @@ If you need help, feel free to reach out on Twitter or on Discord!
 
 ## Featured Streamers
 
-SubLink is used by the following notable streamers (and more):
+[SubLink](https://github.com/yewnyx/SubLink) for Twitch is used by the following notable streamers (and more):
 
 - [Roflgator](https://www.twitch.tv/roflgator)
 - [MurderCrumpet](https://www.twitch.tv/murdercrumpet)
@@ -26,7 +26,7 @@ SubLink is currently very stable, and has been for over a year. I'm hitting paus
 
 CatGirlEddie remains actively involved with and the foremost expert on creating and integrating SubLink features and animations into avatars.
 
-## Setup
+## Setup (Twitch)
 
 1. On the first run, the application will create a `settings.json` file.
 2. Add your `clientid` and `clientsecret` obtained from your Twitch Developer account (or provided to you by CatGirlEddie to the `settings.json` file).
@@ -38,6 +38,25 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
   "Clientsecret": "your-client-secret"
 }
 ```
+
+## Setup (Kick)
+
+1. On the first run, the application will create a `settings.json` file.
+2. Retrieve your Chatroom ID, using an in-private browser, from the following URL: https://kick.com/api/v2/channels/YOUR_USER_NAME/chatroom
+3. Add the `PusherKey` and `PusherCluster` settings provided to you in `settings.json`. If you don't have these, you may need to sign up for a developer account.
+4. Add the numbers behind `id` in your browser to the `settings.json` file's `ChatroomId` setting.
+5. On the second run, the application will automatically connect to Kick's event API and start receiving events.
+
+```json
+{
+  "ChatroomId": "your-chatroom-id"
+}
+
+## Kick Events and data types
+
+For more information on the events see [Events.md](Events.md)
+
+For more information on the data types see [Types.md](Types.md)
 
 ## Adding Support to Avatars
 
