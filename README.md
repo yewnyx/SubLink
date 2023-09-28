@@ -41,11 +41,16 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 
 ## Adding Support to Avatars
 
-To add support for SubLink integrations to your VRChat avatars, I recommend using VRChat's avatar parameter drivers to increment an avatar parameter. For instance, when gift subs or bits come in, OSC will set an avatar parameter such as `TwitchCommunityGift` or `TwitchCheer` to the number gifted or cheered.
-
+To add support for SubLink integrations to your VRChat avatars, I recommend using VRChat's avatar parameter drivers to increment an avatar parameter. For instance, when gift subs or bits come in, OSC will set an avatar parameter such as `KickCommunityGift` to the number gifted.
 You can then create an animator layer with a resting state that transitions to a state with a parameter driver using the respective avatar parameter (e.g., `ExplosionQueue`). This animator layer will increment an internal parameter accordingly and reset the (OSC-set) avatar parameter to zero, allowing for manual radial menu fallback triggers.
 
 From there, you can enqueue animations as needed based on the secondary parameters incremented by the parameter driver.
+
+## Events and data types
+
+For more information on the events see [Events.md](https://github.com/LauraRozier/SubLink-Kick/blob/master/Events.md)
+
+For more information on the data types see [Types.md](https://github.com/LauraRozier/SubLink-Kick/blob/master/Types.md)
 
 ## Support
 

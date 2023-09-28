@@ -16,44 +16,11 @@ rules.Kick.ReactToChatMessage(async chatMessage => {
         chatMessage.Sender.Username, chatMessage.Sender.Slug, chatMessage.CreatedAt, chatMessage.Content);
 });
 
+rules.Kick.ReactToGiftedSubscriptions(async giftedSubs => {
+    logger.Information("Gifter {Gifter} gifted {GiftCount} subs", giftedSubs.Gifter, giftedSubs.GetGiftCount());
+});
+
 /*
-rules.Twitch.ReactToCheer(async channelCheer => {
-    logger.Information(
-        "{UserName} cheered {Bits} bits to {BroadcasterUserName} with {Message}",
-        channelCheer.UserName, channelCheer.Bits, channelCheer.BroadcasterUserName, channelCheer.Message);
-});
-
-rules.Twitch.ReactToFollow(async follow => {
-    logger.Information(
-        "{EventDataUserName} followed {EventDataBroadcasterUserName} at {EventDataFollowedAt}",
-        follow.UserName, follow.BroadcasterUserName, follow.FollowedAt);
-});
-
-rules.Twitch.ReactToHypeTrainBegin(async hypeTrainBegin => {
-    logger.Information(
-        "Hype Train for {BroadcasterUserName} began at level {Level}. Progress: {Progress} - {Goal} to next level. Total Points: {Total}",
-        hypeTrainBegin.BroadcasterUserName, hypeTrainBegin.Level, hypeTrainBegin.Progress, hypeTrainBegin.Goal, hypeTrainBegin.Total);
-});
-
-rules.Twitch.ReactToHypeTrainEnd(async hypeTrainEnd => {
-    logger.Information(
-        "Hype Train for {BroadcasterUserName} ended at level {Level}. Total Points: {Total}",
-        hypeTrainEnd.BroadcasterUserName, hypeTrainEnd.Level, hypeTrainEnd.Total);
-});
-
-rules.Twitch.ReactToHypeTrainProgress(async hypeTrainProgress => {
-    logger.Information(
-        "Hype Train for {BroadcasterUserName} progressed to level {Level}. Progress: {Progress} - {Goal} to next level. Total Points: {Total}",
-        hypeTrainProgress.BroadcasterUserName, hypeTrainProgress.Level, hypeTrainProgress.Progress, hypeTrainProgress.Goal, hypeTrainProgress.Total);
-});
-
-rules.Twitch.ReactToPointsCustomRewardRedemptionAdd(async channelPointsCustomRewardRedemption => {
-    var r = channelPointsCustomRewardRedemption;
-            
-    logger.Information("User {DisplayName} ({Login}) redeemed {RewardId} {Title} with message {UserInput}", 
-        r.UserName, r.UserLogin, r.Reward.Id, r.Reward.Title, r.UserInput);
-});
-
 rules.Twitch.ReactToRaid(async channelRaid => {
     logger.Information("{Login} raided you with {ViewerCount} viewers", channelRaid.FromBroadcasterUserName, channelRaid.Viewers);
 });
