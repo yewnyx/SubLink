@@ -90,10 +90,8 @@ internal class Program {
     }
 
     public async Task Run(string[] args) {
-        var programName = FiggleFonts.Slant.Render("SubLink");
-        programName = Regex.Replace(programName, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
-        Console.Write(programName);
-        Console.WriteLine(@"by
+        Console.WriteLine(@"Credits
+----------------------------Credits-----------------------------
 __  __
 \ \/ /__ _      ______  __  ___  __
  \  / _ \ | /| / / __ \/ / / / |/_/
@@ -104,8 +102,17 @@ and                  /____/
   / ____/___ _/ /_   / ____(_)____/ /  / ____/___/ /___/ (_)__
  / /   / __ `/ __/  / / __/ / ___/ /  / __/ / __  / __  / / _ \
 / /___/ /_/ / /_   / /_/ / / /  / /  / /___/ /_/ / /_/ / /  __/
-\____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/");
-        
+\____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/
+and __                           ____              _
+   / /   ____ ___  ___________ _/ __ \____  ____  (_)__  _____
+  / /   / __ `/ / / / ___/ __ `/ /_/ / __ \/_  / / / _ \/ ___/
+ / /___/ /_/ / /_/ / /  / /_/ / _, _/ /_/ / / /_/ /  __/ /    
+/_____/\__,_/\__,_/_/   \__,_/_/ |_|\____/ /___/_/\___/_/
+----------------------------Starting----------------------------");
+        var programName = FiggleFonts.Slant.Render("SubLinkKick");
+        programName = Regex.Replace(programName, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
+        Console.Write(programName);
+        Console.WriteLine("----------------------------------------------------------------");
         using (var host = CreateHostBuilder(args).Build()) {
             var ks = host.Services.GetService<IOptions<KickSettings>>();
 

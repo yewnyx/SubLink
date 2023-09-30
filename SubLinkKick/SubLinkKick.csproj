@@ -9,15 +9,15 @@
         <ApplicationIcon>..\SubLink.ico</ApplicationIcon>
         <RootNamespace>xyz.yewnyx</RootNamespace>
         <Authors>yewnyx</Authors>
-        <Product>SubLink</Product>
-        <Description>SubLink programmable streamer app</Description>
+        <Product>SubLinkKick</Product>
+        <Description>SubLink programmable streamer app (Kick Version)</Description>
         <Copyright>©2022-present Yewnyx</Copyright>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="SubLink.cs" />
-      <None Include="SubLink.cs">
+      <Compile Remove="SubLinkKick.cs" />
+      <None Include="SubLinkKick.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
