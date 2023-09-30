@@ -7,7 +7,7 @@
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
         <ApplicationIcon>..\SubLink.ico</ApplicationIcon>
-        <RootNamespace>xyz.yewnyx</RootNamespace>
+        <RootNamespace>xyz.yewnyx.SubLink</RootNamespace>
         <Authors>yewnyx</Authors>
         <Product>SubLink</Product>
         <Description>SubLink programmable streamer app</Description>
@@ -43,5 +43,9 @@
       <PackageReference Include="TwitchLib.EventSub.Websockets" Version="0.4.0" />
       <PackageReference Include="VRCOscLib" Version="1.4.3" />
       <PackageReference Include="XSNotifications" Version="0.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SubLinkCommon\SubLinkCommon.csproj" />
     </ItemGroup>
 </Project>
