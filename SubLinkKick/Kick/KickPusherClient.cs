@@ -68,19 +68,19 @@ internal sealed class KickPusherClient {
             await _pusher.ConnectAsync();
 
             // Bind to events
-            _pusher.Bind("App\\Events\\ChatMessageEvent",          OnChatMessageEvent);
-            _pusher.Bind("App\\Events\\GiftedSubscriptionsEvent",  OnGiftedSubscriptionsEvent);
-            _pusher.Bind("App\\Events\\SubscriptionEvent",         OnSubscriptionEvent);
-            _pusher.Bind("App\\Events\\StreamHostEvent",           OnStreamHostEvent);
-            _pusher.Bind("App\\Events\\UserBannedEvent",           OnUserBannedEvent);
-            _pusher.Bind("App\\Events\\UserUnbannedEvent",         OnUserUnbannedEvent);
-            _pusher.Bind("App\\Events\\MessageDeletedEvent",       OnMessageDeletedEvent);
-            _pusher.Bind("App\\Events\\ChatroomClearEvent",        OnChatroomClearEvent);
-            _pusher.Bind("App\\Events\\ChatroomUpdatedEvent",      OnChatroomUpdatedEvent);
-            _pusher.Bind("App\\Events\\PollUpdateEvent",           OnPollUpdateEvent);
-            _pusher.Bind("App\\Events\\PollDeleteEvent",           OnPollDeleteEvent);
-            _pusher.Bind("App\\Events\\PinnedMessageCreatedEvent", OnPinnedMessageCreatedEvent);
-            _pusher.Bind("App\\Events\\PinnedMessageDeletedEvent", OnPinnedMessageDeletedEvent);
+            _pusher.Bind(@"App\Events\ChatMessageEvent",          OnChatMessageEvent);
+            _pusher.Bind(@"App\Events\GiftedSubscriptionsEvent",  OnGiftedSubscriptionsEvent);
+            _pusher.Bind(@"App\Events\SubscriptionEvent",         OnSubscriptionEvent);
+            _pusher.Bind(@"App\Events\StreamHostEvent",           OnStreamHostEvent);
+            _pusher.Bind(@"App\Events\UserBannedEvent",           OnUserBannedEvent);
+            _pusher.Bind(@"App\Events\UserUnbannedEvent",         OnUserUnbannedEvent);
+            _pusher.Bind(@"App\Events\MessageDeletedEvent",       OnMessageDeletedEvent);
+            _pusher.Bind(@"App\Events\ChatroomClearEvent",        OnChatroomClearEvent);
+            _pusher.Bind(@"App\Events\ChatroomUpdatedEvent",      OnChatroomUpdatedEvent);
+            _pusher.Bind(@"App\Events\PollUpdateEvent",           OnPollUpdateEvent);
+            _pusher.Bind(@"App\Events\PollDeleteEvent",           OnPollDeleteEvent);
+            _pusher.Bind(@"App\Events\PinnedMessageCreatedEvent", OnPinnedMessageCreatedEvent);
+            _pusher.Bind(@"App\Events\PinnedMessageDeletedEvent", OnPinnedMessageDeletedEvent);
 
             await _pusher.SubscribeAsync($"chatrooms.{chatroomId}.v2");
         } catch (Exception) {
