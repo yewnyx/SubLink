@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using PusherClient;
 using xyz.yewnyx.SubLink.Kick.Events;
 
@@ -120,91 +120,91 @@ internal sealed class KickPusherClient {
         });
 
     private void OnChatMessageEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<ChatMessageEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<ChatMessageEvent>(eventData.Data);
 
         if (data != null)
             ChatMessageEvent?.Invoke(this, new ChatMessageEventArgs { Data = data });
     }
 
     private void OnGiftedSubscriptionsEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<GiftedSubscriptionsEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<GiftedSubscriptionsEvent>(eventData.Data);
 
         if (data != null)
             GiftedSubscriptionsEvent?.Invoke(this, new GiftedSubscriptionsEventArgs { Data = data });
     }
 
     private void OnSubscriptionEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<SubscriptionEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<SubscriptionEvent>(eventData.Data);
 
         if (data != null)
             SubscriptionEvent?.Invoke(this, new SubscriptionEventArgs { Data = data });
     }
 
     private void OnStreamHostEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<StreamHostEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<StreamHostEvent>(eventData.Data);
 
         if (data != null)
             StreamHostEvent?.Invoke(this, new StreamHostEventArgs { Data = data });
     }
 
     private void OnUserBannedEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<UserBannedEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<UserBannedEvent>(eventData.Data);
 
         if (data != null)
             UserBannedEvent?.Invoke(this, new UserBannedEventArgs { Data = data });
     }
 
     private void OnUserUnbannedEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<UserUnbannedEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<UserUnbannedEvent>(eventData.Data);
 
         if (data != null)
             UserUnbannedEvent?.Invoke(this, new UserUnbannedEventArgs { Data = data });
     }
 
     private void OnMessageDeletedEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<MessageDeletedEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<MessageDeletedEvent>(eventData.Data);
 
         if (data != null)
             MessageDeletedEvent?.Invoke(this, new MessageDeletedEventArgs { Data = data });
     }
 
     private void OnChatroomClearEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<ChatroomClearEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<ChatroomClearEvent>(eventData.Data);
 
         if (data != null)
             ChatroomClearEvent?.Invoke(this, new ChatroomClearEventArgs { Data = data });
     }
 
     private void OnChatroomUpdatedEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<ChatroomUpdatedEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<ChatroomUpdatedEvent>(eventData.Data);
 
         if (data != null)
             ChatroomUpdatedEvent?.Invoke(this, new ChatroomUpdatedEventArgs { Data = data });
     }
 
     private void OnPollUpdateEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<PollUpdateEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<PollUpdateEvent>(eventData.Data);
 
         if (data != null)
             PollUpdateEvent?.Invoke(this, new PollUpdateEventArgs { Data = data });
     }
 
     private void OnPollDeleteEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<PollDeleteEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<PollDeleteEvent>(eventData.Data);
 
         if (data != null)
             PollDeleteEvent?.Invoke(this, new PollDeleteEventArgs { Data = data });
     }
 
     private void OnPinnedMessageCreatedEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<PinnedMessageCreatedEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<PinnedMessageCreatedEvent>(eventData.Data);
 
         if (data != null)
             PinnedMessageCreatedEvent?.Invoke(this, new PinnedMessageCreatedEventArgs { Data = data });
     }
 
     private void OnPinnedMessageDeletedEvent(PusherEvent eventData) {
-        var data = JsonConvert.DeserializeObject<PinnedMessageDeletedEvent>(eventData.Data);
+        var data = JsonSerializer.Deserialize<PinnedMessageDeletedEvent>(eventData.Data);
 
         if (data != null)
             PinnedMessageDeletedEvent?.Invoke(this, new PinnedMessageDeletedEventArgs { Data = data });

@@ -1,19 +1,19 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.Kick.Events;
 
 public sealed class GiftedSubscriptionsEvent {
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public string Id { get; set; } = string.Empty;
 
-    [JsonProperty("chatroom_id")]
+    [JsonPropertyName("chatroom_id")]
     public uint ChatroomId { get; set; } = 0;
 
-    [JsonProperty("gifted_usernames")]
+    [JsonPropertyName("gifted_usernames")]
     public string[] Users { get; set; } = Array.Empty<string>();
 
-    [JsonProperty("gifter_username")]
+    [JsonPropertyName("gifter_username")]
     public string Gifter { get; set; } = string.Empty;
 
     public int GetGiftCount() =>

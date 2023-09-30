@@ -1,37 +1,37 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.Kick.Events;
 
 public sealed class PollUpdateEvent {
     public sealed class PollOptionInfo {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public uint Id { get; set; } = 0;
 
-        [JsonProperty("label")]
+        [JsonPropertyName("label")]
         public string Label { get; set; } = string.Empty;
 
-        [JsonProperty("votes")]
+        [JsonPropertyName("votes")]
         public int Votes { get; set; } = 0;
     }
 
     public sealed class PollInfo {
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; } = string.Empty;
 
-        [JsonProperty("options")]
+        [JsonPropertyName("options")]
         public PollOptionInfo[] Options { get; set; } = Array.Empty<PollOptionInfo>();
 
-        [JsonProperty("duration")]
+        [JsonPropertyName("duration")]
         public int Duration { get; set; } = 0;
 
-        [JsonProperty("remaining")]
+        [JsonPropertyName("remaining")]
         public int Remaining { get; set; } = 0;
 
-        [JsonProperty("result_display_duration")]
+        [JsonPropertyName("result_display_duration")]
         public int ResultDisplayDuration { get; set; } = 0;
     }
 
-    [JsonProperty("poll")]
+    [JsonPropertyName("poll")]
     public PollInfo Poll { get; set; } = new();
 }

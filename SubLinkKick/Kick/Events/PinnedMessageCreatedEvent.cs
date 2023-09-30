@@ -1,34 +1,34 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.Kick.Events;
 
 public sealed class PinnedMessageCreatedEvent {
     public sealed class PinnedMessageInfo {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
 
-        [JsonProperty("chatroom_id")]
+        [JsonPropertyName("chatroom_id")]
         public uint ChatroomId { get; set; } = 0;
 
-        [JsonProperty("content")]
+        [JsonPropertyName("content")]
         public string Content { get; set; } = string.Empty;
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; } = string.Empty;
 
-        [JsonProperty("created_at")]
+        [JsonPropertyName("created_at")]
         public string CreatedAt { get; set; } = string.Empty;
 
-        [JsonProperty("sender")]
+        [JsonPropertyName("sender")]
         public KickUser Sender { get; set; } = new();
 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public object Metadata { get; set; } = new();
     }
 
-    [JsonProperty("message")]
+    [JsonPropertyName("message")]
     public PinnedMessageInfo Message { get; set; } = new();
 
-    [JsonProperty("duration")]
+    [JsonPropertyName("duration")]
     public string Duration { get; set; } = string.Empty;
 }

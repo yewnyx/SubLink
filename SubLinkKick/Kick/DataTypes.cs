@@ -1,48 +1,48 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.Kick;
 
 public sealed class KickBadge {
-    [JsonProperty("type")]
+    [JsonPropertyName("type")]
     public string Type { get; set; } = string.Empty;
 
-    [JsonProperty("text")]
+    [JsonPropertyName("text")]
     public string Text { get; set; } = string.Empty;
 
-    [JsonProperty("count")]
+    [JsonPropertyName("count")]
     public int Count { get; set; } = 0;
 }
 
 public sealed class KickIdentity {
-    [JsonProperty("color")]
+    [JsonPropertyName("color")]
     public string Color { get; set; } = string.Empty;
 
-    [JsonProperty("badges")]
+    [JsonPropertyName("badges")]
     public KickBadge[] Badges { get; set; } = Array.Empty<KickBadge>();
 }
 
 public sealed class KickUser {
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public string Id { get; set; } = string.Empty;
 
-    [JsonProperty("username")]
+    [JsonPropertyName("username")]
     public string Username { get; set; } = string.Empty;
 
-    [JsonProperty("slug")]
+    [JsonPropertyName("slug")]
     public string Slug { get; set; } = string.Empty;
 
-    [JsonProperty("identity")]
+    [JsonPropertyName("identity")]
     public KickIdentity Identity { get; set; } = new();
 }
 
 public sealed class KickUserShort {
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public uint Id { get; set; } = 0;
 
-    [JsonProperty("username")]
+    [JsonPropertyName("username")]
     public string Username { get; set; } = string.Empty;
 
-    [JsonProperty("slug")]
+    [JsonPropertyName("slug")]
     public string Slug { get; set; } = string.Empty;
 }

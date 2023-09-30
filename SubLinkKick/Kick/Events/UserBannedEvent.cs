@@ -1,17 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.Kick.Events;
 
 public sealed class UserBannedEvent {
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public string Id { get; set; } = string.Empty;
 
-    [JsonProperty("user")]
+    [JsonPropertyName("user")]
     public KickUserShort User { get; set; } = new();
 
-    [JsonProperty("banned_by")]
+    [JsonPropertyName("banned_by")]
     public KickUserShort BannedBy { get; set; } = new();
 
-    [JsonProperty("expires_at")]
+    [JsonPropertyName("expires_at")]
     public string ExpiresAt { get; set; } = string.Empty;
 }

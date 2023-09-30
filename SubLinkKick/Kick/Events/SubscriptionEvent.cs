@@ -1,17 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.Kick.Events;
 
 public sealed class SubscriptionEvent {
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public string Id { get; set; } = string.Empty;
 
-    [JsonProperty("chatroom_id")]
+    [JsonPropertyName("chatroom_id")]
     public uint ChatroomId { get; set; } = 0;
 
-    [JsonProperty("username")]
+    [JsonPropertyName("username")]
     public string Username { get; set; } = string.Empty;
 
-    [JsonProperty("months")]
+    [JsonPropertyName("months")]
     public uint Months { get; set; } = 0;
 }
