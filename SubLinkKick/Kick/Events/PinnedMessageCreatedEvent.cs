@@ -3,7 +3,7 @@
 namespace xyz.yewnyx.SubLink.Kick.Events;
 
 public sealed class PinnedMessageCreatedEvent {
-    public sealed class MessageInfo {
+    public sealed class PinnedMessageInfo {
         [JsonProperty("id")]
         public string Id { get; set; } = string.Empty;
 
@@ -27,7 +27,7 @@ public sealed class PinnedMessageCreatedEvent {
     }
 
     [JsonProperty("message")]
-    public MessageInfo Message { get; set; } = new();
+    public PinnedMessageInfo Message { get; set; } = new();
 
     [JsonProperty("duration")]
     public string Duration { get; set; } = string.Empty;

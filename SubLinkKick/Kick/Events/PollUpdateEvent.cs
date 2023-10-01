@@ -31,4 +31,7 @@ public sealed class PollUpdateEvent {
         [JsonProperty("result_display_duration")]
         public int ResultDisplayDuration { get; set; } = 0;
     }
+
+    [JsonProperty("poll")]
+    public PollInfo Poll { get; set; } = new();
 }
