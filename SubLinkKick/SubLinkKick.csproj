@@ -16,8 +16,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="SubLinkKick.cs" />
-      <None Include="SubLinkKick.cs">
+      <Compile Remove="SubLink.cs" />
+      <None Include="SubLink.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

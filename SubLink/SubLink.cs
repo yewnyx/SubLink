@@ -2,9 +2,11 @@
 using System;
 using System.Threading.Channels;
 
-logger.Information("Test (delete me)");
-
 var notifier = new XSNotifier();
+
+#if SUBLINK_TWITCH
+
+logger.Information("Twitch integration enabled");
 
 twitch.ReactToJoinedChannel(async (channel, botUsername) => {
     logger.Information("User {BotUsername} joined channel {ChannelName}", botUsername, channel);
@@ -89,3 +91,5 @@ twitch.ReactToStreamOffline(async streamOffline => {
 twitch.ReactToStreamOnline(async streamOnline => {
     logger.Information("Streamer {UserName} started a {Type} stream at {StartedAt}", streamOnline.BroadcasterUserName, streamOnline.Type, streamOnline.StartedAt.ToString("F"));
 });
+
+#endif

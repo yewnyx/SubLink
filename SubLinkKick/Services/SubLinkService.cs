@@ -23,7 +23,7 @@ internal class SubLinkService : BackgroundService {
 
         var compiler = sublinkScope.ServiceProvider.GetService<CompilerService>()!;
         var provider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
-        var script = provider.GetFileInfo("SubLinkKick.cs");
+        var script = provider.GetFileInfo("SubLink.cs");
         var scriptFunc = await compiler.CompileSource(script, stoppingToken);
         
         var kickService = sublinkScope.ServiceProvider.GetService<KickService>()!;

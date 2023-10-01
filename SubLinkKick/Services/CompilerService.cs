@@ -50,7 +50,8 @@ namespace xyz.yewnyx {
                     SourceText.From(scriptStream, Encoding.UTF8),
                     CSharpParseOptions.Default
                         .WithLanguageVersion(LanguageVersion.Latest)
-                        .WithKind(SourceCodeKind.Script),
+                        .WithKind(SourceCodeKind.Script)
+                        .WithPreprocessorSymbols("SUBLINK_KICK"),
                     fileInfo.PhysicalPath!,
                     stoppingToken);
             }

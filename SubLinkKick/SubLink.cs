@@ -2,9 +2,11 @@
 using System;
 using System.Threading.Channels;
 
-logger.Information("Test (delete me)");
-
 var notifier = new XSNotifier();
+
+#if SUBLINK_KICK
+
+logger.Information("Kick integration enabled");
 
 kick.ReactToChatMessage(async chatMessage => {
     if ("yewnyx".Equals(chatMessage.Sender.Slug, StringComparison.InvariantCultureIgnoreCase)) {
@@ -91,3 +93,5 @@ kick.ReactToPinnedMessageCreated(async pinnedMessage => {
 kick.ReactToPinnedMessageDeleted(async pinnedMessage => {
     logger.Information("Pinned message was deleted");
 });
+
+#endif
