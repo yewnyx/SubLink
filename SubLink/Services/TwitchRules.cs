@@ -6,12 +6,6 @@ using TwitchLib.EventSub.Core.SubscriptionTypes.Stream;
 
 namespace xyz.yewnyx.SubLink;
 
-class Rules : IRules {
-    public ITwitchRules Twitch { get; }
-
-    public Rules(ITwitchRules twitch) { Twitch = twitch; }
-}
-
 internal sealed class TwitchRules : ITwitchRules {
     internal Func<string, string, Task>? OnJoinedChannel;
     internal Func<ChatMessage, Task>? OnMessageReceived;

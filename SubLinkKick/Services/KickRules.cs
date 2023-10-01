@@ -4,12 +4,6 @@ using xyz.yewnyx.SubLink.Kick.Events;
 
 namespace xyz.yewnyx.SubLink;
 
-class Rules : IRules {
-    public IKickRules Kick { get; }
-
-    public Rules(IKickRules kick) { Kick = kick; }
-}
-
 internal sealed class KickRules : IKickRules {
     internal Func<ChatMessageEvent, Task>? OnChatMessage;
     internal Func<GiftedSubscriptionsEvent, Task>? OnGiftedSubscriptions;

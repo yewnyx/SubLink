@@ -21,7 +21,7 @@ internal sealed partial class KickService {
 
     private void OnChatMessageEvent(object? sender, Kick.ChatMessageEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnChatMessage: { } callback } })
+            if (_rules is KickRules { OnChatMessage: { } callback })
                 await callback(e.Data);
 
             //_logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -30,7 +30,7 @@ internal sealed partial class KickService {
 
     private void OnGiftedSubscriptionsEvent(object? sender, Kick.GiftedSubscriptionsEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnGiftedSubscriptions: { } callback } })
+            if (_rules is KickRules { OnGiftedSubscriptions: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -39,7 +39,7 @@ internal sealed partial class KickService {
 
     private void OnSubscriptionEvent(object? sender, Kick.SubscriptionEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnSubscription: { } callback } })
+            if (_rules is KickRules { OnSubscription: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -48,7 +48,7 @@ internal sealed partial class KickService {
 
     private void OnStreamHostEvent(object? sender, Kick.StreamHostEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnStreamHost: { } callback } })
+            if (_rules is KickRules { OnStreamHost: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -57,7 +57,7 @@ internal sealed partial class KickService {
 
     private void OnUserBannedEvent(object? sender, Kick.UserBannedEventArgs e)  {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnUserBanned: { } callback } })
+            if (_rules is KickRules { OnUserBanned: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -66,7 +66,7 @@ internal sealed partial class KickService {
 
     private void OnUserUnbannedEvent(object? sender, Kick.UserUnbannedEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnUserUnbanned: { } callback } })
+            if (_rules is KickRules { OnUserUnbanned: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -75,7 +75,7 @@ internal sealed partial class KickService {
 
     private void OnMessageDeletedEvent(object? sender, Kick.MessageDeletedEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnMessageDeleted: { } callback } })
+            if (_rules is KickRules { OnMessageDeleted: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -84,7 +84,7 @@ internal sealed partial class KickService {
 
     private void OnChatroomClearEvent(object? sender, Kick.ChatroomClearEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnChatroomClear: { } callback } })
+            if (_rules is KickRules { OnChatroomClear: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -93,7 +93,7 @@ internal sealed partial class KickService {
 
     private void OnChatroomUpdatedEvent(object? sender, Kick.ChatroomUpdatedEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnChatroomUpdated: { } callback } })
+            if (_rules is KickRules { OnChatroomUpdated: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -102,7 +102,7 @@ internal sealed partial class KickService {
 
     private void OnPollUpdateEvent(object? sender, Kick.PollUpdateEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnPollUpdate: { } callback } })
+            if (_rules is KickRules { OnPollUpdate: { } callback })
                 await callback(e.Data);
 
             //_logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -111,7 +111,7 @@ internal sealed partial class KickService {
 
     private void OnPollDeleteEvent(object? sender, Kick.PollDeleteEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnPollDelete: { } callback } })
+            if (_rules is KickRules { OnPollDelete: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -120,7 +120,7 @@ internal sealed partial class KickService {
 
     private void OnPinnedMessageCreatedEvent(object? sender, Kick.PinnedMessageCreatedEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnPinnedMessageCreated: { } callback } })
+            if (_rules is KickRules { OnPinnedMessageCreated: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -129,7 +129,7 @@ internal sealed partial class KickService {
 
     private void OnPinnedMessageDeletedEvent(object? sender, Kick.PinnedMessageDeletedEventArgs e) {
         Task.Run(async () => {
-            if (_rules is { Kick: KickRules { OnPinnedMessageDeleted: { } callback } })
+            if (_rules is KickRules { OnPinnedMessageDeleted: { } callback })
                 await callback(e.Data);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);

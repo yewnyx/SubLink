@@ -8,11 +8,6 @@ using TwitchLib.EventSub.Core.SubscriptionTypes.Stream;
 namespace xyz.yewnyx.SubLink; 
 
 [PublicAPI]
-public interface IRules {
-    ITwitchRules Twitch { get; }
-}
-
-[PublicAPI]
 public interface ITwitchRules {
     public void ReactToJoinedChannel(Func<string, string, Task> with);
     public void ReactToMessageReceived(Func<ChatMessage, Task> with);

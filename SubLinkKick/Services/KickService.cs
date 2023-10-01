@@ -22,7 +22,7 @@ internal sealed partial class KickService
 
     private readonly KickPusherClient _kick;
 
-    private readonly IRules _rules;
+    private readonly IKickRules _rules;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Shhh")]
     private IServiceScope? _kickLoggedInScope;
@@ -34,7 +34,7 @@ internal sealed partial class KickService
         IOptionsMonitor<KickSettings> settingsMonitor,
         IServiceProvider serviceProvider,
         KickPusherClient kickPusherClient,
-        IRules rules)
+        IKickRules rules)
     {
 
         Globals.serviceProvider = serviceProvider;

@@ -24,15 +24,15 @@ namespace xyz.yewnyx {
         private readonly ILogger _logger;
         
         [UsedImplicitly]
-        private readonly IRules _rules;
+        private readonly IKickRules _kick;
 
         private AssemblyLoadContext? _assemblyLoadContext;
 
-        public CompilerService(ILogger logger, IRules rules) {
+        public CompilerService(ILogger logger, IKickRules kick) {
             _logger = logger;
-            _rules = rules;
-            
-            Globals.rules = _rules;
+            _kick = kick;
+
+            Globals.kick = kick;
         }
 
         public async Task<Func<Task<object?>>> CompileSource(IFileInfo fileInfo, CancellationToken stoppingToken) {

@@ -39,7 +39,7 @@ internal sealed partial class TwitchService {
     private readonly TwitchClient _client;
     private readonly EventSubWebsocketClient _eventSub;
 
-    private readonly IRules _rules;
+    private readonly ITwitchRules _rules;
     
     private string? ChannelName;
     private string? ChannelId;
@@ -53,7 +53,7 @@ internal sealed partial class TwitchService {
         IOptionsMonitor<TwitchSettings> settingsMonitor,
         IServiceProvider serviceProvider,
         EventSubWebsocketClient eventSub,
-        IRules rules) {
+        ITwitchRules rules) {
 
         Globals.serviceProvider = serviceProvider;
         

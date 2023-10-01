@@ -13,5 +13,5 @@ public static class Globals {
     public static IServiceProvider serviceProvider { get; internal set; } = null!;
 
     [UsedImplicitly] 
-    public static IRules rules { get; internal set; } = null!;
+    public static ITwitchRules twitch { get; internal set; } = null!;
 }

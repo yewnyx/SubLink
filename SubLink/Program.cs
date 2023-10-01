@@ -70,7 +70,6 @@ internal class Program {
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
                     .AddTwitchLibEventSubWebsockets()
                     .AddHostedService<SubLinkService>()
-                    .AddScoped<IRules, Rules>()
                     .AddScoped<ITwitchRules, TwitchRules>()
                     .AddScoped<TwitchService>()
                     .AddScoped<CompilerService>();

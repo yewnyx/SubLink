@@ -6,11 +6,6 @@ using xyz.yewnyx.SubLink.Kick.Events;
 namespace xyz.yewnyx.SubLink; 
 
 [PublicAPI]
-public interface IRules {
-    IKickRules Kick { get; }
-}
-
-[PublicAPI]
 public interface IKickRules {
     public void ReactToChatMessage(Func<ChatMessageEvent, Task> with);
     public void ReactToGiftedSubscriptions(Func<GiftedSubscriptionsEvent, Task> with);
