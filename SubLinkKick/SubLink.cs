@@ -18,39 +18,76 @@ rules.Kick.ReactToChatMessage(async chatMessage => {
 
 rules.Kick.ReactToGiftedSubscriptions(async giftedSubs => {
     logger.Information("Gifter {Gifter} gifted {GiftCount} subs", giftedSubs.Gifter, giftedSubs.GetGiftCount());
+
+    switch(giftedSubs.GetGiftCount()) {
+        case 2: {
+            OscParameter.SendAvatarParameter("BoobaGrow", true);
+            break;
+        }
+        case 3: {
+            OscParameter.SendAvatarParameter("BulgeGrow", true);
+            break;
+        }
+        case 5: {
+            OscParameter.SendAvatarParameter("Outfit", 1);
+            break;
+        }
+        case 6: {
+            OscParameter.SendAvatarParameter("Outfit", 2);
+            break;
+        }
+        default: break;
+    }
 });
 
-/*
-rules.Twitch.ReactToRaid(async channelRaid => {
-    logger.Information("{Login} raided you with {ViewerCount} viewers", channelRaid.FromBroadcasterUserName, channelRaid.Viewers);
+rules.Kick.ReactToSubscription(async sub => {
+    logger.Information("Subscription {Username} subscribed for {Months} months", sub.Username, sub.Months);
 });
 
-rules.Twitch.ReactToSubscribe(async channelSubscribe => {
-    logger.Information("New subscription: User {UserName} ({Login}) {WasGift} at tier \"{Tier}\" ",
-        channelSubscribe.UserName, channelSubscribe.UserLogin, channelSubscribe.IsGift ? "was gifted a sub" : "subscribed", channelSubscribe.Tier);
-});
-
-rules.Twitch.ReactToSubscriptionGift(async channelSubscriptionGift => {
+rules.Kick.ReactToStreamHost(async streamHost => {
     logger.Information(
-        "User {UserName} ({Login}) gifted {Total} \"{Tier}\" subs - they have gifted {CumulativeTotal} subs total",
-        channelSubscriptionGift.UserName, channelSubscriptionGift.UserId, channelSubscriptionGift.Total, channelSubscriptionGift.Tier, channelSubscriptionGift.CumulativeTotal);
+        "Hosting {HostUsername} with {NumberViewers} viewers",
+        streamHost.HostUsername, streamHost.NumberViewers);
 });
 
-rules.Twitch.ReactToSubscriptionMessage(async channelSubscriptionMessage => {
+rules.Kick.ReactToUserBanned(async banned => {
     logger.Information(
-        "User {UserName} ({Login}) resubscribed at tier \"{Tier}\" for {Months} months (streak: {Streak}) with message: \"{Message}\"",
-        channelSubscriptionMessage.UserName, channelSubscriptionMessage.UserLogin, channelSubscriptionMessage.Tier, channelSubscriptionMessage.DurationMonths, channelSubscriptionMessage.StreakMonths, channelSubscriptionMessage.Message);
+        "User {UserUsername} got banned by {ModUsername} until {ExpiresAt}",
+        banned.User.Username, banned.BannedBy.Username, banned.ExpiresAt);
 });
 
-rules.Twitch.ReactToChannelUpdate(async channelUpdate => {
-    logger.Information("Streamer {UserName} updated with title: \"{Title}\" category: \"{category}\"", channelUpdate.BroadcasterUserName, channelUpdate.CategoryName, channelUpdate.Title);
+rules.Kick.ReactToUserUnbanned(async unbanned => {
+    logger.Information(
+        "User {UserUsername} got unbanned by {ModUsername}",
+        unbanned.User.Username, unbanned.UnbannedBy.Username);
 });
 
-rules.Twitch.ReactToStreamOffline(async streamOffline => {
-    logger.Information("Streamer {UserName} stopped streaming", streamOffline.BroadcasterUserName);
+rules.Kick.ReactToMessageDeleted(async deletedMessage => {
+    logger.Information("Message ID {Id} got deleted", deletedMessage.Message.Id);
 });
 
-rules.Twitch.ReactToStreamOnline(async streamOnline => {
-    logger.Information("Streamer {UserName} started a {Type} stream at {StartedAt}", streamOnline.BroadcasterUserName, streamOnline.Type, streamOnline.StartedAt.ToString("F"));
+rules.Kick.ReactToChatroomClear(async chatroomClear => {
+    logger.Information("Chatroom was cleared");
 });
-*/
+
+rules.Kick.ReactToChatroomUpdated(async chatroomUpdate => {
+    logger.Information("Chatroom settings have been updated");
+});
+
+rules.Kick.ReactToPollUpdate(async pollUpdate => {
+    logger.Information("Poll has been updated");
+});
+
+rules.Kick.ReactToPollDelete(async pollDelete => {
+    logger.Information("Poll was deleted");
+});
+
+rules.Kick.ReactToPinnedMessageCreated(async pinnedMessage => {
+    logger.Information(
+        "Message ID {Id} has beenn pinned for {Duration} seconds",
+        pinnedMessage.Message.Id, pinnedMessage.Duration);
+});
+
+rules.Kick.ReactToPinnedMessageDeleted(async pinnedMessage => {
+    logger.Information("Pinned message was deleted");
+});
