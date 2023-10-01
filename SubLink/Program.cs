@@ -40,6 +40,11 @@ internal class Program {
       "chat:read"
     ]
   },
+  "Kick": {
+    "PusherKey": "",
+    "PusherCluster": "",
+    "ChatroomId": ""
+  },
   "Discord": {
     "Webhook": ""
   },

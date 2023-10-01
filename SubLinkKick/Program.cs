@@ -22,6 +22,24 @@ internal class Program {
             
             var settingsTemplate = """
 {
+  "Twitch": {
+    "ClientId": "",
+    "ClientSecret": "",
+    "AccessToken": "",
+    "RefreshToken": "",
+    "Scopes": [
+      "bits:read",
+      "channel:manage:polls",
+      "channel:manage:redemptions",
+      "channel:read:hype_train",
+      "channel:read:polls",
+      "channel:read:redemptions",
+      "channel:read:subscriptions",
+      "channel:read:vips",
+      "chat:edit",
+      "chat:read"
+    ]
+  },
   "Kick": {
     "PusherKey": "",
     "PusherCluster": "",
