@@ -82,6 +82,9 @@ internal partial class Program {
             .UseSerilog((context, configuration) => {
                 var webhook = context.Configuration.GetSection("Discord").Get<DiscordSettings>();
 
+                if (webhook == null)
+                    return;
+
                 const string outputTemplate = "[{Timestamp:HH:mm:ss} {Level}] {Message:l}{NewLine}{Exception}";
 
                 configuration

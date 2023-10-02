@@ -44,7 +44,8 @@ internal sealed partial class TwitchService {
     private string? ChannelName;
     private string? ChannelId;
 
-    private IServiceScope _twitchLoggedInScope;
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Shhh")]
+    private IServiceScope? _twitchLoggedInScope;
     
     public TwitchService(
         ILogger logger,
@@ -298,6 +299,8 @@ internal sealed partial class TwitchService {
         var json = await File.ReadAllTextAsync("settings.json");
         var j = JsonNode.Parse(json,
             documentOptions: new JsonDocumentOptions {CommentHandling = JsonCommentHandling.Skip});
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         j["Twitch"]["AccessToken"] = accessToken;
         j["Twitch"]["RefreshToken"] = refreshToken;
 
@@ -308,6 +311,7 @@ internal sealed partial class TwitchService {
         _api.Settings.AccessToken = accessToken;
         
         _twitchLoggedInScope = _serviceScopeFactory.CreateScope();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
     }
 }
 

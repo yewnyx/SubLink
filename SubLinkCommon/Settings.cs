@@ -44,7 +44,9 @@ public sealed class TwitchSettings {
     [JsonPropertyName("RefreshToken"), ConfigurationKeyName("RefreshToken")]
     public string RefreshToken { get; init; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public TwitchSettings() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     public TwitchSettings(string clientId, string clientSecret, string accessToken, string refreshToken) =>
         (ClientId, ClientSecret, AccessToken, RefreshToken) = (clientId, clientSecret, accessToken, refreshToken);
@@ -60,7 +62,9 @@ public sealed class KickSettings {
     [JsonPropertyName("ChatroomId"), ConfigurationKeyName("ChatroomId")]
     public string ChatroomId { get; init; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public KickSettings() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     public KickSettings(string pusherKey, string pusherCluster, string chatroomId) =>
         (PusherKey, PusherCluster, ChatroomId) = (pusherKey, pusherCluster, chatroomId);
@@ -73,7 +77,10 @@ public sealed class DiscordSettings {
     [JsonPropertyName("Webhook"), ConfigurationKeyName("Webhook")]
     public string Webhook { get; init; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public DiscordSettings() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
     public DiscordSettings(string webhook) => Webhook = webhook;
 }
 
@@ -82,7 +89,9 @@ public sealed class SubLinkSettings {
     [JsonPropertyName("Discriminator"), ConfigurationKeyName("Discriminator")]
     public string Discriminator { get; init; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public SubLinkSettings() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     public SubLinkSettings(string discriminator) => Discriminator = discriminator;
 }
