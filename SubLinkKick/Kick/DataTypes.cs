@@ -10,8 +10,8 @@ public sealed class KickBadge {
     [JsonPropertyName("text")]
     public string Text { get; set; } = string.Empty;
 
-    [JsonPropertyName("count")]
-    public int Count { get; set; } = 0;
+    [JsonPropertyName("count"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+    public uint Count { get; set; } = 0;
 }
 
 public sealed class KickIdentity {

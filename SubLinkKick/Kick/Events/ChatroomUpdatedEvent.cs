@@ -8,7 +8,7 @@ public sealed class ChatroomUpdatedEvent {
         public bool Enabled { get; set; } = false;
 
         [JsonPropertyName("message_interval"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-        public int MessageInterval { get; set; } = 0;
+        public uint MessageInterval { get; set; } = 0;
     }
 
     public sealed class SubsOnlyModeInfo {
@@ -21,7 +21,7 @@ public sealed class ChatroomUpdatedEvent {
         public bool Enabled { get; set; } = false;
 
         [JsonPropertyName("min_duration"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-        public int MinDuration { get; set; } = 0;
+        public uint MinDuration { get; set; } = 0;
     }
 
     public sealed class EmoteModeInfo {
@@ -34,7 +34,7 @@ public sealed class ChatroomUpdatedEvent {
         public bool Enabled { get; set; } = false;
 
         [JsonPropertyName("message_interval"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-        public int MessageInterval { get; set; } = 0;
+        public uint MessageInterval { get; set; } = 0;
     }
 
     [JsonPropertyName("id"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]

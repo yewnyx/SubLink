@@ -7,7 +7,7 @@ public sealed class GiftedSubscriptionsEvent {
     [JsonPropertyName("id")]
     public string Id { get; set; } = string.Empty;
 
-    [JsonPropertyName("chatroom_id")]
+    [JsonPropertyName("chatroom_id"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public uint ChatroomId { get; set; } = 0;
 
     [JsonPropertyName("gifted_usernames")]

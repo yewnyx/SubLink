@@ -2,7 +2,7 @@
 
 - `string` Type  - Required - Badge type
 - `string` Text  - Required - Badge name
-- `int`    Count - Optional - The number of months
+- `uint`   Count - Optional - The number of months
 
 ## KickIdentity
 
@@ -29,7 +29,7 @@
 ## SlowModeInfo
 
 - `bool` Enabled         - Required - Indicates if the mode is enabled
-- `int`  MessageInterval - Required - The amount of seconds between messages
+- `uint` MessageInterval - Required - The amount of seconds between messages
 
 ## SubsOnlyModeInfo
 
@@ -38,7 +38,7 @@
 ## FollowOnlyModeInfo
 
 - `bool` Enabled     - Required - Indicates if the mode is enabled
-- `int`  MinDuration - Required - The amount of seconds a user must be following
+- `uint` MinDuration - Required - The amount of seconds a user must be following
 
 ## EmoteModeInfo
 
@@ -47,21 +47,21 @@
 ## AdvBotProtectModeInfo
 
 - `bool` Enabled         - Required - Indicates if the mode is enabled
-- `int`  MessageInterval - Required - The amount of messages it takes to trigger the bot protection
+- `uint` MessageInterval - Required - The amount of messages it takes to trigger the bot protection
 
 ## PollOptionInfo
 
 - `uint`   Id    - Required - The poll option ID
 - `string` Label - Required - The poll option text
-- `int`    Votes - Required - The number of votes for this poll option
+- `uint`   Votes - Required - The number of votes for this poll option
 
 ## PollInfo
 
 - `string`         Title                 - Required - The poll title text
 - `PollOptionInfo` Options               - Required - The poll option information
-- `int`            Duration              - Required - The total poll duration in seconds
+- `uint`           Duration              - Required - The total poll duration in seconds
 - `int`            Remaining             - Required - The remaining poll voting time in seconds
-- `int`            ResultDisplayDuration - Required - The poll result display duration in seconds
+- `uint`           ResultDisplayDuration - Required - The poll result display duration in seconds
 
 ## PinnedMessageInfo
 

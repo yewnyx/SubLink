@@ -5,14 +5,14 @@ namespace xyz.yewnyx.SubLink.Kick.Events;
 
 public sealed class PollUpdateEvent {
     public sealed class PollOptionInfo {
-        [JsonPropertyName("id")]
+        [JsonPropertyName("id"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public uint Id { get; set; } = 0;
 
         [JsonPropertyName("label")]
         public string Label { get; set; } = string.Empty;
 
-        [JsonPropertyName("votes")]
-        public int Votes { get; set; } = 0;
+        [JsonPropertyName("votes"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+        public uint Votes { get; set; } = 0;
     }
 
     public sealed class PollInfo {
@@ -22,14 +22,14 @@ public sealed class PollUpdateEvent {
         [JsonPropertyName("options")]
         public PollOptionInfo[] Options { get; set; } = Array.Empty<PollOptionInfo>();
 
-        [JsonPropertyName("duration")]
-        public int Duration { get; set; } = 0;
+        [JsonPropertyName("duration"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+        public uint Duration { get; set; } = 0;
 
-        [JsonPropertyName("remaining")]
+        [JsonPropertyName("remaining"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public int Remaining { get; set; } = 0;
 
-        [JsonPropertyName("result_display_duration")]
-        public int ResultDisplayDuration { get; set; } = 0;
+        [JsonPropertyName("result_display_duration"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+        public uint ResultDisplayDuration { get; set; } = 0;
     }
 
     [JsonPropertyName("poll")]
