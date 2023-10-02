@@ -38,7 +38,7 @@ internal sealed partial class TwitchService {
 
     private void OnJoinedChannel(object? sender, OnJoinedChannelArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnJoinedChannel: { } callback}}) {
+            if (_rules is TwitchRules {OnJoinedChannel: { } callback}) {
                 await callback(e.Channel, e.BotUsername);
             }
         });
@@ -46,7 +46,7 @@ internal sealed partial class TwitchService {
 
     private void OnMessageReceived(object? sender, OnMessageReceivedArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnMessageReceived: { } callback}}) {
+            if (_rules is TwitchRules {OnMessageReceived: { } callback}) {
                 await callback(e.ChatMessage);
             }
         });
@@ -54,7 +54,7 @@ internal sealed partial class TwitchService {
     
     private void OnChannelCheer(object? sender, ChannelCheerArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnCheer: { } callback}}) {
+            if (_rules is TwitchRules {OnCheer: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -62,7 +62,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelFollow(object? sender, ChannelFollowArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnFollow: { } callback}}) {
+            if (_rules is TwitchRules {OnFollow: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -70,7 +70,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelHypeTrainBegin(object? sender, ChannelHypeTrainBeginArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnHypeTrainBegin: { } callback}}) {
+            if (_rules is TwitchRules {OnHypeTrainBegin: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -78,7 +78,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelHypeTrainEnd(object? sender, ChannelHypeTrainEndArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnHypeTrainEnd: { } callback}}) {
+            if (_rules is TwitchRules {OnHypeTrainEnd: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -86,7 +86,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelHypeTrainProgress(object? sender, ChannelHypeTrainProgressArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnHypeTrainProgress: { } callback}}) {
+            if (_rules is TwitchRules {OnHypeTrainProgress: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -94,7 +94,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelPointsCustomRewardRedemptionAdd(object? sender, ChannelPointsCustomRewardRedemptionArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnPointsCustomRewardRedemptionAdd: { } callback}}) {
+            if (_rules is TwitchRules {OnPointsCustomRewardRedemptionAdd: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -103,7 +103,7 @@ internal sealed partial class TwitchService {
     private void
         OnChannelPointsCustomRewardRedemptionUpdate(object? sender, ChannelPointsCustomRewardRedemptionArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnPointsCustomRewardRedemptionUpdate: { } callback}}) {
+            if (_rules is TwitchRules {OnPointsCustomRewardRedemptionUpdate: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
 
@@ -113,7 +113,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelPollBegin(object? sender, ChannelPollBeginArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnPollBegin: { } callback}}) {
+            if (_rules is TwitchRules {OnPollBegin: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
 
@@ -123,7 +123,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelPollEnd(object? sender, ChannelPollEndArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnPollEnd: { } callback}}) {
+            if (_rules is TwitchRules {OnPollEnd: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
 
@@ -133,7 +133,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelPollProgress(object? sender, ChannelPollProgressArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnPollProgress: { } callback}}) {
+            if (_rules is TwitchRules {OnPollProgress: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
 
@@ -143,7 +143,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelPredictionBegin(object? sender, ChannelPredictionBeginArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnPredictionBegin: { } callback}}) {
+            if (_rules is TwitchRules {OnPredictionBegin: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
 
@@ -153,7 +153,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelPredictionEnd(object? sender, ChannelPredictionEndArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnPredictionEnd: { } callback}}) {
+            if (_rules is TwitchRules {OnPredictionEnd: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
 
@@ -163,7 +163,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelPredictionLock(object? sender, ChannelPredictionLockArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnPredictionLock: { } callback}}) {
+            if (_rules is TwitchRules {OnPredictionLock: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
 
@@ -173,7 +173,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelPredictionProgress(object? sender, ChannelPredictionProgressArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnPredictionProgress: { } callback}}) {
+            if (_rules is TwitchRules {OnPredictionProgress: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
 
@@ -183,7 +183,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelRaid(object? sender, ChannelRaidArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnRaid: { } callback}}) {
+            if (_rules is TwitchRules {OnRaid: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -191,7 +191,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelSubscribe(object? sender, ChannelSubscribeArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnSubscribe: { } callback}}) {
+            if (_rules is TwitchRules {OnSubscribe: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -199,7 +199,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelSubscriptionEnd(object? sender, ChannelSubscriptionEndArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnSubscriptionEnd: { } callback}}) {
+            if (_rules is TwitchRules {OnSubscriptionEnd: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
@@ -208,7 +208,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelSubscriptionGift(object? sender, ChannelSubscriptionGiftArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnSubscriptionGift: { } callback}}) {
+            if (_rules is TwitchRules {OnSubscriptionGift: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -216,7 +216,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelSubscriptionMessage(object? sender, ChannelSubscriptionMessageArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnSubscriptionMessage: { } callback}}) {
+            if (_rules is TwitchRules {OnSubscriptionMessage: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -224,7 +224,7 @@ internal sealed partial class TwitchService {
 
     private void OnChannelUpdate(object? sender, ChannelUpdateArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnChannelUpdate: { } callback}}) {
+            if (_rules is TwitchRules {OnChannelUpdate: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -236,7 +236,7 @@ internal sealed partial class TwitchService {
 
     private void OnStreamOffline(object? sender, StreamOfflineArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnStreamOffline: { } callback}}) {
+            if (_rules is TwitchRules {OnStreamOffline: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });
@@ -244,7 +244,7 @@ internal sealed partial class TwitchService {
 
     private void OnStreamOnline(object? sender, StreamOnlineArgs e) {
         Task.Run(async () => {
-            if (_rules is {Twitch: TwitchRules {OnStreamOnline: { } callback}}) {
+            if (_rules is TwitchRules {OnStreamOnline: { } callback}) {
                 await callback(e.Notification.Payload.Event);
             }
         });

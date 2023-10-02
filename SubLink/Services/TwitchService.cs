@@ -26,7 +26,7 @@ using TwitchLib.EventSub.Websockets.Core.EventArgs;
 namespace xyz.yewnyx.SubLink;
 
 [UsedImplicitly]
-internal sealed partial class TwitchService {
+internal sealed partial class TwitchService : IService {
     private readonly ILogger _logger;
     private readonly IHostApplicationLifetime _applicationLifetime;
     private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -39,12 +39,13 @@ internal sealed partial class TwitchService {
     private readonly TwitchClient _client;
     private readonly EventSubWebsocketClient _eventSub;
 
-    private readonly IRules _rules;
+    private readonly ITwitchRules _rules;
     
     private string? ChannelName;
     private string? ChannelId;
 
-    private IServiceScope _twitchLoggedInScope;
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Shhh")]
+    private IServiceScope? _twitchLoggedInScope;
     
     public TwitchService(
         ILogger logger,
@@ -53,7 +54,7 @@ internal sealed partial class TwitchService {
         IOptionsMonitor<TwitchSettings> settingsMonitor,
         IServiceProvider serviceProvider,
         EventSubWebsocketClient eventSub,
-        IRules rules) {
+        ITwitchRules rules) {
 
         Globals.serviceProvider = serviceProvider;
         
@@ -298,6 +299,8 @@ internal sealed partial class TwitchService {
         var json = await File.ReadAllTextAsync("settings.json");
         var j = JsonNode.Parse(json,
             documentOptions: new JsonDocumentOptions {CommentHandling = JsonCommentHandling.Skip});
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         j["Twitch"]["AccessToken"] = accessToken;
         j["Twitch"]["RefreshToken"] = refreshToken;
 
@@ -308,6 +311,7 @@ internal sealed partial class TwitchService {
         _api.Settings.AccessToken = accessToken;
         
         _twitchLoggedInScope = _serviceScopeFactory.CreateScope();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
     }
 }
 

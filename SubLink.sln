@@ -5,6 +5,10 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubLink", "SubLink\SubLink.csproj", "{B727467B-D005-4899-81B9-BD3F3814C864}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubLinkKick", "SubLinkKick\SubLinkKick.csproj", "{A55AA27C-5DAB-4A2B-81CE-3C6FC31E0DB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubLinkCommon", "SubLinkCommon\SubLinkCommon.csproj", "{232E8A75-B355-4B3A-B842-E92BE96190EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{B727467B-D005-4899-81B9-BD3F3814C864}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B727467B-D005-4899-81B9-BD3F3814C864}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B727467B-D005-4899-81B9-BD3F3814C864}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A55AA27C-5DAB-4A2B-81CE-3C6FC31E0DB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A55AA27C-5DAB-4A2B-81CE-3C6FC31E0DB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A55AA27C-5DAB-4A2B-81CE-3C6FC31E0DB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A55AA27C-5DAB-4A2B-81CE-3C6FC31E0DB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{232E8A75-B355-4B3A-B842-E92BE96190EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{232E8A75-B355-4B3A-B842-E92BE96190EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{232E8A75-B355-4B3A-B842-E92BE96190EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{232E8A75-B355-4B3A-B842-E92BE96190EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

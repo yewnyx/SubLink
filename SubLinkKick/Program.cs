@@ -11,7 +11,7 @@ using Serilog;
 using Serilog.Context;
 using Serilog.Events;
 using Serilog.Sinks.Discord;
-using TwitchLib.EventSub.Websockets.Extensions;
+using xyz.yewnyx.SubLink.Kick;
 
 namespace xyz.yewnyx.SubLink;
 
@@ -70,13 +70,13 @@ internal partial class Program {
             .ConfigureServices((context, services) => {
                 services
                     .Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true)
-                    .Configure<TwitchSettings>(context.Configuration.GetSection("Twitch"))
+                    .Configure<KickSettings>(context.Configuration.GetSection("Kick"))
                     .Configure<DiscordSettings>(context.Configuration.GetSection("Discord"))
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
-                    .AddTwitchLibEventSubWebsockets()
-                    .AddHostedService<SubLinkService<CompilerService, TwitchService>>()
-                    .AddScoped<ITwitchRules, TwitchRules>()
-                    .AddScoped<TwitchService>()
+                    .AddSingleton<KickPusherClient>()
+                    .AddHostedService<SubLinkService<CompilerService, KickService>>()
+                    .AddScoped<IKickRules, KickRules>()
+                    .AddScoped<KickService>()
                     .AddScoped<CompilerService>();
             })
             .UseSerilog((context, configuration) => {
@@ -110,10 +110,8 @@ internal partial class Program {
     }
 
     public async Task Run(string[] args) {
-        var programName = FiggleFonts.Slant.Render("SubLink");
-        programName = ProgramNameRegex().Replace(programName, string.Empty);
-        Console.Write(programName);
-        Console.WriteLine(@"by
+        Console.WriteLine(@"
+----------------------------Credits-----------------------------
 __  __
 \ \/ /__ _      ______  __  ___  __
  \  / _ \ | /| / / __ \/ / / / |/_/
@@ -124,15 +122,28 @@ and                  /____/
   / ____/___ _/ /_   / ____(_)____/ /  / ____/___/ /___/ (_)__
  / /   / __ `/ __/  / / __/ / ___/ /  / __/ / __  / __  / / _ \
 / /___/ /_/ / /_   / /_/ / / /  / /  / /___/ /_/ / /_/ / /  __/
-\____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/");
-        
+\____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/
+and __                           ____              _
+   / /   ____ ___  ___________ _/ __ \____  ____  (_)__  _____
+  / /   / __ `/ / / / ___/ __ `/ /_/ / __ \/_  / / / _ \/ ___/
+ / /___/ /_/ / /_/ / /  / /_/ / _, _/ /_/ / / /_/ /  __/ /    
+/_____/\__,_/\__,_/_/   \__,_/_/ |_|\____/ /___/_/\___/_/
+----------------------------Starting----------------------------");
+        var programName = FiggleFonts.Slant.Render("SubLinkKick");
+        programName = ProgramNameRegex().Replace(programName, string.Empty);
+        Console.Write(programName);
+        Console.WriteLine("----------------------------------------------------------------");
         using (var host = CreateHostBuilder(args).Build()) {
-            var ts = host.Services.GetService<IOptions<TwitchSettings>>();
-            if (string.IsNullOrWhiteSpace(ts!.Value.ClientId) || string.IsNullOrWhiteSpace(ts.Value.ClientSecret)) {
-                Console.WriteLine("Your Twitch Client ID and secret are set up incorrectly.");
+            var ks = host.Services.GetService<IOptions<KickSettings>>();
+
+            if (
+                string.IsNullOrWhiteSpace(ks!.Value.PusherKey) ||
+                string.IsNullOrWhiteSpace(ks!.Value.PusherCluster) ||
+                string.IsNullOrWhiteSpace(ks!.Value.ChatroomId)) {
+                Console.WriteLine("Your Kick settings are set up incorrectly.");
                 return;
             }
-            
+
             await host.StartAsync();
             await host.WaitForShutdownAsync();
         }
