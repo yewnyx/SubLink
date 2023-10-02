@@ -1,4 +1,4 @@
-<img src="SubLink.png" alt="SubLink Logo" width="200" height="200">
+<img src="Icon/SubLink.png" alt="SubLink Logo" width="200" height="200">
 
 # SubLink
 
