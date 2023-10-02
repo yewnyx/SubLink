@@ -15,7 +15,7 @@ using xyz.yewnyx.SubLink.Kick;
 
 namespace xyz.yewnyx.SubLink;
 
-internal class Program {
+internal partial class Program {
     public static async Task Main(string[] args) {
         if (!File.Exists("settings.json")) {
             var discriminator = new Random().Next(1, 9999);
@@ -127,7 +127,7 @@ and __                           ____              _
 /_____/\__,_/\__,_/_/   \__,_/_/ |_|\____/ /___/_/\___/_/
 ----------------------------Starting----------------------------");
         var programName = FiggleFonts.Slant.Render("SubLinkKick");
-        programName = Regex.Replace(programName, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
+        programName = ProgramNameRegex().Replace(programName, string.Empty);
         Console.Write(programName);
         Console.WriteLine("----------------------------------------------------------------");
         using (var host = CreateHostBuilder(args).Build()) {
@@ -145,4 +145,7 @@ and __                           ____              _
             await host.WaitForShutdownAsync();
         }
     }
+
+    [GeneratedRegex(@"^\s+$[\r\n]*", RegexOptions.Multiline)]
+    private static partial Regex ProgramNameRegex();
 }
