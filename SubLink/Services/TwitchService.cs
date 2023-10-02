@@ -26,7 +26,7 @@ using TwitchLib.EventSub.Websockets.Core.EventArgs;
 namespace xyz.yewnyx.SubLink;
 
 [UsedImplicitly]
-internal sealed partial class TwitchService {
+internal sealed partial class TwitchService : IService {
     private readonly ILogger _logger;
     private readonly IHostApplicationLifetime _applicationLifetime;
     private readonly IServiceScopeFactory _serviceScopeFactory;

@@ -10,8 +10,7 @@ using xyz.yewnyx.SubLink.Kick;
 namespace xyz.yewnyx.SubLink;
 
 [UsedImplicitly]
-internal sealed partial class KickService
-{
+internal sealed partial class KickService : IService {
     private readonly ILogger _logger;
     private readonly IHostApplicationLifetime _applicationLifetime;
     private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -68,8 +67,4 @@ internal sealed partial class KickService
     public async Task Stop() {
         await _kick.DisconnectAsync();
     }
-}
-
-internal static class StringUtil {
-    internal static bool HasAnything(this string str) => !string.IsNullOrWhiteSpace(str);
 }

@@ -102,6 +102,17 @@ kick.ReactToChatMessage(async chatMessage => {
         OscParameter.SendAvatarParameter("JacketToggle", false);
         OscParameter.SendAvatarParameter("Sus", true);
     }
+
+    // Extract the Kick emote ID and send it to OSC. Format: [emote:37224:GIGACHAD]
+    if (chatMessage.Content.Contains("[emote:")) {
+        int idx = chatMessage.Content.IndexOf("[emote:") + 7;
+        string emoteIdStr = chatMessage.Content.Substring(idx, chatMessage.Content.IndexOf(':', idx) - idx);
+
+        if (int.TryParse(emoteIdStr, out int emoteId)) {
+            OscParameter.SendAvatarParameter("emote", emoteId);
+        }
+    }
+
     logger.Information(
         "Username: {UserName}, Slug: {Slug}, Created At: {CreatedAt}, Content: {Content}",
         chatMessage.Sender.Username, chatMessage.Sender.Slug, chatMessage.CreatedAt, chatMessage.Content);

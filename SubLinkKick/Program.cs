@@ -74,7 +74,7 @@ internal partial class Program {
                     .Configure<DiscordSettings>(context.Configuration.GetSection("Discord"))
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
                     .AddSingleton<KickPusherClient>()
-                    .AddHostedService<SubLinkService>()
+                    .AddHostedService<SubLinkService<CompilerService, KickService>>()
                     .AddScoped<IKickRules, KickRules>()
                     .AddScoped<KickService>()
                     .AddScoped<CompilerService>();
@@ -110,7 +110,7 @@ internal partial class Program {
     }
 
     public async Task Run(string[] args) {
-        Console.WriteLine(@"Credits
+        Console.WriteLine(@"
 ----------------------------Credits-----------------------------
 __  __
 \ \/ /__ _      ______  __  ___  __
