@@ -1,4 +1,4 @@
-<img src="Icon/SubLink.png" alt="SubLink Logo" width="200" height="200">
+<img src="Icon/SubLink.png" alt="SubLink Logo" width="200" height="200">&nbsp;&nbsp;&nbsp;&nbsp;<img src="Icon/SubLinkKick.png" alt="SubLink Logo" width="200" height="200">
 
 # SubLink
 
@@ -51,6 +51,7 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 {
   "ChatroomId": "your-chatroom-id"
 }
+```
 
 ## Kick Events and data types
 
