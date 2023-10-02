@@ -23,8 +23,8 @@ public sealed class KickIdentity {
 }
 
 public sealed class KickUser {
-    [JsonPropertyName("id")]
-    public string Id { get; set; } = string.Empty;
+    [JsonPropertyName("id"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+    public uint Id { get; set; } = 0;
 
     [JsonPropertyName("username")]
     public string Username { get; set; } = string.Empty;
@@ -37,7 +37,7 @@ public sealed class KickUser {
 }
 
 public sealed class KickUserShort {
-    [JsonPropertyName("id")]
+    [JsonPropertyName("id"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public uint Id { get; set; } = 0;
 
     [JsonPropertyName("username")]
