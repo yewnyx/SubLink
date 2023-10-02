@@ -15,9 +15,9 @@ internal sealed class KickRules : IKickRules {
     internal Func<ChatroomClearEvent, Task>? OnChatroomClear;
     internal Func<ChatroomUpdatedEvent, Task>? OnChatroomUpdated;
     internal Func<PollUpdateEvent, Task>? OnPollUpdate;
-    internal Func<PollDeleteEvent, Task>? OnPollDelete;
+    internal Func<EventArgs, Task>? OnPollDelete;
     internal Func<PinnedMessageCreatedEvent, Task>? OnPinnedMessageCreated;
-    internal Func<PinnedMessageDeletedEvent, Task>? OnPinnedMessageDeleted;
+    internal Func<EventArgs, Task>? OnPinnedMessageDeleted;
 
     void IKickRules.ReactToChatMessage(Func<ChatMessageEvent, Task> with) { OnChatMessage = with; }
     void IKickRules.ReactToGiftedSubscriptions(Func<GiftedSubscriptionsEvent, Task> with) {
@@ -31,11 +31,11 @@ internal sealed class KickRules : IKickRules {
     void IKickRules.ReactToChatroomClear(Func<ChatroomClearEvent, Task> with) { OnChatroomClear = with; }
     void IKickRules.ReactToChatroomUpdated(Func<ChatroomUpdatedEvent, Task> with) { OnChatroomUpdated = with; }
     void IKickRules.ReactToPollUpdate(Func<PollUpdateEvent, Task> with) { OnPollUpdate = with; }
-    void IKickRules.ReactToPollDelete(Func<PollDeleteEvent, Task> with) { OnPollDelete = with; }
+    void IKickRules.ReactToPollDelete(Func<EventArgs, Task> with) { OnPollDelete = with; }
     void IKickRules.ReactToPinnedMessageCreated(Func<PinnedMessageCreatedEvent, Task> with) {
         OnPinnedMessageCreated = with;
     }
-    void IKickRules.ReactToPinnedMessageDeleted(Func<PinnedMessageDeletedEvent, Task> with) {
+    void IKickRules.ReactToPinnedMessageDeleted(Func<EventArgs, Task> with) {
         OnPinnedMessageDeleted = with;
     }
 }

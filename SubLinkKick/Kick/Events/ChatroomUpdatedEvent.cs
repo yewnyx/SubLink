@@ -7,7 +7,7 @@ public sealed class ChatroomUpdatedEvent {
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = false;
 
-        [JsonPropertyName("message_interval")]
+        [JsonPropertyName("message_interval"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public int MessageInterval { get; set; } = 0;
     }
 
@@ -20,7 +20,7 @@ public sealed class ChatroomUpdatedEvent {
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = false;
 
-        [JsonPropertyName("min_duration")]
+        [JsonPropertyName("min_duration"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public int MinDuration { get; set; } = 0;
     }
 
@@ -33,12 +33,12 @@ public sealed class ChatroomUpdatedEvent {
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = false;
 
-        [JsonPropertyName("message_interval")]
+        [JsonPropertyName("message_interval"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public int MessageInterval { get; set; } = 0;
     }
 
-    [JsonPropertyName("id")]
-    public uint Id { get; set; } = new();
+    [JsonPropertyName("id"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+    public uint ChatroomId { get; set; } = 0;
 
     [JsonPropertyName("slow_mode")]
     public SlowModeInfo SlowMode { get; set; } = new();

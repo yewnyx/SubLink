@@ -39,11 +39,11 @@ internal sealed class KickPusherClient {
 
     public event EventHandler<PollUpdateEventArgs>? PollUpdateEvent;
 
-    public event EventHandler<PollDeleteEventArgs>? PollDeleteEvent;
+    public event EventHandler? PollDeleteEvent;
 
     public event EventHandler<PinnedMessageCreatedEventArgs>? PinnedMessageCreatedEvent;
 
-    public event EventHandler<PinnedMessageDeletedEventArgs>? PinnedMessageDeletedEvent;
+    public event EventHandler? PinnedMessageDeletedEvent;
 
     public KickPusherClient() {
     }
@@ -189,12 +189,8 @@ internal sealed class KickPusherClient {
             PollUpdateEvent?.Invoke(this, new PollUpdateEventArgs { Data = data });
     }
 
-    private void OnPollDeleteEvent(PusherEvent eventData) {
-        var data = JsonSerializer.Deserialize<PollDeleteEvent>(eventData.Data);
-
-        if (data != null)
-            PollDeleteEvent?.Invoke(this, new PollDeleteEventArgs { Data = data });
-    }
+    private void OnPollDeleteEvent(PusherEvent eventData) =>
+        PollDeleteEvent?.Invoke(this, EventArgs.Empty);
 
     private void OnPinnedMessageCreatedEvent(PusherEvent eventData) {
         var data = JsonSerializer.Deserialize<PinnedMessageCreatedEvent>(eventData.Data);
@@ -203,10 +199,6 @@ internal sealed class KickPusherClient {
             PinnedMessageCreatedEvent?.Invoke(this, new PinnedMessageCreatedEventArgs { Data = data });
     }
 
-    private void OnPinnedMessageDeletedEvent(PusherEvent eventData) {
-        var data = JsonSerializer.Deserialize<PinnedMessageDeletedEvent>(eventData.Data);
-
-        if (data != null)
-            PinnedMessageDeletedEvent?.Invoke(this, new PinnedMessageDeletedEventArgs { Data = data });
-    }
+    private void OnPinnedMessageDeletedEvent(PusherEvent eventData) =>
+        PinnedMessageDeletedEvent?.Invoke(this, EventArgs.Empty);
 }

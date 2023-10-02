@@ -90,10 +90,10 @@ rules.Kick.ReactToPollUpdate(async pollUpdate => {
 
 ## rules.Kick.ReactToPollDelete
 
-- Parameter type `PollDeleteEvent`
+- Parameter type `None`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToPollDelete(async pollDelete => {
+rules.Kick.ReactToPollDelete(async () => {
 });
 ```
 
@@ -108,9 +108,9 @@ rules.Kick.ReactToPinnedMessageCreated(async pinnedMessage => {
 
 ## rules.Kick.ReactToPinnedMessageDeleted
 
-- Parameter type `PinnedMessageDeletedEvent`
+- Parameter type `None`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToPinnedMessageDeleted(async pinnedMessage => {
+rules.Kick.ReactToPinnedMessageDeleted(async () => {
 });
 ```

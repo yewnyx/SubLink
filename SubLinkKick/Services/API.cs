@@ -17,7 +17,7 @@ public interface IKickRules {
     public void ReactToChatroomClear(Func<ChatroomClearEvent, Task> with);
     public void ReactToChatroomUpdated(Func<ChatroomUpdatedEvent, Task> with);
     public void ReactToPollUpdate(Func<PollUpdateEvent, Task> with);
-    public void ReactToPollDelete(Func<PollDeleteEvent, Task> with);
+    public void ReactToPollDelete(Func<EventArgs, Task> with);
     public void ReactToPinnedMessageCreated(Func<PinnedMessageCreatedEvent, Task> with);
-    public void ReactToPinnedMessageDeleted(Func<PinnedMessageDeletedEvent, Task> with);
+    public void ReactToPinnedMessageDeleted(Func<EventArgs, Task> with);
 }

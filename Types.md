@@ -128,7 +128,7 @@
 
 ## ChatroomUpdatedEvent
 
-- `string`                Id                    - Required - The message ID
+- `uint`                  ChatroomId            - Required - The chatroom ID
 - `SlowModeInfo`          SlowMode              - Required - The slow mode settings
 - `SubsOnlyModeInfo`      SubscribersMode       - Required - The subs-only mode settings
 - `FollowOnlyModeInfo`    FollowersMode         - Required - The followers-only mode settings
@@ -139,15 +139,7 @@
 
 - `PollInfo` Poll - Required - The poll information
 
-## PollDeleteEvent
-
-No data
-
 ## PinnedMessageCreatedEvent
 
 - `PinnedMessageInfo` Message  - Required - The pinned message information
 - `string`            Duration - Required - The duration of the pin
-
-## PinnedMessageDeletedEvent
-
-No data

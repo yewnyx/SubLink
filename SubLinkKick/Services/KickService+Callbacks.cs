@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace xyz.yewnyx.SubLink;
 
@@ -109,10 +110,10 @@ internal sealed partial class KickService {
         });
     }
 
-    private void OnPollDeleteEvent(object? sender, Kick.PollDeleteEventArgs e) {
+    private void OnPollDeleteEvent(object? sender, EventArgs e) {
         Task.Run(async () => {
             if (_rules is KickRules { OnPollDelete: { } callback })
-                await callback(e.Data);
+                await callback(e);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
         });
@@ -127,10 +128,10 @@ internal sealed partial class KickService {
         });
     }
 
-    private void OnPinnedMessageDeletedEvent(object? sender, Kick.PinnedMessageDeletedEventArgs e) {
+    private void OnPinnedMessageDeletedEvent(object? sender, EventArgs e) {
         Task.Run(async () => {
             if (_rules is KickRules { OnPinnedMessageDeleted: { } callback })
-                await callback(e.Data);
+                await callback(e);
 
             _logger.Debug("sender: {Sender} event: {@E}", sender, e);
         });

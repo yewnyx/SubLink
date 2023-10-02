@@ -42,8 +42,4 @@ public sealed class ChatroomUpdatedEventArgs : KickEventArgs<ChatroomUpdatedEven
 
 public sealed class PollUpdateEventArgs : KickEventArgs<PollUpdateEvent> { }
 
-public sealed class PollDeleteEventArgs : KickEventArgs<PollDeleteEvent> { }
-
 public sealed class PinnedMessageCreatedEventArgs : KickEventArgs<PinnedMessageCreatedEvent> { }
-
-public sealed class PinnedMessageDeletedEventArgs : KickEventArgs<PinnedMessageDeletedEvent> { }
