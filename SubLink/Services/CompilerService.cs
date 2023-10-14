@@ -26,7 +26,8 @@ namespace xyz.yewnyx {
                 "TwitchLib.EventSub.Core.SubscriptionTypes.Drop",
                 "TwitchLib.EventSub.Core.SubscriptionTypes.Extension",
                 "TwitchLib.EventSub.Core.SubscriptionTypes.Stream",
-                "TwitchLib.EventSub.Core.SubscriptionTypes.User"
+                "TwitchLib.EventSub.Core.SubscriptionTypes.User",
+                "VRC.OSCQuery",
             };
         }
 
@@ -45,7 +46,8 @@ namespace xyz.yewnyx {
                 "TwitchLib.Communication",
                 "TwitchLib.EventSub.Core",
                 "TwitchLib.EventSub.Websockets",
-                "TwitchLib.PubSub"
+                "TwitchLib.PubSub",
+                "vrc-oscquery-lib",
             };
         }
 

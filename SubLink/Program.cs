@@ -75,6 +75,7 @@ internal partial class Program {
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
                     .AddTwitchLibEventSubWebsockets()
                     .AddHostedService<SubLinkService<CompilerService, TwitchService>>()
+                    .AddScoped<OSCSupportService>()
                     .AddScoped<ITwitchRules, TwitchRules>()
                     .AddScoped<TwitchService>()
                     .AddScoped<CompilerService>();

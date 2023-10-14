@@ -15,7 +15,14 @@ namespace xyz.yewnyx {
         protected override string[] ServiceUsings {
             get => new string[] {
                 "xyz.yewnyx.SubLink.Kick",
-                "xyz.yewnyx.SubLink.Kick.Events"
+                "xyz.yewnyx.SubLink.Kick.Events",
+                "VRC.OSCQuery",
+            };
+        }
+
+        protected override string[] ServiceAssemblies {
+            get => new string[] {
+                "vrc-oscquery-lib",
             };
         }
 

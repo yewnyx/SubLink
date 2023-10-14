@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting.Hosting;
+using Microsoft.CodeAnalysis.CSharp.Scripting.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -28,8 +28,13 @@ public class SubLinkService<T1, T2> : BackgroundService where T1 : BaseCompilerS
         var script = provider.GetFileInfo("SubLink.cs");
         var scriptFunc = await compiler.CompileSource(script, stoppingToken);
         
+        var oscSupportService = sublinkScope.ServiceProvider.GetService<OSCSupportService>()!;
         var service = sublinkScope.ServiceProvider.GetService<T2>()!;
         try {
+            oscSupportService.Start();
+            // TODO: Need to restore this functionality
+            // OscConnectionSettings.ReceivePort = oscSupportService.OSCPort;
+            // Globals.oscQuery = oscSupportService.OSCQuery;
             await service.Start();
             var returnValue = await scriptFunc();
             if (returnValue != null) {

@@ -4,6 +4,8 @@ using System.Threading.Channels;
 
 var notifier = new XSNotifier();
 
+oscQuery.AddEndpoint<bool>("/avatar/parameters/MuteSelf", Attributes.AccessValues.ReadWrite, new object[] { true });
+
 #if SUBLINK_TWITCH
 
 logger.Information("Twitch integration enabled");
