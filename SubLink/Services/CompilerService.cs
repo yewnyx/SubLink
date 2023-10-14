@@ -27,7 +27,6 @@ namespace xyz.yewnyx {
                 "TwitchLib.EventSub.Core.SubscriptionTypes.Extension",
                 "TwitchLib.EventSub.Core.SubscriptionTypes.Stream",
                 "TwitchLib.EventSub.Core.SubscriptionTypes.User",
-                "VRC.OSCQuery",
             };
         }
 
@@ -47,14 +46,13 @@ namespace xyz.yewnyx {
                 "TwitchLib.EventSub.Core",
                 "TwitchLib.EventSub.Websockets",
                 "TwitchLib.PubSub",
-                "vrc-oscquery-lib",
             };
         }
 
         public CompilerService(ILogger logger, ITwitchRules twitch) : base(logger) {
             _twitch = twitch;
             Globals.twitch = _twitch;
-            Globals.logger = logger;
+            CommonGlobals.logger = logger;
         }
     }
 }

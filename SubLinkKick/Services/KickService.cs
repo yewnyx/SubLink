@@ -36,7 +36,7 @@ internal sealed partial class KickService : IService {
         IKickRules rules)
     {
 
-        Globals.serviceProvider = serviceProvider;
+        CommonGlobals.serviceProvider = serviceProvider;
 
         _logger = logger;
         _applicationLifetime = applicationLifetime;

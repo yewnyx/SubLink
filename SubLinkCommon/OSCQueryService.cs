@@ -29,7 +29,7 @@ public sealed class OSCSupportService {
         _discovery.OnOscServiceAdded += profile => {
             _logger.Information("OSC Service Added: {Name} on port {Port}", profile.name, profile.port);
         };
-        
+
         OSCQuery = new OSCQueryServiceBuilder()
             .WithServiceName("SubLink")
             .WithUdpPort(OSCPort)
@@ -40,6 +40,8 @@ public sealed class OSCSupportService {
             .AdvertiseOSCQuery()
             .Build();
         OSCQuery.RefreshServices();
+
+        CommonGlobals.oscQuery = OSCQuery;
         // OSCQuery.AddEndpoint<bool>(..., Attributes.AccessValues.ReadWrite, new object[] { true }); 
     }
 }

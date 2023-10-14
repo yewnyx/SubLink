@@ -75,6 +75,7 @@ internal partial class Program {
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
                     .AddSingleton<KickPusherClient>()
                     .AddHostedService<SubLinkService<CompilerService, KickService>>()
+                    .AddScoped<OSCSupportService>()
                     .AddScoped<IKickRules, KickRules>()
                     .AddScoped<KickService>()
                     .AddScoped<CompilerService>();

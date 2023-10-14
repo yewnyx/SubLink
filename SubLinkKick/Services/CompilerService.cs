@@ -16,20 +16,18 @@ namespace xyz.yewnyx {
             get => new string[] {
                 "xyz.yewnyx.SubLink.Kick",
                 "xyz.yewnyx.SubLink.Kick.Events",
-                "VRC.OSCQuery",
             };
         }
 
         protected override string[] ServiceAssemblies {
             get => new string[] {
-                "vrc-oscquery-lib",
             };
         }
 
         public CompilerService(ILogger logger, IKickRules kick) : base(logger) {
             _kick = kick;
             Globals.kick = _kick;
-            Globals.logger = logger;
+            CommonGlobals.logger = logger;
         }
     }
 }

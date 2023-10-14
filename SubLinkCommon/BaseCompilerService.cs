@@ -16,6 +16,7 @@ public abstract class BaseCompilerService {
     private AssemblyLoadContext? _assemblyLoadContext;
 
     private static readonly string[] _baseUsings = {
+        "VRC.OSCQuery",
         "BuildSoft.VRChat.Osc",
         "BuildSoft.VRChat.Osc.Avatar",
         "BuildSoft.VRChat.Osc.Chatbox",
@@ -27,13 +28,16 @@ public abstract class BaseCompilerService {
         "XSNotifications.Enum",
         "XSNotifications.Exception",
         "XSNotifications.Helpers",
-        "xyz.yewnyx.Globals"
+        "xyz.yewnyx.CommonGlobals",
+        "xyz.yewnyx.Globals",
     };
 
     private static readonly string[] _baseAssemblies = {
         "vrcosclib",
+        "vrc-oscquery-lib",
         "BuildSoft.OscCore",
-        "XSNotifications"
+        "XSNotifications",
+        "SubLinkCommon",
     };
 
     protected readonly ILogger _logger;

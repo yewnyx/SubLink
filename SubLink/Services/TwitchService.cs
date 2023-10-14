@@ -56,7 +56,7 @@ internal sealed partial class TwitchService : IService {
         EventSubWebsocketClient eventSub,
         ITwitchRules rules) {
 
-        Globals.serviceProvider = serviceProvider;
+        CommonGlobals.serviceProvider = serviceProvider;
         
         _logger = logger;
         _applicationLifetime = applicationLifetime;
