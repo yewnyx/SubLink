@@ -11,7 +11,10 @@ public interface IService {
     public Task Stop();
 }
 
-public class SubLinkService<T1, T2> : BackgroundService where T1 : BaseCompilerService where T2 : IService {
+public class SubLinkService<TGlobals, TCompilerService, TService> : BackgroundService 
+    where TGlobals : IGlobals 
+    where TCompilerService : BaseCompilerService<TGlobals> 
+    where TService : IService {
     private readonly ILogger _logger;
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
@@ -23,18 +26,15 @@ public class SubLinkService<T1, T2> : BackgroundService where T1 : BaseCompilerS
     protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
         using var sublinkScope = _serviceScopeFactory.CreateScope();
 
-        var compiler = sublinkScope.ServiceProvider.GetService<T1>()!;
+        var compiler = sublinkScope.ServiceProvider.GetService<TCompilerService>()!;
         var provider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
         var script = provider.GetFileInfo("SubLink.cs");
         var scriptFunc = await compiler.CompileSource(script, stoppingToken);
         
-        var oscSupportService = sublinkScope.ServiceProvider.GetService<OSCSupportService>()!;
-        var service = sublinkScope.ServiceProvider.GetService<T2>()!;
+        var oscSupportService = sublinkScope.ServiceProvider.GetService<OSCSupportService<TGlobals>>()!;
+        var service = sublinkScope.ServiceProvider.GetService<TService>()!;
         try {
             oscSupportService.Start();
-            // TODO: Need to restore this functionality
-            // OscConnectionSettings.ReceivePort = oscSupportService.OSCPort;
-            // Globals.oscQuery = oscSupportService.OSCQuery;
             await service.Start();
             var returnValue = await scriptFunc();
             if (returnValue != null) {

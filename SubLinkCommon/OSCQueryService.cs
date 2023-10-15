@@ -7,15 +7,17 @@ using static VRC.OSCQuery.Extensions;
 namespace xyz.yewnyx.SubLink; 
 
 [UsedImplicitly]
-public sealed class OSCSupportService {
+public sealed class OSCSupportService<TGlobals> where TGlobals : IGlobals {
     public int OSCPort { get; private set; }
     public int OSCQueryPort { get; private set; }
 
     private readonly ILogger _logger;
+    private readonly TGlobals _globals;
     private readonly MeaModDiscovery _discovery;
 
-    public OSCSupportService(ILogger logger) {
+    public OSCSupportService(ILogger logger, TGlobals globals) {
         _logger = logger;
+        _globals = globals;
         _discovery = new();
     }
     
@@ -29,9 +31,9 @@ public sealed class OSCSupportService {
             _logger.Information("OSC Service Added: {Name} on port {Port}", profile.name, profile.port);
         };
 
-        CommonGlobals.oscServer = OscServer.GetOrCreate(OSCPort);
+        _globals.oscServer = OscServer.GetOrCreate(OSCPort);
 
-        CommonGlobals.oscQuery = new OSCQueryServiceBuilder()
+        _globals.oscQuery = new OSCQueryServiceBuilder()
             .WithServiceName("SubLink")
             .WithUdpPort(OSCPort)
             .WithTcpPort(OSCQueryPort)
@@ -40,7 +42,7 @@ public sealed class OSCSupportService {
             .AdvertiseOSC()
             .AdvertiseOSCQuery()
             .Build();
-        CommonGlobals.oscQuery.RefreshServices();
+        _globals.oscQuery.RefreshServices();
 
         /*
         CommonGlobals.oscQuery.AddEndpoint<bool>("/avatar/parameters/MuteSelf", Attributes.AccessValues.ReadWrite, new object[] { true }); 

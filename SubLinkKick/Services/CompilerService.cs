@@ -4,11 +4,9 @@ using Serilog;
 using xyz.yewnyx.SubLink;
 
 namespace xyz.yewnyx {
-    public class CompilerService : BaseCompilerService {
+    public class CompilerService : BaseCompilerService<KickGlobals> {
         [UsedImplicitly]
         private readonly IKickRules _kick;
-
-        protected override Type GlobalsType { get => typeof(Globals); }
 
         protected override string ServiceSymbol { get => "SUBLINK_KICK"; }
 
@@ -24,10 +22,10 @@ namespace xyz.yewnyx {
             };
         }
 
-        public CompilerService(ILogger logger, IKickRules kick) : base(logger) {
+        public CompilerService(ILogger logger, KickGlobals globals, IKickRules kick) : base(logger, globals) {
             _kick = kick;
-            Globals.kick = _kick;
-            CommonGlobals.logger = logger;
+            globals.kick = _kick;
+            globals.logger = logger;
         }
     }
 }

@@ -73,9 +73,10 @@ internal partial class Program {
                     .Configure<KickSettings>(context.Configuration.GetSection("Kick"))
                     .Configure<DiscordSettings>(context.Configuration.GetSection("Discord"))
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
+                    .AddSingleton<KickGlobals>()
                     .AddSingleton<KickPusherClient>()
-                    .AddHostedService<SubLinkService<CompilerService, KickService>>()
-                    .AddScoped<OSCSupportService>()
+                    .AddHostedService<SubLinkService<KickGlobals, CompilerService, KickService>>()
+                    .AddScoped<OSCSupportService<KickGlobals>>()
                     .AddScoped<IKickRules, KickRules>()
                     .AddScoped<KickService>()
                     .AddScoped<CompilerService>();

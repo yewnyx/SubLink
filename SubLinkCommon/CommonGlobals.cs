@@ -5,16 +5,10 @@ using VRC.OSCQuery;
 
 namespace xyz.yewnyx;
 
-public static class CommonGlobals {
-    [UsedImplicitly] 
-    public static ILogger logger { get; set; } = null!;
-
-    [UsedImplicitly] 
-    public static IServiceProvider serviceProvider { get; set; } = null!;
-
-    [UsedImplicitly]
-    public static OSCQueryService oscQuery { get; set; } = null!;
-
-    [UsedImplicitly]
-    public static OscServer oscServer { get; set; } = null!;
+[PublicAPI]
+public interface IGlobals {
+    public ILogger logger { get; set; }
+    public IServiceProvider serviceProvider { get; set; }
+    public OSCQueryService oscQuery { get; set; }
+    public OscServer oscServer { get; set; }
 }

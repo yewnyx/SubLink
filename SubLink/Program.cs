@@ -74,8 +74,9 @@ internal partial class Program {
                     .Configure<DiscordSettings>(context.Configuration.GetSection("Discord"))
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
                     .AddTwitchLibEventSubWebsockets()
-                    .AddHostedService<SubLinkService<CompilerService, TwitchService>>()
-                    .AddScoped<OSCSupportService>()
+                    .AddSingleton<TwitchGlobals>()
+                    .AddHostedService<SubLinkService<TwitchGlobals, CompilerService, TwitchService>>()
+                    .AddScoped<OSCSupportService<TwitchGlobals>>()
                     .AddScoped<ITwitchRules, TwitchRules>()
                     .AddScoped<TwitchService>()
                     .AddScoped<CompilerService>();
