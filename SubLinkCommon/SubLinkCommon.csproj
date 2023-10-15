@@ -32,6 +32,7 @@
         <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
         <PackageReference Include="Serilog" Version="3.0.1" />
+        <PackageReference Include="VRCOscLib" Version="1.4.3" />
         <PackageReference Include="VRChat.OSCQuery" Version="0.0.7" />
     </ItemGroup>
 </Project>

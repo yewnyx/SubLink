@@ -5,6 +5,9 @@ using System.Threading.Channels;
 var notifier = new XSNotifier();
 
 oscQuery.AddEndpoint<bool>("/avatar/parameters/MuteSelf", Attributes.AccessValues.ReadWrite, new object[] { true });
+oscServer.TryAddMethod("/avatar/parameters/MuteSelf", message => {
+    logger.Information($"Received `/avatar/parameters/MuteSelf` value from VRChat : {message.ReadBooleanElement(0)}");
+});
 
 #if SUBLINK_TWITCH
 

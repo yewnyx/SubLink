@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using BuildSoft.OscCore;
 using JetBrains.Annotations;
 using Serilog;
 using VRC.OSCQuery;
@@ -10,14 +10,13 @@ namespace xyz.yewnyx.SubLink;
 public sealed class OSCSupportService {
     public int OSCPort { get; private set; }
     public int OSCQueryPort { get; private set; }
-    public OSCQueryService OSCQuery { get; private set; } = null!;
 
     private readonly ILogger _logger;
     private readonly MeaModDiscovery _discovery;
 
     public OSCSupportService(ILogger logger) {
         _logger = logger;
-        _discovery = new MeaModDiscovery();
+        _discovery = new();
     }
     
     public void Start() {
@@ -30,7 +29,9 @@ public sealed class OSCSupportService {
             _logger.Information("OSC Service Added: {Name} on port {Port}", profile.name, profile.port);
         };
 
-        OSCQuery = new OSCQueryServiceBuilder()
+        CommonGlobals.oscServer = OscServer.GetOrCreate(OSCPort);
+
+        CommonGlobals.oscQuery = new OSCQueryServiceBuilder()
             .WithServiceName("SubLink")
             .WithUdpPort(OSCPort)
             .WithTcpPort(OSCQueryPort)
@@ -39,9 +40,13 @@ public sealed class OSCSupportService {
             .AdvertiseOSC()
             .AdvertiseOSCQuery()
             .Build();
-        OSCQuery.RefreshServices();
+        CommonGlobals.oscQuery.RefreshServices();
 
-        CommonGlobals.oscQuery = OSCQuery;
-        // OSCQuery.AddEndpoint<bool>(..., Attributes.AccessValues.ReadWrite, new object[] { true }); 
+        /*
+        CommonGlobals.oscQuery.AddEndpoint<bool>("/avatar/parameters/MuteSelf", Attributes.AccessValues.ReadWrite, new object[] { true }); 
+        CommonGlobals.oscServer.TryAddMethod("/avatar/parameters/MuteSelf", message => {
+            _logger.Information($"Received `/avatar/parameters/MuteSelf` value from VRChat : {message.ReadBooleanElement(0)}");
+        });
+        */
     }
 }

@@ -1,3 +1,4 @@
+using BuildSoft.OscCore;
 using JetBrains.Annotations;
 using Serilog;
 using VRC.OSCQuery;
@@ -10,7 +11,10 @@ public static class CommonGlobals {
 
     [UsedImplicitly] 
     public static IServiceProvider serviceProvider { get; set; } = null!;
-    
+
     [UsedImplicitly]
     public static OSCQueryService oscQuery { get; set; } = null!;
+
+    [UsedImplicitly]
+    public static OscServer oscServer { get; set; } = null!;
 }
