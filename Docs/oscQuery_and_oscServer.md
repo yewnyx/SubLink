@@ -46,19 +46,19 @@ oscServer.TryAddMethod(
 
 // Examples:
 oscServer.TryAddMethod("/avatar/parameters/MuteSelf", message => {
-    _logger.Information($"VRChat mic mute changed to : {message.ReadBooleanElement(0)}");
+    logger.Information($"VRChat mic mute changed to : {message.ReadBooleanElement(0)}");
 });
 oscServer.TryAddMethod("/avatar/parameters/Viseme", message => {
-    _logger.Information($"VRChat viseme changed to : {message.ReadIntElement(0)}");
+    logger.Information($"VRChat viseme changed to : {message.ReadIntElement(0)}");
 });
 oscServer.TryAddMethod("/avatar/parameters/ScaleFactor", message => {
-    _logger.Information($"VRChat avatar scaling changed to : {message.ReadFloatElement(0)}");
+    logger.Information($"VRChat avatar scaling changed to : {message.ReadFloatElement(0)}");
 });
 oscServer.TryAddMethod("/tracking/vrsystem/head/pose", message => {
     // To make this work add the following to the top of your sublink.cs file:
     // using BuildSoft.OscCore.UnityObjects;
     var position = new Vector3(message.ReadFloatElement(0), message.ReadFloatElement(1), message.ReadFloatElement(2));
     var rotation = new Vector3(message.ReadFloatElement(3), message.ReadFloatElement(4), message.ReadFloatElement(5));
-    _logger.Information($"VRChat head tracking changed to : Pos{position} rot{rotation}");
+    logger.Information($"VRChat head tracking changed to : Pos{position} rot{rotation}");
 });
 ```
