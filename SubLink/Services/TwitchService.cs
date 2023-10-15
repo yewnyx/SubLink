@@ -49,16 +49,15 @@ internal sealed partial class TwitchService : IService {
     
     public TwitchService(
         ILogger logger,
+        TwitchGlobals globals,
+        IServiceProvider serviceProvider,
         IHostApplicationLifetime applicationLifetime,
         IServiceScopeFactory serviceScopeFactory,
         IOptionsMonitor<TwitchSettings> settingsMonitor,
-        IServiceProvider serviceProvider,
         EventSubWebsocketClient eventSub,
         ITwitchRules rules) {
-
-        Globals.serviceProvider = serviceProvider;
-        
         _logger = logger;
+        globals.serviceProvider = serviceProvider;
         _applicationLifetime = applicationLifetime;
         _serviceScopeFactory = serviceScopeFactory;
         _settingsMonitor = settingsMonitor;

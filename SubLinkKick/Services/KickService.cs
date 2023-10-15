@@ -28,6 +28,7 @@ internal sealed partial class KickService : IService {
 
     public KickService(
         ILogger logger,
+        KickGlobals globals,
         IHostApplicationLifetime applicationLifetime,
         IServiceScopeFactory serviceScopeFactory,
         IOptionsMonitor<KickSettings> settingsMonitor,
@@ -35,10 +36,8 @@ internal sealed partial class KickService : IService {
         KickPusherClient kickPusherClient,
         IKickRules rules)
     {
-
-        Globals.serviceProvider = serviceProvider;
-
         _logger = logger;
+        globals.serviceProvider = serviceProvider;
         _applicationLifetime = applicationLifetime;
         _serviceScopeFactory = serviceScopeFactory;
         _settingsMonitor = settingsMonitor;

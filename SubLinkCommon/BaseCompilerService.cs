@@ -12,10 +12,11 @@ using Serilog;
 
 namespace xyz.yewnyx.SubLink;
 
-public abstract class BaseCompilerService {
+public abstract class BaseCompilerService<TGlobals> where TGlobals : IGlobals {
     private AssemblyLoadContext? _assemblyLoadContext;
 
     private static readonly string[] _baseUsings = {
+        "VRC.OSCQuery",
         "BuildSoft.VRChat.Osc",
         "BuildSoft.VRChat.Osc.Avatar",
         "BuildSoft.VRChat.Osc.Chatbox",
@@ -27,18 +28,20 @@ public abstract class BaseCompilerService {
         "XSNotifications.Enum",
         "XSNotifications.Exception",
         "XSNotifications.Helpers",
-        "xyz.yewnyx.Globals"
     };
 
     private static readonly string[] _baseAssemblies = {
         "vrcosclib",
+        "vrc-oscquery-lib",
         "BuildSoft.OscCore",
-        "XSNotifications"
+        "XSNotifications",
+        "SubLinkCommon",
     };
 
     protected readonly ILogger _logger;
+    protected readonly TGlobals _globals;
 
-    protected abstract Type GlobalsType { get; }
+    protected Type GlobalsType => typeof(TGlobals); 
 
     protected abstract string ServiceSymbol { get; }
 
@@ -46,8 +49,10 @@ public abstract class BaseCompilerService {
 
     protected virtual string[] ServiceAssemblies { get => Array.Empty<string>(); }
 
-    public BaseCompilerService(ILogger logger) {
+    public BaseCompilerService(ILogger logger, TGlobals globals) {
         _logger = logger;
+        globals.logger = logger;
+        _globals = globals;
     }
 
     public async Task<Func<Task<object?>>> CompileSource(IFileInfo fileInfo, CancellationToken stoppingToken)
@@ -145,6 +150,6 @@ public abstract class BaseCompilerService {
         var entryPointMethod = type.GetMethod(entryPoint.MetadataName)!;
 
         var submission = (Func<object[], Task>)entryPointMethod.CreateDelegate(typeof(Func<object[], Task>));
-        return () => (Task<object?>)submission(new object[] { null!, null! });
+        return () => (Task<object?>)submission(new object[] { _globals, null! });
     }
 }

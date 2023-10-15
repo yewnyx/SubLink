@@ -4,11 +4,9 @@ using Serilog;
 using xyz.yewnyx.SubLink;
 
 namespace xyz.yewnyx {
-    public sealed class CompilerService : BaseCompilerService {
+    public sealed class CompilerService : BaseCompilerService<TwitchGlobals> {
         [UsedImplicitly]
         private readonly ITwitchRules _twitch;
-
-        protected override Type GlobalsType { get => typeof(Globals); }
 
         protected override string ServiceSymbol { get => "SUBLINK_TWITCH"; }
 
@@ -26,7 +24,7 @@ namespace xyz.yewnyx {
                 "TwitchLib.EventSub.Core.SubscriptionTypes.Drop",
                 "TwitchLib.EventSub.Core.SubscriptionTypes.Extension",
                 "TwitchLib.EventSub.Core.SubscriptionTypes.Stream",
-                "TwitchLib.EventSub.Core.SubscriptionTypes.User"
+                "TwitchLib.EventSub.Core.SubscriptionTypes.User",
             };
         }
 
@@ -45,14 +43,14 @@ namespace xyz.yewnyx {
                 "TwitchLib.Communication",
                 "TwitchLib.EventSub.Core",
                 "TwitchLib.EventSub.Websockets",
-                "TwitchLib.PubSub"
+                "TwitchLib.PubSub",
             };
         }
 
-        public CompilerService(ILogger logger, ITwitchRules twitch) : base(logger) {
+        public CompilerService(ILogger logger, TwitchGlobals globals, ITwitchRules twitch) : base(logger, globals) {
             _twitch = twitch;
-            Globals.twitch = _twitch;
-            Globals.logger = logger;
+            globals.twitch = _twitch;
+            globals.logger = logger;
         }
     }
 }

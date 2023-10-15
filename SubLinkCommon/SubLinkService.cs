@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting.Hosting;
+using Microsoft.CodeAnalysis.CSharp.Scripting.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +11,10 @@ public interface IService {
     public Task Stop();
 }
 
-public class SubLinkService<T1, T2> : BackgroundService where T1 : BaseCompilerService where T2 : IService {
+public class SubLinkService<TGlobals, TCompilerService, TService> : BackgroundService 
+    where TGlobals : IGlobals 
+    where TCompilerService : BaseCompilerService<TGlobals> 
+    where TService : IService {
     private readonly ILogger _logger;
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
@@ -23,13 +26,15 @@ public class SubLinkService<T1, T2> : BackgroundService where T1 : BaseCompilerS
     protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
         using var sublinkScope = _serviceScopeFactory.CreateScope();
 
-        var compiler = sublinkScope.ServiceProvider.GetService<T1>()!;
+        var compiler = sublinkScope.ServiceProvider.GetService<TCompilerService>()!;
         var provider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
         var script = provider.GetFileInfo("SubLink.cs");
         var scriptFunc = await compiler.CompileSource(script, stoppingToken);
         
-        var service = sublinkScope.ServiceProvider.GetService<T2>()!;
+        var oscSupportService = sublinkScope.ServiceProvider.GetService<OSCSupportService<TGlobals>>()!;
+        var service = sublinkScope.ServiceProvider.GetService<TService>()!;
         try {
+            oscSupportService.Start();
             await service.Start();
             var returnValue = await scriptFunc();
             if (returnValue != null) {
