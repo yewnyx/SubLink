@@ -1,4 +1,4 @@
-$version = "2.1.6"
+$version = "2.1.7"
 
 $currentDir = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . dotnet.exe restore $currentDir
