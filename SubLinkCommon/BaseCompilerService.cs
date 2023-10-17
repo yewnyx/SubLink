@@ -28,6 +28,7 @@ public abstract class BaseCompilerService<TGlobals> where TGlobals : IGlobals {
         "XSNotifications.Enum",
         "XSNotifications.Exception",
         "XSNotifications.Helpers",
+        "BuildSoft.OscCore.UnityObjects",
     };
 
     private static readonly string[] _baseAssemblies = {
