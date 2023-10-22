@@ -1,0 +1,168 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Configurations>Debug;Release</Configurations>
+		<UseWPF>true</UseWPF>
+		<OutputType>WinExe</OutputType>
+		<StartupObject>tech.sublink.SubLinkEditor.App</StartupObject>
+		<ApplicationIcon>Resources\SubLink.ico</ApplicationIcon>
+		<RootNamespace>tech.sublink.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\add-icon.png" />
+	  <None Remove="Resources\Aqua-Ball-Gray-icon.png" />
+	  <None Remove="Resources\Aqua-Ball-Green-icon.png" />
+	  <None Remove="Resources\Aqua-Ball-Red-icon.png" />
+	  <None Remove="Resources\backward0_16x16.png" />
+	  <None Remove="Resources\block_16.png" />
+	  <None Remove="Resources\Copy-icon.png" />
+	  <None Remove="Resources\cross-icon.png" />
+	  <None Remove="Resources\Cut.png" />
+	  <None Remove="Resources\delete-icon.png" />
+	  <None Remove="Resources\edit-copy-icon.png" />
+	  <None Remove="Resources\edit-paste-icon.png" />
+	  <None Remove="Resources\email-not-validated-icon.png" />
+	  <None Remove="Resources\email-receive-icon.png" />
+	  <None Remove="Resources\email-send-icon.png" />
+	  <None Remove="Resources\exclamation-icon.png" />
+	  <None Remove="Resources\forward_16x16.png" />
+	  <None Remove="Resources\gear-icon.png" />
+	  <None Remove="Resources\icon-build.png" />
+	  <None Remove="Resources\icon_arrowDown_16x16.png" />
+	  <None Remove="Resources\icon_arrowUp_16x16.png" />
+	  <None Remove="Resources\icon_edit_16x16.gif" />
+	  <None Remove="Resources\icon_last_16x16.png" />
+	  <None Remove="Resources\icon_last_gray_16x16.png" />
+	  <None Remove="Resources\icon_Minus_16x16.png" />
+	  <None Remove="Resources\icon_pause_16x16.png" />
+	  <None Remove="Resources\icon_pause_gray_16x16.png" />
+	  <None Remove="Resources\icon_play_16x16.png" />
+	  <None Remove="Resources\icon_play_gray_16x16.png" />
+	  <None Remove="Resources\icon_Plus_16x16.png" />
+	  <None Remove="Resources\layer--minus.png" />
+	  <None Remove="Resources\layer--plus.png" />
+	  <None Remove="Resources\left-arow-error-icon.png" />
+	  <None Remove="Resources\left-arow-icon.png" />
+	  <None Remove="Resources\listen-error-icon.png" />
+	  <None Remove="Resources\listen-icon.png" />
+	  <None Remove="Resources\lock-16.png" />
+	  <None Remove="Resources\minus-icon.png" />
+	  <None Remove="Resources\not-listen-icon.png" />
+	  <None Remove="Resources\Pause-icon.png" />
+	  <None Remove="Resources\Play-Normal-icon-32x32.png" />
+	  <None Remove="Resources\Redo-gray-icon-16x16.png" />
+	  <None Remove="Resources\Redo-icon-16x16.png" />
+	  <None Remove="Resources\redo_16x16.png" />
+	  <None Remove="Resources\right-arow-error-icon.png" />
+	  <None Remove="Resources\right-arow-icon.png" />
+	  <None Remove="Resources\Save-icon.png" />
+	  <None Remove="Resources\scissors.png" />
+	  <None Remove="Resources\Status-mail-task-icon-16x16.png" />
+	  <None Remove="Resources\Status-mail-task-icon-64x64.png" />
+	  <None Remove="Resources\Step-Forward-Normal-Blue-icon-32x32.png" />
+	  <None Remove="Resources\Stop-Normal-Blue-icon-32x32.png" />
+	  <None Remove="Resources\Stop-Normal-Blue-icon.png" />
+	  <None Remove="Resources\Stop-Normal-Gray-icon.png" />
+	  <None Remove="Resources\Stop-Normal-Red-icon.png" />
+	  <None Remove="Resources\tick_16.png" />
+	  <None Remove="Resources\Time-icon.png" />
+	  <None Remove="Resources\Undo-gray-icon-16x16.png" />
+	  <None Remove="Resources\Undo-icon-16x16.png" />
+	  <None Remove="Resources\undo_16x16.png" />
+	  <None Remove="Resources\unlock-16.png" />
+	  <None Remove="Resources\warning-icon.png" />
+	  <None Remove="Resources\WordWrap.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\SubLink.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
+	  <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\FlowGraph\FlowGraph.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\add-icon.png" />
+	  <Resource Include="Resources\Aqua-Ball-Gray-icon.png" />
+	  <Resource Include="Resources\Aqua-Ball-Green-icon.png" />
+	  <Resource Include="Resources\Aqua-Ball-Red-icon.png" />
+	  <Resource Include="Resources\backward0_16x16.png" />
+	  <Resource Include="Resources\block_16.png" />
+	  <Resource Include="Resources\Copy-icon.png" />
+	  <Resource Include="Resources\cross-icon.png" />
+	  <Resource Include="Resources\Cut.png" />
+	  <Resource Include="Resources\delete-icon.png" />
+	  <Resource Include="Resources\edit-copy-icon.png" />
+	  <Resource Include="Resources\edit-paste-icon.png" />
+	  <Resource Include="Resources\email-not-validated-icon.png" />
+	  <Resource Include="Resources\email-receive-icon.png" />
+	  <Resource Include="Resources\email-send-icon.png" />
+	  <Resource Include="Resources\exclamation-icon.png" />
+	  <Resource Include="Resources\forward_16x16.png" />
+	  <Resource Include="Resources\gear-icon.png" />
+	  <Resource Include="Resources\icon-build.png" />
+	  <Resource Include="Resources\icon_arrowDown_16x16.png" />
+	  <Resource Include="Resources\icon_arrowUp_16x16.png" />
+	  <Resource Include="Resources\icon_edit_16x16.gif" />
+	  <Resource Include="Resources\icon_last_16x16.png" />
+	  <Resource Include="Resources\icon_last_gray_16x16.png" />
+	  <Resource Include="Resources\icon_Minus_16x16.png" />
+	  <Resource Include="Resources\icon_pause_16x16.png" />
+	  <Resource Include="Resources\icon_pause_gray_16x16.png" />
+	  <Resource Include="Resources\icon_play_16x16.png" />
+	  <Resource Include="Resources\icon_play_gray_16x16.png" />
+	  <Resource Include="Resources\icon_Plus_16x16.png" />
+	  <Resource Include="Resources\layer--minus.png" />
+	  <Resource Include="Resources\layer--plus.png" />
+	  <Resource Include="Resources\left-arow-error-icon.png" />
+	  <Resource Include="Resources\left-arow-icon.png" />
+	  <Resource Include="Resources\listen-error-icon.png" />
+	  <Resource Include="Resources\listen-icon.png" />
+	  <Resource Include="Resources\lock-16.png" />
+	  <Resource Include="Resources\minus-icon.png" />
+	  <Resource Include="Resources\not-listen-icon.png" />
+	  <Resource Include="Resources\Pause-icon.png" />
+	  <Resource Include="Resources\Play-Normal-icon-32x32.png" />
+	  <Resource Include="Resources\Redo-gray-icon-16x16.png" />
+	  <Resource Include="Resources\Redo-icon-16x16.png" />
+	  <Resource Include="Resources\redo_16x16.png" />
+	  <Resource Include="Resources\right-arow-error-icon.png" />
+	  <Resource Include="Resources\right-arow-icon.png" />
+	  <Resource Include="Resources\Save-icon.png" />
+	  <Resource Include="Resources\scissors.png" />
+	  <Resource Include="Resources\Status-mail-task-icon-16x16.png" />
+	  <Resource Include="Resources\Status-mail-task-icon-64x64.png" />
+	  <Resource Include="Resources\Step-Forward-Normal-Blue-icon-32x32.png" />
+	  <Resource Include="Resources\Stop-Normal-Blue-icon-32x32.png" />
+	  <Resource Include="Resources\Stop-Normal-Blue-icon.png" />
+	  <Resource Include="Resources\Stop-Normal-Gray-icon.png" />
+	  <Resource Include="Resources\Stop-Normal-Red-icon.png" />
+	  <Resource Include="Resources\tick_16.png" />
+	  <Resource Include="Resources\Time-icon.png" />
+	  <Resource Include="Resources\Undo-gray-icon-16x16.png" />
+	  <Resource Include="Resources\Undo-icon-16x16.png" />
+	  <Resource Include="Resources\undo_16x16.png" />
+	  <Resource Include="Resources\unlock-16.png" />
+	  <Resource Include="Resources\warning-icon.png" />
+	  <Resource Include="Resources\WordWrap.png" />
+	</ItemGroup>
+
+</Project>

@@ -7,3 +7,6 @@ riderModule.iml
 **/settings.ini
 settings.json
 builds/
+.vs/
+OSCMonitor.exe
+*.csproj.user

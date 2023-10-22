@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubLinkKick", "SubLinkKick\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubLinkCommon", "SubLinkCommon\SubLinkCommon.csproj", "{232E8A75-B355-4B3A-B842-E92BE96190EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubLink_UI", "SubLink_UI\SubLink_UI.csproj", "{5963BC02-6872-4561-A4E1-3F5E6A6D7EF8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{232E8A75-B355-4B3A-B842-E92BE96190EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{232E8A75-B355-4B3A-B842-E92BE96190EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{232E8A75-B355-4B3A-B842-E92BE96190EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5963BC02-6872-4561-A4E1-3F5E6A6D7EF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5963BC02-6872-4561-A4E1-3F5E6A6D7EF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5963BC02-6872-4561-A4E1-3F5E6A6D7EF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5963BC02-6872-4561-A4E1-3F5E6A6D7EF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
