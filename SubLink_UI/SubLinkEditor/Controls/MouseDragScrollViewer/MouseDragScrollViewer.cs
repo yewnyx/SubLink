@@ -7,8 +7,7 @@ namespace tech.sublink.SubLinkEditor.Controls.MouseDragScrollViewer;
 /// <summary>
 /// ScrollViewer which can be scrolled by the mouse when dragging
 /// </summary>
-public class MouseDragScrollViewer : ScrollViewer
-{
+internal class MouseDragScrollViewer : ScrollViewer {
     //         public static readonly DependencyProperty IsMouseDraggingProperty =
     //                 DependencyProperty.Register("IsMouseDragging", typeof(bool), typeof(MouseDragScrollViewer),
     //                                             new FrameworkPropertyMetadata(false));
@@ -52,8 +51,7 @@ public class MouseDragScrollViewer : ScrollViewer
     /// <summary>
     /// milliseconds
     /// </summary>
-    public double DragInterval
-    {
+    public double DragInterval {
         get => (double)GetValue(DragIntervalProperty);
         set => SetValue(DragIntervalProperty, value);
     }
@@ -61,8 +59,7 @@ public class MouseDragScrollViewer : ScrollViewer
     /// <summary>
     /// pixels per millisecond²
     /// </summary>
-    public double DragAcceleration
-    {
+    public double DragAcceleration {
         get => (double)GetValue(DragAccelerationProperty);
         set => SetValue(DragAccelerationProperty, value);
     }
@@ -70,8 +67,7 @@ public class MouseDragScrollViewer : ScrollViewer
     /// <summary>
     /// pixels per millisecond
     /// </summary>
-    public double DragMaxVelocity
-    {
+    public double DragMaxVelocity {
         get => (double)GetValue(DragMaxVelocityProperty);
         set => SetValue(DragMaxVelocityProperty, value);
     }
@@ -79,8 +75,7 @@ public class MouseDragScrollViewer : ScrollViewer
     /// <summary>
     /// pixels per millisecond
     /// </summary>
-    public double DragInitialVelocity
-    {
+    public double DragInitialVelocity {
         get => (double)GetValue(DragInitialVelocityProperty);
         set => SetValue(DragInitialVelocityProperty, value);
     }
@@ -88,8 +83,7 @@ public class MouseDragScrollViewer : ScrollViewer
     /// <summary>
     /// pixels per millisecond
     /// </summary>
-    public double DragMargin
-    {
+    public double DragMargin  {
         get => (double)GetValue(DragMarginProperty);
         set => SetValue(DragMarginProperty, value);
     }
@@ -106,18 +100,15 @@ public class MouseDragScrollViewer : ScrollViewer
     /// 
     /// </summary>
     /// <param name="e"></param>
-    public void DoMouseDown()
-    {
+    public void DoMouseDown() {
         Point p = MouseUtilities.GetMousePosition(this);
-        if ((p.Y < DragMargin) || (p.Y > RenderSize.Height - DragMargin)
-            || (p.X < DragMargin) || (p.X > RenderSize.Width - DragMargin))
-        {
-            if (_dragScrollTimer == null)
-            {
+        if ((p.Y < DragMargin) || (p.Y > RenderSize.Height - DragMargin) || (p.X < DragMargin) ||
+            (p.X > RenderSize.Width - DragMargin)) {
+            if (_dragScrollTimer == null) {
                 _dragVelocity = DragInitialVelocity;
-                _dragScrollTimer = new DispatcherTimer();
+                _dragScrollTimer = new();
                 _dragScrollTimer.Tick += TickDragScroll;
-                _dragScrollTimer.Interval = new TimeSpan(0, 0, 0, 0, (int)DragInterval);
+                _dragScrollTimer.Interval = new(0, 0, 0, 0, (int)DragInterval);
                 _dragScrollTimer.Start();
             }
         }
@@ -127,70 +118,54 @@ public class MouseDragScrollViewer : ScrollViewer
     /// 
     /// </summary>
     /// <param name="e"></param>
-    public void DoMouseUp()
-    {
+    public void DoMouseUp() =>
         CancelDrag();
-    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void TickDragScroll(object sender, EventArgs e)
-    {
+    private void TickDragScroll(object sender, EventArgs e) {
         bool isDone = true;
 
-        if (IsLoaded)
-        {
-            Rect bounds = new Rect(RenderSize);
+        if (IsLoaded) {
+            Rect bounds = new(RenderSize);
             Point p = MouseUtilities.GetMousePosition(this);
-            if (bounds.Contains(p))
-            {
+
+            if (bounds.Contains(p)) {
                 int dir = 0;
 
-                if (p.X < DragMargin)
-                {
+                if (p.X < DragMargin) {
                     dir |= (int)DragDirection.Left;
                     isDone = false;
-                }
-                else if (p.X > RenderSize.Width - DragMargin)
-                {
+                } else if (p.X > RenderSize.Width - DragMargin) {
                     dir |= (int)DragDirection.Right;
                     isDone = false;
                 }
 
-                if (p.Y < DragMargin)
-                {
+                if (p.Y < DragMargin) {
                     dir |= (int)DragDirection.Up;
                     isDone = false;
-                }
-                else if (p.Y > RenderSize.Height - DragMargin)
-                {
+                } else if (p.Y > RenderSize.Height - DragMargin) {
                     dir |= (int)DragDirection.Down;
                     isDone = false;
                 }
 
                 if (dir != 0)
-                {
                     DragScroll(dir);
-                }
             }
         }
 
         if (isDone)
-        {
             CancelDrag();
-        }
     }
 
     /// <summary>
     /// 
     /// </summary>
-    private void CancelDrag()
-    {
-        if (_dragScrollTimer != null)
-        {
+    private void CancelDrag() {
+        if (_dragScrollTimer != null) {
             _dragScrollTimer.Tick -= TickDragScroll;
             _dragScrollTimer.Stop();
             _dragScrollTimer = null;
@@ -201,8 +176,7 @@ public class MouseDragScrollViewer : ScrollViewer
     /// 
     /// </summary>
     [Flags]
-    private enum DragDirection
-    {
+    private enum DragDirection {
         Down = 1,
         Up = 2,
         Left = 4,
@@ -213,28 +187,19 @@ public class MouseDragScrollViewer : ScrollViewer
     /// 
     /// </summary>
     /// <param name="direction"></param>
-    private void DragScroll(int direction)
-    {
+    private void DragScroll(int direction) {
         double hOffset = 0.0;
         double vOffset = 0.0;
 
         if ((direction & (int)DragDirection.Left) > 0)
-        {
             hOffset = -_dragVelocity * DragInterval;
-        }
         else if ((direction & (int)DragDirection.Right) > 0)
-        {
             hOffset = _dragVelocity * DragInterval;
-        }
 
         if ((direction & (int)DragDirection.Up) > 0)
-        {
             vOffset = -_dragVelocity * DragInterval;
-        }
         else if ((direction & (int)DragDirection.Down) > 0)
-        {
             vOffset = _dragVelocity * DragInterval;
-        }
 
         DragHorizontalDelegate?.Invoke(hOffset);
         DragVerticalDelegate?.Invoke(vOffset);

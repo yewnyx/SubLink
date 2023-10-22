@@ -16,13 +16,11 @@ namespace tech.sublink.SubLinkEditor.Controls.ZoomAndPan;
 ///     http://blogs.msdn.com/bencon/archive/2006/01/05/509991.aspx
 ///     
 /// </summary>
-public partial class ZoomAndPanControl
-{
+internal partial class ZoomAndPanControl {
     /// <summary>
     /// Set to 'true' when the vertical scrollbar is enabled.
     /// </summary>
-    public bool CanVerticallyScroll
-    {
+    public bool CanVerticallyScroll {
         get => _canVerticallyScroll;
         set => _canVerticallyScroll = value;
     }
@@ -30,8 +28,7 @@ public partial class ZoomAndPanControl
     /// <summary>
     /// Set to 'true' when the vertical scrollbar is enabled.
     /// </summary>
-    public bool CanHorizontallyScroll
-    {
+    public bool CanHorizontallyScroll {
         get => _canHorizontallyScroll;
         set => _canHorizontallyScroll = value;
     }
@@ -60,8 +57,7 @@ public partial class ZoomAndPanControl
     /// Reference to the ScrollViewer that is wrapped (in XAML) around the ZoomAndPanControl.
     /// Or set to null if there is no ScrollViewer.
     /// </summary>
-    public ScrollViewer? ScrollOwner
-    {
+    public ScrollViewer? ScrollOwner {
         get => _scrollOwner;
         set => _scrollOwner = value;
     }
@@ -79,21 +75,14 @@ public partial class ZoomAndPanControl
     /// <summary>
     /// Called when the offset of the horizontal scrollbar has been set.
     /// </summary>
-    public void SetHorizontalOffset(double offset)
-    {
+    public void SetHorizontalOffset(double offset) {
         if (_disableScrollOffsetSync)
-        {
             return;
-        }
 
-        try
-        {
+        try {
             _disableScrollOffsetSync = true;
-
             ContentOffsetX = offset / ContentScale;
-        }
-        finally
-        {
+        } finally {
             _disableScrollOffsetSync = false;
         }
     }
@@ -101,21 +90,14 @@ public partial class ZoomAndPanControl
     /// <summary>
     /// Called when the offset of the vertical scrollbar has been set.
     /// </summary>
-    public void SetVerticalOffset(double offset)
-    {
+    public void SetVerticalOffset(double offset) {
         if (_disableScrollOffsetSync)
-        {
             return;
-        }
 
-        try
-        {
+        try {
             _disableScrollOffsetSync = true;
-
             ContentOffsetY = offset / ContentScale;
-        }
-        finally
-        {
+        } finally {
             _disableScrollOffsetSync = false;
         }
     }
@@ -123,64 +105,56 @@ public partial class ZoomAndPanControl
     /// <summary>
     /// Shift the content offset one line up.
     /// </summary>
-    public void LineUp()
-    {
+    public void LineUp() {
         ContentOffsetY -= (ContentViewportHeight / 10);
     }
 
     /// <summary>
     /// Shift the content offset one line down.
     /// </summary>
-    public void LineDown()
-    {
+    public void LineDown() {
         ContentOffsetY += (ContentViewportHeight / 10);
     }
 
     /// <summary>
     /// Shift the content offset one line left.
     /// </summary>
-    public void LineLeft()
-    {
+    public void LineLeft() {
         ContentOffsetX -= (ContentViewportWidth / 10);
     }
 
     /// <summary>
     /// Shift the content offset one line right.
     /// </summary>
-    public void LineRight()
-    {
+    public void LineRight() {
         ContentOffsetX += (ContentViewportWidth / 10);
     }
 
     /// <summary>
     /// Shift the content offset one page up.
     /// </summary>
-    public void PageUp()
-    {
+    public void PageUp() {
         ContentOffsetY -= ContentViewportHeight;
     }
 
     /// <summary>
     /// Shift the content offset one page down.
     /// </summary>
-    public void PageDown()
-    {
+    public void PageDown() {
         ContentOffsetY += ContentViewportHeight;
     }
 
     /// <summary>
     /// Shift the content offset one page left.
     /// </summary>
-    public void PageLeft()
-    {
+    public void PageLeft() {
         ContentOffsetX -= ContentViewportWidth;
     }
 
     /// <summary>
     /// Shift the content offset one page right.
     /// </summary>
-    public void PageRight()
-    {
+    public void PageRight() {
         ContentOffsetX += ContentViewportWidth;
     }
 
@@ -188,95 +162,65 @@ public partial class ZoomAndPanControl
     /// Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is
     /// used for zooming in and out, not for manipulating the scrollbars.
     /// </summary>
-    public void MouseWheelDown()
-    {
+    public void MouseWheelDown() {
         if (IsMouseWheelScrollingEnabled)
-        {
             LineDown();
-        }
     }
 
     /// <summary>
     /// Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is
     /// used for zooming in and out, not for manipulating the scrollbars.
     /// </summary>
-    public void MouseWheelLeft()
-    {
+    public void MouseWheelLeft() {
         if (IsMouseWheelScrollingEnabled)
-        {
             LineLeft();
-        }
     }
 
     /// <summary>
     /// Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is
     /// used for zooming in and out, not for manipulating the scrollbars.
     /// </summary>
-    public void MouseWheelRight()
-    {
+    public void MouseWheelRight() {
         if (IsMouseWheelScrollingEnabled)
-        {
             LineRight();
-        }
     }
 
     /// <summary>
     /// Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is
     /// used for zooming in and out, not for manipulating the scrollbars.
     /// </summary>
-    public void MouseWheelUp()
-    {
+    public void MouseWheelUp() {
         if (IsMouseWheelScrollingEnabled)
-        {
             LineUp();
-        }
     }
 
     /// <summary>
     /// Bring the specified rectangle to view.
     /// </summary>
-    public Rect MakeVisible(Visual visual, Rect rectangle)
-    {
-        if (_content != null && _content.IsAncestorOf(visual))
-        {
+    public Rect MakeVisible(Visual visual, Rect rectangle) {
+        if (_content != null && _content.IsAncestorOf(visual)) {
             Rect transformedRect = visual.TransformToAncestor(_content).TransformBounds(rectangle);
-            Rect viewportRect = new Rect(ContentOffsetX, ContentOffsetY, ContentViewportWidth, ContentViewportHeight);
-            if (!transformedRect.Contains(viewportRect))
-            {
+            Rect viewportRect = new(ContentOffsetX, ContentOffsetY, ContentViewportWidth, ContentViewportHeight);
+
+            if (!transformedRect.Contains(viewportRect)) {
                 double horizOffset = 0;
                 double vertOffset = 0;
 
                 if (transformedRect.Left < viewportRect.Left)
-                {
-                    //
                     // Want to move viewport left.
-                    //
                     horizOffset = transformedRect.Left - viewportRect.Left;
-                }
                 else if (transformedRect.Right > viewportRect.Right)
-                {
-                    //
                     // Want to move viewport right.
-                    //
                     horizOffset = transformedRect.Right - viewportRect.Right;
-                }
 
                 if (transformedRect.Top < viewportRect.Top)
-                {
-                    //
                     // Want to move viewport up.
-                    //
                     vertOffset = transformedRect.Top - viewportRect.Top;
-                }
                 else if (transformedRect.Bottom > viewportRect.Bottom)
-                {
-                    //
                     // Want to move viewport down.
-                    //
                     vertOffset = transformedRect.Bottom - viewportRect.Bottom;
-                }
 
-                SnapContentOffsetTo(new Point(ContentOffsetX + horizOffset, ContentOffsetY + vertOffset));
+                SnapContentOffsetTo(new(ContentOffsetX + horizOffset, ContentOffsetY + vertOffset));
             }
         }
         return rectangle;

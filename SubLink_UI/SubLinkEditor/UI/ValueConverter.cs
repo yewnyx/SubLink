@@ -4,15 +4,11 @@ using System.Windows.Data;
 
 namespace tech.sublink.SubLinkEditor.UI;
 
-public class BoolToVisibilityConverter : IValueConverter
+internal class BoolToVisibilityConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return (bool)value ? Visibility.Visible : Visibility.Collapsed;
-    }
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        (bool)value ? Visibility.Visible : Visibility.Collapsed;
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return null;
-    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        null;
 }

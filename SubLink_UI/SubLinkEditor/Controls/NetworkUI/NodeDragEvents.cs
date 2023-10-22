@@ -6,16 +6,13 @@ namespace tech.sublink.SubLinkEditor.Controls.NetworkUI;
 /// <summary>
 /// Base class for node dragging event args.
 /// </summary>
-public class NodeDragEventArgs : RoutedEventArgs
-{
+internal class NodeDragEventArgs : RoutedEventArgs {
     /// <summary>
     /// The NodeItem's or their DataContext (when non-NULL).
     /// </summary>
     public ICollection nodes;
 
-    protected NodeDragEventArgs(RoutedEvent routedEvent, object source, ICollection nodes) :
-        base(routedEvent, source)
-    {
+    protected NodeDragEventArgs(RoutedEvent routedEvent, object source, ICollection nodes) : base(routedEvent, source) {
         this.nodes = nodes;
     }
 
@@ -28,28 +25,23 @@ public class NodeDragEventArgs : RoutedEventArgs
 /// <summary>
 /// Defines the event handler for NodeDragStarted events.
 /// </summary>
-public delegate void NodeDragEventHandler(object sender, NodeDragEventArgs e);
+internal delegate void NodeDragEventHandler(object sender, NodeDragEventArgs e);
 
 /// <summary>
 /// Arguments for event raised when the user starts to drag a node in the network.
 /// </summary>
-public class NodeDragStartedEventArgs : NodeDragEventArgs
-{
+internal class NodeDragStartedEventArgs : NodeDragEventArgs {
     /// <summary>
     /// Set to 'false' to disallow dragging.
     /// </summary>
     private bool _cancel;
 
-    internal NodeDragStartedEventArgs(RoutedEvent routedEvent, object source, ICollection nodes) :
-        base(routedEvent, source, nodes)
-    {
-    }
+    internal NodeDragStartedEventArgs(RoutedEvent routedEvent, object source, ICollection nodes) : base(routedEvent, source, nodes) { }
 
     /// <summary>
     /// Set to 'false' to disallow dragging.
     /// </summary>
-    public bool Cancel
-    {
+    public bool Cancel {
         get => _cancel;
         set => _cancel = value;
     }
@@ -58,13 +50,12 @@ public class NodeDragStartedEventArgs : NodeDragEventArgs
 /// <summary>
 /// Defines the event handler for NodeDragStarted events.
 /// </summary>
-public delegate void NodeDragStartedEventHandler(object sender, NodeDragStartedEventArgs e);
+internal delegate void NodeDragStartedEventHandler(object sender, NodeDragStartedEventArgs e);
 
 /// <summary>
 /// Arguments for event raised while user is dragging a node in the network.
 /// </summary>
-public class NodeDraggingEventArgs : NodeDragEventArgs
-{
+internal class NodeDraggingEventArgs : NodeDragEventArgs {
     /// <summary>
     /// The amount the node has been dragged horizontally.
     /// </summary>
@@ -76,10 +67,9 @@ public class NodeDraggingEventArgs : NodeDragEventArgs
     private double _verticalChange;
 
     internal NodeDraggingEventArgs(RoutedEvent routedEvent, object source, ICollection nodes, double horizontalChange, double verticalChange) :
-        base(routedEvent, source, nodes)
-    {
-        this._horizontalChange = horizontalChange;
-        this._verticalChange = verticalChange;
+        base(routedEvent, source, nodes) {
+        _horizontalChange = horizontalChange;
+        _verticalChange = verticalChange;
     }
 
     /// <summary>
@@ -96,20 +86,17 @@ public class NodeDraggingEventArgs : NodeDragEventArgs
 /// <summary>
 /// Defines the event handler for NodeDragStarted events.
 /// </summary>
-public delegate void NodeDraggingEventHandler(object sender, NodeDraggingEventArgs e);
+internal delegate void NodeDraggingEventHandler(object sender, NodeDraggingEventArgs e);
 
 /// <summary>
 /// Arguments for event raised when the user has completed dragging a node in the network.
 /// </summary>
-public class NodeDragCompletedEventArgs : NodeDragEventArgs
-{
+internal class NodeDragCompletedEventArgs : NodeDragEventArgs {
     public NodeDragCompletedEventArgs(RoutedEvent routedEvent, object source, ICollection nodes) :
-        base(routedEvent, source, nodes)
-    {
-    }
+        base(routedEvent, source, nodes) { }
 }
 
 /// <summary>
 /// Defines the event handler for NodeDragCompleted events.
 /// </summary>
-public delegate void NodeDragCompletedEventHandler(object sender, NodeDragCompletedEventArgs e);
+internal delegate void NodeDragCompletedEventHandler(object sender, NodeDragCompletedEventArgs e);

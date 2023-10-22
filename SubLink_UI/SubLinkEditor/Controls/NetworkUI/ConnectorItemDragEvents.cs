@@ -5,21 +5,13 @@ namespace tech.sublink.SubLinkEditor.Controls.NetworkUI;
 /// <summary>
 /// Arguments for event raised when the user starts to drag a connector out from a node.
 /// </summary>
-internal class ConnectorItemDragStartedEventArgs : RoutedEventArgs
-{
-    internal ConnectorItemDragStartedEventArgs(RoutedEvent routedEvent, object source) :
-        base(routedEvent, source)
-    {
-    }
+internal class ConnectorItemDragStartedEventArgs : RoutedEventArgs {
+    internal ConnectorItemDragStartedEventArgs(RoutedEvent routedEvent, object source) : base(routedEvent, source) { }
 
     /// <summary>
     /// Cancel dragging out of the connector.
     /// </summary>
-    public bool Cancel
-    {
-        get;
-        set;
-    }
+    public bool Cancel { get; set; }
 }
 
 /// <summary>
@@ -30,8 +22,7 @@ internal delegate void ConnectorItemDragStartedEventHandler(object sender, Conne
 /// <summary>
 /// Arguments for event raised while user is dragging a node in the network.
 /// </summary>
-internal class ConnectorItemDraggingEventArgs : RoutedEventArgs
-{
+internal class ConnectorItemDraggingEventArgs : RoutedEventArgs {
     /// <summary>
     /// The amount the connector has been dragged horizontally.
     /// </summary>
@@ -43,10 +34,9 @@ internal class ConnectorItemDraggingEventArgs : RoutedEventArgs
     private readonly double _verticalChange;
 
     public ConnectorItemDraggingEventArgs(RoutedEvent routedEvent, object source, double horizontalChange, double verticalChange) :
-        base(routedEvent, source)
-    {
-        this._horizontalChange = horizontalChange;
-        this._verticalChange = verticalChange;
+        base(routedEvent, source) {
+        _horizontalChange = horizontalChange;
+        _verticalChange = verticalChange;
     }
 
     /// <summary>
@@ -68,12 +58,8 @@ internal delegate void ConnectorItemDraggingEventHandler(object sender, Connecto
 /// <summary>
 /// Arguments for event raised when the user has completed dragging a connector.
 /// </summary>
-internal class ConnectorItemDragCompletedEventArgs : RoutedEventArgs
-{
-    public ConnectorItemDragCompletedEventArgs(RoutedEvent routedEvent, object source) :
-        base(routedEvent, source)
-    {
-    }
+internal class ConnectorItemDragCompletedEventArgs : RoutedEventArgs {
+    public ConnectorItemDragCompletedEventArgs(RoutedEvent routedEvent, object source) : base(routedEvent, source) { }
 }
 
 /// <summary>

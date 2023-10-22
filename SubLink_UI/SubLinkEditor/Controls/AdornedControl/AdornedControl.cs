@@ -13,7 +13,7 @@ namespace tech.sublink.SubLinkEditor.Controls.AdornedControl;
 /// A content control that allows an Adorner for the content to
 /// be defined in XAML.
 /// </summary>
-public class AdornedControl : ContentControl {
+internal class AdornedControl : ContentControl {
     public static readonly DependencyProperty IsAdornerVisibleProperty =
         DependencyProperty.Register("IsAdornerVisible", typeof(bool), typeof(AdornedControl),
             new FrameworkPropertyMetadata(IsAdornerVisible_PropertyChanged));
@@ -68,10 +68,10 @@ public class AdornedControl : ContentControl {
     /// <summary>
     /// Commands.
     /// </summary>
-    public static readonly RoutedCommand ShowAdornerCommand = new RoutedCommand("ShowAdorner", typeof(AdornedControl));
-    public static readonly RoutedCommand FadeInAdornerCommand = new RoutedCommand("FadeInAdorner", typeof(AdornedControl));
-    public static readonly RoutedCommand HideAdornerCommand = new RoutedCommand("HideAdorner", typeof(AdornedControl));
-    public static readonly RoutedCommand FadeOutAdornerCommand = new RoutedCommand("FadeOutAdorner", typeof(AdornedControl));
+    public static readonly RoutedCommand ShowAdornerCommand = new("ShowAdorner", typeof(AdornedControl));
+    public static readonly RoutedCommand FadeInAdornerCommand = new("FadeInAdorner", typeof(AdornedControl));
+    public static readonly RoutedCommand HideAdornerCommand = new("HideAdorner", typeof(AdornedControl));
+    public static readonly RoutedCommand FadeOutAdornerCommand = new("FadeOutAdorner", typeof(AdornedControl));
 
     public AdornedControl() {
         Focusable = false; // By default don't want 'AdornedControl' to be focusable.
@@ -121,7 +121,7 @@ public class AdornedControl : ContentControl {
             if (_adorner != null)
                 _adorner.Opacity = 0.0;
 
-        DoubleAnimation doubleAnimation = new DoubleAnimation(1.0, new Duration(TimeSpan.FromSeconds(FadeInTime)));
+        DoubleAnimation doubleAnimation = new(1.0, new Duration(TimeSpan.FromSeconds(FadeInTime)));
         doubleAnimation.Completed += fadeInAnimation_Completed;
         doubleAnimation.Freeze();
 
@@ -142,7 +142,7 @@ public class AdornedControl : ContentControl {
             // Adorner has already been hidden.
             return;
 
-        DoubleAnimation fadeOutAnimation = new DoubleAnimation(0.0, new Duration(TimeSpan.FromSeconds(FadeOutTime)));
+        DoubleAnimation fadeOutAnimation = new(0.0, new Duration(TimeSpan.FromSeconds(FadeOutTime)));
         fadeOutAnimation.Completed += fadeOutAnimation_Completed;
         fadeOutAnimation.Freeze();
 
@@ -277,10 +277,10 @@ public class AdornedControl : ContentControl {
     /// <summary>
     /// Command bindings.
     /// </summary>
-    private static readonly CommandBinding ShowAdornerCommandBinding = new CommandBinding(ShowAdornerCommand, ShowAdornerCommand_Executed);
-    private static readonly CommandBinding FadeInAdornerCommandBinding = new CommandBinding(FadeInAdornerCommand, FadeInAdornerCommand_Executed);
-    private static readonly CommandBinding HideAdornerCommandBinding = new CommandBinding(HideAdornerCommand, HideAdornerCommand_Executed);
-    private static readonly CommandBinding FadeOutAdornerCommandBinding = new CommandBinding(FadeInAdornerCommand, FadeOutAdornerCommand_Executed);
+    private static readonly CommandBinding ShowAdornerCommandBinding = new(ShowAdornerCommand, ShowAdornerCommand_Executed);
+    private static readonly CommandBinding FadeInAdornerCommandBinding = new(FadeInAdornerCommand, FadeInAdornerCommand_Executed);
+    private static readonly CommandBinding HideAdornerCommandBinding = new(HideAdornerCommand, HideAdornerCommand_Executed);
+    private static readonly CommandBinding FadeOutAdornerCommandBinding = new(FadeInAdornerCommand, FadeOutAdornerCommand_Executed);
 
     /// <summary>
     /// Specifies the current show/hide state of the _adorner.
@@ -595,8 +595,7 @@ public class AdornedControl : ContentControl {
                         );
                 }
 
-                _adorner = new FrameworkElementAdorner(AdornerContent, adornedControl,
-                    HorizontalAdornerPlacement, VerticalAdornerPlacement,
+                _adorner = new(AdornerContent, adornedControl, HorizontalAdornerPlacement, VerticalAdornerPlacement,
                     AdornerOffsetX, AdornerOffsetY);
                 _adornerLayer.Add(_adorner);
 

@@ -8,8 +8,7 @@ namespace tech.sublink.SubLinkEditor.Controls.NetworkModel;
 /// <summary>
 /// Defines a connection between two connectors (aka connection points) of two nodes.
 /// </summary>
-public sealed class ConnectionViewModel : AbstractModelBase
-{
+internal sealed class ConnectionViewModel : AbstractModelBase {
     /// <summary>
     /// The source connector the connection is attached to.
     /// </summary>
@@ -48,18 +47,13 @@ public sealed class ConnectionViewModel : AbstractModelBase
     /// <summary>
     /// The source connector the connection is attached to.
     /// </summary>
-    public ConnectorViewModel SourceConnector
-    {
+    public ConnectorViewModel SourceConnector {
         get => _sourceConnector;
-        set
-        {
+        set {
             if (_sourceConnector == value)
-            {
                 return;
-            }
 
-            if (_sourceConnector != null)
-            {
+            if (_sourceConnector != null) {
                 _sourceConnector.AttachedConnections.Remove(this);
                 _sourceConnector.HotspotUpdated -= sourceConnector_HotspotUpdated;
                 //sourceConnector.SourceSlot.Activated -= new EventHandler(OnSourceSlotActivated); 
@@ -67,15 +61,14 @@ public sealed class ConnectionViewModel : AbstractModelBase
 
             _sourceConnector = value;
 
-            if (_sourceConnector != null)
-            {
+            if (_sourceConnector != null) {
                 _sourceConnector.AttachedConnections.Add(this);
                 _sourceConnector.HotspotUpdated += sourceConnector_HotspotUpdated;
                 //sourceConnector.SourceSlot.Activated += new EventHandler(OnSourceSlotActivated);
                 SourceConnectorHotspot = _sourceConnector.Hotspot;
             }
 
-            OnPropertyChanged("SourceConnector");
+            OnPropertyChanged(nameof(SourceConnector));
             OnConnectionChanged();
         }
     }
@@ -83,18 +76,13 @@ public sealed class ConnectionViewModel : AbstractModelBase
     /// <summary>
     /// The destination connector the connection is attached to.
     /// </summary>
-    public ConnectorViewModel DestConnector
-    {
+    public ConnectorViewModel DestConnector {
         get => _destConnector;
-        set
-        {
+        set {
             if (_destConnector == value)
-            {
                 return;
-            }
 
-            if (_destConnector != null)
-            {
+            if (_destConnector != null) {
                 _destConnector.AttachedConnections.Remove(this);
                 _destConnector.HotspotUpdated -= destConnector_HotspotUpdated;
                 //destConnector.SourceSlot.Activated -= new EventHandler(OnSourceSlotActivated); 
@@ -102,15 +90,14 @@ public sealed class ConnectionViewModel : AbstractModelBase
 
             _destConnector = value;
 
-            if (_destConnector != null)
-            {
+            if (_destConnector != null) {
                 _destConnector.AttachedConnections.Add(this);
                 _destConnector.HotspotUpdated += destConnector_HotspotUpdated;
                 //destConnector.SourceSlot.Activated += new EventHandler(OnSourceSlotActivated);
                 DestConnectorHotspot = _destConnector.Hotspot;
             }
 
-            OnPropertyChanged("DestConnector");
+            OnPropertyChanged(nameof(DestConnector));
             OnConnectionChanged();
         }
     }
@@ -118,16 +105,13 @@ public sealed class ConnectionViewModel : AbstractModelBase
     /// <summary>
     /// The source and dest hotspots used for generating connection points.
     /// </summary>
-    public Point SourceConnectorHotspot
-    {
+    public Point SourceConnectorHotspot {
         get => _sourceConnectorHotspot;
-        set
-        {
-            if (_sourceConnectorHotspot != value)
-            {
+        set {
+            if (_sourceConnectorHotspot != value) {
                 _sourceConnectorHotspot = value;
                 ComputeConnectionPoints();
-                OnPropertyChanged("SourceConnectorHotspot");
+                OnPropertyChanged(nameof(SourceConnectorHotspot));
             }
         }
     }
@@ -135,16 +119,13 @@ public sealed class ConnectionViewModel : AbstractModelBase
     /// <summary>
     /// 
     /// </summary>
-    public Point DestConnectorHotspot
-    {
+    public Point DestConnectorHotspot {
         get => _destConnectorHotspot;
-        set
-        {
-            if (_destConnectorHotspot != value)
-            {
+        set {
+            if (_destConnectorHotspot != value) {
                 _destConnectorHotspot = value;
                 ComputeConnectionPoints();
-                OnPropertyChanged("DestConnectorHotspot");
+                OnPropertyChanged(nameof(DestConnectorHotspot));
             }
         }
     }
@@ -152,13 +133,11 @@ public sealed class ConnectionViewModel : AbstractModelBase
     /// <summary>
     /// Points that make up the connection.
     /// </summary>
-    public PointCollection Points
-    {
+    public PointCollection Points {
         get => _points;
-        set
-        {
+        set {
             _points = value;
-            OnPropertyChanged("Points");
+            OnPropertyChanged(nameof(Points));
         }
     }
 
@@ -166,10 +145,8 @@ public sealed class ConnectionViewModel : AbstractModelBase
     /// Warning : there are events on collection DestConnector, SourceConnector, Points
     /// </summary>
     /// <returns></returns>
-    public ConnectionViewModel Copy()
-    {
-        ConnectionViewModel newConn = new ConnectionViewModel
-        {
+    public ConnectionViewModel Copy() {
+        ConnectionViewModel newConn = new() {
             DestConnector = DestConnector,
             DestConnectorHotspot = DestConnectorHotspot,
             Points = Points,
@@ -183,60 +160,44 @@ public sealed class ConnectionViewModel : AbstractModelBase
     /// <summary>
     /// Raises the 'ConnectionChanged' event.
     /// </summary>
-    private void OnConnectionChanged()
-    {
+    private void OnConnectionChanged() =>
         ConnectionChanged?.Invoke(this, EventArgs.Empty);
-    }
 
     /// <summary>
     /// Event raised when the hotspot of the source connector has been updated.
     /// </summary>
-    private void sourceConnector_HotspotUpdated(object sender, EventArgs e)
-    {
+    private void sourceConnector_HotspotUpdated(object sender, EventArgs e) {
         SourceConnectorHotspot = SourceConnector.Hotspot;
     }
 
     /// <summary>
     /// Event raised when the hotspot of the dest connector has been updated.
     /// </summary>
-    private void destConnector_HotspotUpdated(object sender, EventArgs e)
-    {
+    private void destConnector_HotspotUpdated(object sender, EventArgs e) {
         DestConnectorHotspot = DestConnector.Hotspot;
     }
 
     /// <summary>
     /// Rebuild connection points.
     /// </summary>
-    private void ComputeConnectionPoints()
-    {
+    private void ComputeConnectionPoints() {
         const double offset = 120.0;
 
         double srcDeltaX = offset;
         double destDeltaX = -offset;
 
-        if (SourceConnector != null)
-        {
-            if (SourceConnector.Type == ConnectorType.Input
-                || SourceConnector.Type == ConnectorType.VariableInput)
-            {
+        if (SourceConnector != null) {
+            if (SourceConnector.Type == ConnectorType.Input || SourceConnector.Type == ConnectorType.VariableInput)
                 srcDeltaX = -offset;
-            }
-            else if (SourceConnector.Type == ConnectorType.Output
-                || SourceConnector.Type == ConnectorType.VariableOutput)
-            {
+            else if (SourceConnector.Type == ConnectorType.Output || SourceConnector.Type == ConnectorType.VariableOutput)
                 srcDeltaX = offset;
-            }
         }
 
         if (DestConnector != null)
-        {
-            if (DestConnector.Type == ConnectorType.Output
-                || DestConnector.Type == ConnectorType.VariableOutput
-                || DestConnector.Type == ConnectorType.VariableInputOutput)
-            {
+            if (DestConnector.Type == ConnectorType.Output ||
+                DestConnector.Type == ConnectorType.VariableOutput ||
+                DestConnector.Type == ConnectorType.VariableInputOutput)
                 destDeltaX = offset;
-            }
-        }
 
         PointCollection computedPoints = new PointCollection();
         computedPoints.Add(SourceConnectorHotspot);

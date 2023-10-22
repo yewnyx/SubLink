@@ -2,7 +2,7 @@
 
 namespace tech.sublink.SubLinkEditor.Controls.AdornedControl;
 
-public class AdornerEventArgs : RoutedEventArgs {
+internal class AdornerEventArgs : RoutedEventArgs {
     public AdornerEventArgs(RoutedEvent routedEvent, object source, FrameworkElement adorner) : base(routedEvent, source) {
         Adorner = adorner;
     }
@@ -10,4 +10,4 @@ public class AdornerEventArgs : RoutedEventArgs {
     public FrameworkElement Adorner { get; }
 }
 
-public delegate void AdornerEventHandler(object sender, AdornerEventArgs e);
+internal delegate void AdornerEventHandler(object sender, AdornerEventArgs e);

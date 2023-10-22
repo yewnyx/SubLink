@@ -1,12 +1,12 @@
-﻿<Window x:Class="tech.sublink.SubLinkEditor.MainWindow"
+﻿<Window x:Name="window" x:Class="tech.sublink.SubLinkEditor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:avalondock="http://schemas.xceed.com/wpf/xaml/avalondock"
-        xmlns:extToolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:process="clr-namespace:FlowGraph.Process;assembly=FlowGraph"
         xmlns:ui="clr-namespace:tech.sublink.SubLinkEditor.UI"
         
-        Title="Flow Simulator" Height="681" Width="851">
+        Title="SubLink Editor" Height="720" Width="1280" Icon="/Resources/SubLink.ico">
 
     <Window.CommandBindings>
         <CommandBinding Command="New" Executed="NewCommandBinding_Executed" />
@@ -36,15 +36,19 @@
     </Window.InputBindings>
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="154*"/>
+            <ColumnDefinition Width="697*"/>
+        </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="27" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        
-        <Menu Grid.Row="0" Name="menu1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+        <Menu Grid.Row="0" Name="menu1" Grid.ColumnSpan="2">
             <MenuItem Header="File" x:Name="menuItemFile">
                 <MenuItem Header="New" Command="New" InputGestureText="Ctrl+N" />
                 <MenuItem Header="Open" Command="Open" InputGestureText="Ctrl+O" />
@@ -64,7 +68,7 @@
             <MenuItem Header="?" Click="MenuIte_HelpClick" />
         </Menu>
 
-        <ToolBarTray Grid.Row="1">
+        <ToolBarTray Grid.Row="1" Grid.ColumnSpan="2">
             <ToolBar>
                 <Button Name="buttonResume" Command="{StaticResource Commands.FlowGraph.Resume}" ToolTip="Resume">
                     <Button.Style>
@@ -196,85 +200,73 @@
             </ToolBar>
         </ToolBarTray>
 
-        <avalondock:DockingManager Name="dockingManager1" Grid.Row="2"
-                                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <xcad:DockingManager Name="dockingManager1"
+                             Grid.Row="2" Grid.ColumnSpan="2"
+                             AllowMixedOrientation="True"
+                             BorderBrush="Black" BorderThickness="1">
 
-            <avalondock:DockingManager.Theme>
-                <avalondock:GenericTheme/>
-            </avalondock:DockingManager.Theme>
+            <xcad:DockingManager.Theme>
+                <xcad:GenericTheme/>
+            </xcad:DockingManager.Theme>
 
-            <avalondock:LayoutRoot>
-                <avalondock:LayoutPanel Orientation="Vertical">
+            <xcad:LayoutRoot>
+                <xcad:LayoutPanel Orientation="Vertical">
+                    <xcad:LayoutAnchorablePaneGroup Orientation="Horizontal" >
 
-                    <avalondock:LayoutAnchorablePaneGroup Orientation="Horizontal" >
+                        <xcad:LayoutAnchorablePaneGroup Orientation="Vertical">
 
-                        <avalondock:LayoutAnchorablePaneGroup Orientation="Vertical">
-                            <avalondock:LayoutAnchorablePaneGroup Orientation="Horizontal">
-
-                                <avalondock:LayoutAnchorablePaneGroup Orientation="Vertical">
-                                
-                                    <avalondock:LayoutAnchorablePane>
-                                        <avalondock:LayoutAnchorable x:Name="flowGraphListLayout" Title="Flow Graph List">
+                            <xcad:LayoutAnchorablePaneGroup Orientation="Horizontal">
+                                <xcad:LayoutAnchorablePaneGroup Orientation="Vertical">
+                                    <xcad:LayoutAnchorablePane>
+                                        <xcad:LayoutAnchorable x:Name="flowGraphListLayout" Title="SubLink Graph List">
                                             <Grid x:Name="flowGraphListContainer" >
                                                 <ui:FlowGraphDataControl x:Name="flowGraphListControl" />
                                             </Grid>
-                                        </avalondock:LayoutAnchorable>
-                                    
-                                    </avalondock:LayoutAnchorablePane >
+                                        </xcad:LayoutAnchorable>
+                                    </xcad:LayoutAnchorablePane>
 
-                                    <avalondock:LayoutAnchorablePane>
-                                        <avalondock:LayoutAnchorable x:Name="detailsLayout" Title="Details">
+                                    <xcad:LayoutAnchorablePane>
+                                        <xcad:LayoutAnchorable x:Name="detailsLayout" Title="Details">
                                             <Grid x:Name="detailsGrid" >
                                                 <ui:DetailsControl x:Name="detailsControl" />
                                             </Grid>
-                                        </avalondock:LayoutAnchorable>
+                                        </xcad:LayoutAnchorable>
+                                    </xcad:LayoutAnchorablePane>
+                                </xcad:LayoutAnchorablePaneGroup>
 
-                                    </avalondock:LayoutAnchorablePane>
-
-                                </avalondock:LayoutAnchorablePaneGroup>
-
-                                <avalondock:LayoutAnchorablePane >
-                                    <avalondock:LayoutAnchorable x:Name="flowGraphLayout" Title="Action Graph">
+                                <xcad:LayoutAnchorablePane>
+                                    <xcad:LayoutAnchorable x:Name="flowGraphLayout" Title="Action Graph">
                                         <Grid x:Name="containerFlowGraph">
                                             <ui:FlowGraphManagerControl x:Name="flowGraphManagerControl" />
                                         </Grid>
-                                    </avalondock:LayoutAnchorable>
-                                    
-                                </avalondock:LayoutAnchorablePane>
-                                
-                            </avalondock:LayoutAnchorablePaneGroup>
+                                    </xcad:LayoutAnchorable>
+                                </xcad:LayoutAnchorablePane>
+                            </xcad:LayoutAnchorablePaneGroup>
 
-                            <avalondock:LayoutAnchorablePane>
-                                <avalondock:LayoutAnchorable x:Name="logLayout" Title="Log">
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable x:Name="logLayout" Title="Log">
                                     <Grid x:Name="gridLog" >
                                         <ui:LogViewer />
                                     </Grid>
-                                </avalondock:LayoutAnchorable>
-                            </avalondock:LayoutAnchorablePane>
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                        </xcad:LayoutAnchorablePaneGroup>
+                    </xcad:LayoutAnchorablePaneGroup>
 
-                        </avalondock:LayoutAnchorablePaneGroup>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
 
-                     </avalondock:LayoutAnchorablePaneGroup>
+        <xctk:WindowContainer x:Name="windowContainer" Grid.Row="2" ModalBackgroundBrush="#80000000" Grid.ColumnSpan="2" />
 
-                    <avalondock:LayoutDocumentPaneGroup>
-                        <avalondock:LayoutDocumentPane />
-                    </avalondock:LayoutDocumentPaneGroup>
-
-                </avalondock:LayoutPanel>
-            </avalondock:LayoutRoot>
-        </avalondock:DockingManager>
-
-        <extToolkit:WindowContainer x:Name="windowContainer" Grid.Row="2"
-                                     ModalBackgroundBrush="#80000000" />
-
-        <StatusBar x:Name="statusBar" Grid.Row="3">
+        <StatusBar x:Name="statusBar" Grid.Row="3" Grid.ColumnSpan="2">
             <StatusBar.Resources>
                 <Style TargetType="Label">
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="Padding" Value="0" />
                 </Style>
             </StatusBar.Resources>
-            
+
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
@@ -305,8 +297,8 @@
             <StatusBarItem Grid.Column="3">
                 <Label x:Name="labelNbTask" Content="0 Task(s) running" />
             </StatusBarItem>
-            
+
         </StatusBar>
-        
+
     </Grid>
 </Window>

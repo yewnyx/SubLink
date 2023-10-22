@@ -2,16 +2,12 @@
 
 namespace tech.sublink.SubLinkEditor.UI;
 
-static class NamedVarEditTemplateManager
-{
+static class NamedVarEditTemplateManager {
     private static readonly Dictionary<Type, DataTemplate> TemplatesByTypes = new(15);
 
-    public static void Initialize()
-    {
-        ResourceDictionary res = new()
-        {
-            Source = new Uri("/SubLinkEditor;component/UI/SharedVisualTemplates.xaml",
-                UriKind.RelativeOrAbsolute)
+    public static void Initialize() {
+        ResourceDictionary res = new() {
+            Source = new("/SubLinkEditor;component/UI/SharedVisualTemplates.xaml", UriKind.RelativeOrAbsolute)
         };
 
         DataTemplate numericTemplate = (DataTemplate)res["numericTemplate"];
@@ -42,38 +38,26 @@ static class NamedVarEditTemplateManager
         Add(typeof(object), readOnlyTemplate);
     }
 
-    public static void Add(Type type, DataTemplate template)
-    {
+    public static void Add(Type type, DataTemplate template) {
         if (type == null)
-        {
             throw new ArgumentNullException(nameof(type));
-        }
 
         if (template == null)
-        {
             throw new ArgumentNullException(nameof(template));
-        }
 
         TemplatesByTypes.Add(type, template);
     }
 
-    public static DataTemplate GetTemplateByType(Type type)
-    {
+    public static DataTemplate GetTemplateByType(Type type) {
         if (type == null)
-        {
             return null;
-        }
 
         if (TemplatesByTypes.ContainsKey(type))
-        {
             return TemplatesByTypes[type];
-        }
 
         return null;
     }
 
-    public static bool ContainsType(Type type)
-    {
-        return type != null && TemplatesByTypes.ContainsKey(type);
-    }
+    public static bool ContainsType(Type type) =>
+        type != null && TemplatesByTypes.ContainsKey(type);
 }

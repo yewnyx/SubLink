@@ -5,8 +5,7 @@ namespace tech.sublink.SubLinkEditor.Controls.NetworkUI;
 /// <summary>
 /// Base class for connection dragging event args.
 /// </summary>
-public class ConnectionDragEventArgs : RoutedEventArgs
-{
+internal class ConnectionDragEventArgs : RoutedEventArgs {
     /// <summary>
     /// The NodeItem or it's DataContext (when non-NULL).
     /// </summary>
@@ -33,44 +32,38 @@ public class ConnectionDragEventArgs : RoutedEventArgs
     public object ConnectorDraggedOut => _draggedOutConnector;
 
     protected ConnectionDragEventArgs(RoutedEvent routedEvent, object source, object node, object connection, object connector) :
-        base(routedEvent, source)
-    {
-        this._node = node;
+        base(routedEvent, source) {
+        _node = node;
         _draggedOutConnector = connector;
-        this.Connection = connection;
+        Connection = connection;
     }
 }
 
 /// <summary>
 /// Arguments for event raised when the user starts to drag a connection out from a node.
 /// </summary>
-public class ConnectionDragStartedEventArgs : ConnectionDragEventArgs
-{
+internal class ConnectionDragStartedEventArgs : ConnectionDragEventArgs {
     /// <summary>
     /// The connection that will be dragged out.
     /// </summary>
-    public new object Connection
-    {
+    public new object Connection {
         get => base.Connection;
         set => base.Connection = value;
     }
 
     internal ConnectionDragStartedEventArgs(RoutedEvent routedEvent, object source, object node, object connector) :
-        base(routedEvent, source, node, null, connector)
-    {
-    }
+        base(routedEvent, source, node, null, connector) { }
 }
 
 /// <summary>
 /// Defines the event handler for the ConnectionDragStarted event.
 /// </summary>
-public delegate void ConnectionDragStartedEventHandler(object sender, ConnectionDragStartedEventArgs e);
+internal delegate void ConnectionDragStartedEventHandler(object sender, ConnectionDragStartedEventArgs e);
 
 /// <summary>
 /// Arguments for event raised while user is dragging a node in the network.
 /// </summary>
-public class QueryConnectionFeedbackEventArgs : ConnectionDragEventArgs
-{
+internal class QueryConnectionFeedbackEventArgs : ConnectionDragEventArgs {
     /// <summary>
     /// The ConnectorItem or it's DataContext (when non-NULL).
     /// </summary>
@@ -99,8 +92,7 @@ public class QueryConnectionFeedbackEventArgs : ConnectionDragEventArgs
     /// <summary>
     /// Set to 'true' / 'false' to indicate that the connection from the dragged out connection to the dragged over connector is valid.
     /// </summary>
-    public bool ConnectionOk
-    {
+    public bool ConnectionOk {
         get => _connectionOk;
         set => _connectionOk = value;
     }
@@ -108,51 +100,45 @@ public class QueryConnectionFeedbackEventArgs : ConnectionDragEventArgs
     /// <summary>
     /// The indicator to display.
     /// </summary>
-    public object FeedbackIndicator
-    {
+    public object FeedbackIndicator {
         get => _feedbackIndicator;
         set => _feedbackIndicator = value;
     }
 
     internal QueryConnectionFeedbackEventArgs(RoutedEvent routedEvent, object source,
         object node, object connection, object connector, object draggedOverConnector) :
-        base(routedEvent, source, node, connection, connector)
-    {
-        this._draggedOverConnector = draggedOverConnector;
+        base(routedEvent, source, node, connection, connector) {
+        _draggedOverConnector = draggedOverConnector;
     }
 }
 
 /// <summary>
 /// Defines the event handler for the QueryConnectionFeedback event.
 /// </summary>
-public delegate void QueryConnectionFeedbackEventHandler(object sender, QueryConnectionFeedbackEventArgs e);
+internal delegate void QueryConnectionFeedbackEventHandler(object sender, QueryConnectionFeedbackEventArgs e);
 
 /// <summary>
 /// Arguments for event raised while user is dragging a node in the network.
 /// </summary>
-public class ConnectionDraggingEventArgs : ConnectionDragEventArgs
-{
+internal class ConnectionDraggingEventArgs : ConnectionDragEventArgs {
     /// <summary>
     /// The connection being dragged out.
     /// </summary>
     public new object Connection => base.Connection;
 
-    internal ConnectionDraggingEventArgs(RoutedEvent routedEvent, object source,
-            object node, object connection, object connector) :
-        base(routedEvent, source, node, connection, connector)
-    {
-    }
+    internal ConnectionDraggingEventArgs(RoutedEvent routedEvent, object source, object node, object connection, object connector) :
+        base(routedEvent, source, node, connection, connector) { }
 }
 
 /// <summary>
 /// Defines the event handler for the ConnectionDragging event.
 /// </summary>
-public delegate void ConnectionDraggingEventHandler(object sender, ConnectionDraggingEventArgs e);
+internal delegate void ConnectionDraggingEventHandler(object sender, ConnectionDraggingEventArgs e);
 
 /// <summary>
 /// Arguments for event raised when the user has completed dragging a connector.
 /// </summary>
-public class ConnectionDragCompletedEventArgs : ConnectionDragEventArgs
+internal class ConnectionDragCompletedEventArgs : ConnectionDragEventArgs
 {
     /// <summary>
     /// The ConnectorItem or it's DataContext (when non-NULL).
@@ -170,13 +156,12 @@ public class ConnectionDragCompletedEventArgs : ConnectionDragEventArgs
     public new object Connection => base.Connection;
 
     internal ConnectionDragCompletedEventArgs(RoutedEvent routedEvent, object source, object node, object connection, object connector, object connectorDraggedOver) :
-        base(routedEvent, source, node, connection, connector)
-    {
-        this._connectorDraggedOver = connectorDraggedOver;
+        base(routedEvent, source, node, connection, connector) {
+        _connectorDraggedOver = connectorDraggedOver;
     }
 }
 
 /// <summary>
 /// Defines the event handler for the ConnectionDragCompleted event.
 /// </summary>
-public delegate void ConnectionDragCompletedEventHandler(object sender, ConnectionDragCompletedEventArgs e);
+internal delegate void ConnectionDragCompletedEventHandler(object sender, ConnectionDragCompletedEventArgs e);

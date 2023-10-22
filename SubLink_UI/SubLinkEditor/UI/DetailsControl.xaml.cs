@@ -8,13 +8,11 @@ namespace tech.sublink.SubLinkEditor.UI;
 /// <summary>
 /// Interaction logic for DetailsControl.xaml
 /// </summary>
-public partial class DetailsControl : UserControl
-{
+public partial class DetailsControl : UserControl {
     /// <summary>
     /// 
     /// </summary>
-    public DetailsControl()
-    {
+    public DetailsControl() {
         InitializeComponent();
     }
 
@@ -23,10 +21,8 @@ public partial class DetailsControl : UserControl
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ButtonAddInput_Click(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is SequenceFunction)
-        {
+    private void ButtonAddInput_Click(object sender, RoutedEventArgs e) {
+        if (DataContext is SequenceFunction) {
             SequenceFunction func = DataContext as SequenceFunction;
             func.AddInput("input");
         }
@@ -37,10 +33,8 @@ public partial class DetailsControl : UserControl
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ButtonAddOutput_Click(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is SequenceFunction)
-        {
+    private void ButtonAddOutput_Click(object sender, RoutedEventArgs e) {
+        if (DataContext is SequenceFunction) {
             SequenceFunction func = DataContext as SequenceFunction;
             func.AddOutput("output");
         }
@@ -51,18 +45,10 @@ public partial class DetailsControl : UserControl
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void btnDeleteSlot_Click(object sender, MouseButtonEventArgs e)
-    {
-        if (sender is Image img)
-        {
-            if (img.Tag is int id)
-            {
-                if (DataContext is SequenceFunction)
-                {
-                    SequenceFunction func = DataContext as SequenceFunction;
-                    func.RemoveSlotById(id);
-                }
-            }
+    private void btnDeleteSlot_Click(object sender, MouseButtonEventArgs e) {
+        if (sender is Image img && img.Tag is int id && DataContext is SequenceFunction) {
+            SequenceFunction func = DataContext as SequenceFunction;
+            func.RemoveSlotById(id);
         }
     }
 }

@@ -7,8 +7,7 @@ namespace tech.sublink.SubLinkEditor.UI;
 /// <summary>
 /// Interaction logic for NewNamedVarWindow.xaml
 /// </summary>
-public partial class NewNamedVarWindow : Window
-{
+public partial class NewNamedVarWindow : Window {
     public delegate bool IsValidInputNameDelegate(string name);
 
     private bool _dialogResult;
@@ -16,8 +15,7 @@ public partial class NewNamedVarWindow : Window
     /// <summary>
     /// 
     /// </summary>
-    public string InputName
-    {
+    public string InputName {
         get => textBoxName.Text;
         set => textBoxName.Text = value;
     }
@@ -25,8 +23,7 @@ public partial class NewNamedVarWindow : Window
     /// <summary>
     /// 
     /// </summary>
-    public string InputType
-    {
+    public string InputType {
         get => comboBox.SelectedItem.ToString();
         set => comboBox.SelectedItem = value;
     }
@@ -34,27 +31,19 @@ public partial class NewNamedVarWindow : Window
     /// <summary>
     /// 
     /// </summary>
-    public IsValidInputNameDelegate IsValidInputNameCallback
-    {
-        get;
-        set;
-    }
+    public IsValidInputNameDelegate IsValidInputNameCallback { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="v_"></param>
-    public NewNamedVarWindow(NamedVariable var = null)
-    {
+    public NewNamedVarWindow(NamedVariable var = null) {
         InitializeComponent();
 
-        if (var == null)
-        {
+        if (var == null) {
             Title = "New named variable";
             comboBox.SelectedIndex = 0;
-        }
-        else
-        {
+        } else {
             InputName = var.Name;
             comboBox.IsEnabled = false;
         }
@@ -67,8 +56,7 @@ public partial class NewNamedVarWindow : Window
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    void OnClosing(object sender, CancelEventArgs e)
-    {
+    void OnClosing(object sender, CancelEventArgs e) {
         DialogResult = _dialogResult;
     }
 
@@ -77,17 +65,13 @@ public partial class NewNamedVarWindow : Window
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ButtonOK_Click(object sender, RoutedEventArgs e)
-    {
-        if (IsValidInputNameCallback == null
-            || (IsValidInputNameCallback != null
-                && IsValidInputNameCallback.Invoke(InputName)))
-        {
+    private void ButtonOK_Click(object sender, RoutedEventArgs e) {
+        if (IsValidInputNameCallback == null ||
+            (IsValidInputNameCallback != null && IsValidInputNameCallback.Invoke(InputName))
+        ) {
             _dialogResult = true;
             Close();
-        }
-        else
-        {
+        } else {
             _dialogResult = false;
             labelError.Content = "'" + InputName + "' is not a valid name. Please enter a valid name.";
         }
@@ -98,8 +82,7 @@ public partial class NewNamedVarWindow : Window
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ButtonCancel_Click(object sender, RoutedEventArgs e)
-    {
+    private void ButtonCancel_Click(object sender, RoutedEventArgs e) {
         _dialogResult = false;
         Close();
     }

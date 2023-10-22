@@ -3,23 +3,20 @@ using FlowGraph.Logger;
 
 namespace tech.sublink.SubLinkEditor.Undo;
 
-public class UndoRedoManager : INotifyPropertyChanged
-{
-    public event EventHandler UndoRedoCommandListChanged;
-    public event EventHandler UndoRedoCommandExecuted;
+internal class UndoRedoManager : INotifyPropertyChanged {
+    public event EventHandler? UndoRedoCommandListChanged;
+    public event EventHandler? UndoRedoCommandExecuted;
 
-    readonly Stack<IUndoCommand> _undo = new Stack<IUndoCommand>();
-    readonly Stack<IUndoCommand> _redo = new Stack<IUndoCommand>();
+    readonly Stack<IUndoCommand> _undo = new();
+    readonly Stack<IUndoCommand> _redo = new();
 
     bool _isProcessing;
 
     public bool CanUndo => _undo.Count != 0;
     public bool CanRedo => _redo.Count != 0;
 
-    public void Add(IUndoCommand command)
-    {
-        if (_isProcessing)
-        {
+    public void Add(IUndoCommand command) {
+        if (_isProcessing) {
             LogManager.Instance.WriteLine(LogVerbosity.Trace, "UndoRedo : can't add because processing");
             return;
         }
@@ -30,33 +27,29 @@ public class UndoRedoManager : INotifyPropertyChanged
         LogManager.Instance.WriteLine(LogVerbosity.Trace, "UndoRedo Add({0}) : history list: {1} item(s)",
             command.ToString(), _undo.Count);
 
-        OnPropertyChanged("CanUndo");
-        OnPropertyChanged("CanRedo");
+        OnPropertyChanged(nameof(CanUndo));
+        OnPropertyChanged(nameof(CanRedo));
 
         UndoRedoCommandListChanged?.Invoke(null, EventArgs.Empty);
     }
 
-    public void Clear()
-    {
+    public void Clear() {
         _undo.Clear();
         _redo.Clear();
 
         LogManager.Instance.WriteLine(LogVerbosity.Trace, "UndoRedo Clear()");
 
-        OnPropertyChanged("CanUndo");
-        OnPropertyChanged("CanRedo");
+        OnPropertyChanged(nameof(CanUndo));
+        OnPropertyChanged(nameof(CanRedo));
 
         UndoRedoCommandListChanged?.Invoke(null, EventArgs.Empty);
     }
 
-    public void Undo()
-    {
-        if (CanUndo)
-        {
+    public void Undo() {
+        if (CanUndo) {
             _isProcessing = true;
 
-            try
-            {
+            try {
                 IUndoCommand command = _undo.Pop();
 
                 LogManager.Instance.WriteLine(LogVerbosity.Trace, "UndoRedo Undo({0}) : history list: {1} item(s)",
@@ -65,26 +58,21 @@ public class UndoRedoManager : INotifyPropertyChanged
                 command.Undo();
                 _redo.Push(command);
 
-                OnPropertyChanged("CanUndo");
-                OnPropertyChanged("CanRedo");
+                OnPropertyChanged(nameof(CanUndo));
+                OnPropertyChanged(nameof(CanRedo));
 
                 UndoRedoCommandExecuted?.Invoke(null, EventArgs.Empty);
-            }
-            finally
-            {
+            } finally {
                 _isProcessing = false;
             }
         }
     }
 
-    public void Redo()
-    {
-        if (CanRedo)
-        {
+    public void Redo() {
+        if (CanRedo) {
             _isProcessing = true;
 
-            try
-            {
+            try {
                 IUndoCommand command = _redo.Pop();
 
                 LogManager.Instance.WriteLine(LogVerbosity.Trace, "UndoRedo Redo({0}) : history list: {1} item(s)",
@@ -93,50 +81,38 @@ public class UndoRedoManager : INotifyPropertyChanged
                 command.Redo();
                 _undo.Push(command);
 
-                OnPropertyChanged("CanUndo");
-                OnPropertyChanged("CanRedo");
+                OnPropertyChanged(nameof(CanUndo));
+                OnPropertyChanged(nameof(CanRedo));
 
                 UndoRedoCommandExecuted?.Invoke(null, EventArgs.Empty);
-            }
-            finally
-            {
+            } finally {
                 _isProcessing = false;
             }
         }
     }
 
-    public void RemoveLastCommand()
-    {
+    public void RemoveLastCommand() =>
         RemoveLastNCommands(0);
-    }
 
-    public void RemoveLastNCommands(int nu)
-    {
-        for (int i = 0; i < nu; i++)
-        {
+    public void RemoveLastNCommands(int nu) {
+        for (int i = 0; i < nu; i++) {
             if (CanUndo)
-            {
                 _undo.Pop();
-            }
             else
-            {
                 break;
-            }
         }
 
         LogManager.Instance.WriteLine(LogVerbosity.Trace, "UndoRedo RemoveLastNCommands({0}) : history list: {1} item(s)",
                 nu, _undo.Count);
 
-        OnPropertyChanged("CanUndo");
-        OnPropertyChanged("CanRedo");
+        OnPropertyChanged(nameof(CanUndo));
+        OnPropertyChanged(nameof(CanRedo));
 
         UndoRedoCommandListChanged?.Invoke(null, EventArgs.Empty);
     }
 
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+    protected virtual void OnPropertyChanged(string propertyName) =>
+        PropertyChanged?.Invoke(this, new(propertyName));
 
     public event PropertyChangedEventHandler? PropertyChanged;
 }

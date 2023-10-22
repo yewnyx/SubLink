@@ -34,8 +34,7 @@ namespace tech.sublink.SubLinkEditor.Controls.Utils;
 /// This is so that observers can undo events, etc on the list after it has been cleared and
 /// raised a CollectionChanged event with a Reset action.
 /// </summary>
-public class ImpObservableCollection<T> : ObservableCollection<T>, ICloneable
-{
+internal class ImpObservableCollection<T> : ObservableCollection<T>, ICloneable {
     /// <summary>
     /// Inner list.
     /// </summary>
@@ -46,148 +45,106 @@ public class ImpObservableCollection<T> : ObservableCollection<T>, ICloneable
     /// </summary>
     private bool _inCollectionChangedEvent;
 
-    public ImpObservableCollection()
-    {
-    }
+    public ImpObservableCollection() { }
 
-    public ImpObservableCollection(IEnumerable<T> range) :
-        base(range)
-    {
-    }
+    public ImpObservableCollection(IEnumerable<T> range) : base(range) { }
 
-    public ImpObservableCollection(IList<T> list) :
-        base(list)
-    {
+    public ImpObservableCollection(IList<T> list) : base(list) {
         _inner.AddRange(list);
     }
 
-    public void AddRange(T[] range)
-    {
-        foreach (T item in range)
-        {
+    public void AddRange(T[] range) {
+        foreach (T item in range) {
             Add(item);
         }
     }
 
-    public void AddRange(IEnumerable range)
-    {
-        foreach (T item in range)
-        {
+    public void AddRange(IEnumerable range) {
+        foreach (T item in range) {
             Add(item);
         }
     }
 
-    public void AddRange(ICollection<T> range)
-    {
-        foreach (T item in range)
-        {
+    public void AddRange(ICollection<T> range) {
+        foreach (T item in range) {
             Add(item);
         }
     }
 
-    public void RemoveRange(T[] range)
-    {
-        foreach (T item in range)
-        {
+    public void RemoveRange(T[] range) {
+        foreach (T item in range) {
             Remove(item);
         }
     }
 
-    public void RemoveRange(IEnumerable range)
-    {
-        foreach (T item in range)
-        {
+    public void RemoveRange(IEnumerable range) {
+        foreach (T item in range) {
             Remove(item);
         }
     }
 
-    public void RemoveRange(ImpObservableCollection<T> range)
-    {
-        foreach (T item in range)
-        {
+    public void RemoveRange(ImpObservableCollection<T> range) {
+        foreach (T item in range) {
             Remove(item);
         }
     }
 
-    public void RemoveRangeAt(int index, int count)
-    {
-        for (int i = 0; i < count; ++i)
-        {
+    public void RemoveRangeAt(int index, int count) {
+        for (int i = 0; i < count; ++i) {
             RemoveAt(index);
         }
     }
 
-    public void RemoveRange(ICollection<T> range)
-    {
-        foreach (T item in range)
-        {
+    public void RemoveRange(ICollection<T> range) {
+        foreach (T item in range) {
             Remove(item);
         }
     }
 
-    public void RemoveRange(ICollection range)
-    {
-        foreach (T item in range)
-        {
+    public void RemoveRange(ICollection range) {
+        foreach (T item in range) {
             Remove(item);
         }
     }
 
-    protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-    {
+    protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
         Trace.Assert(!_inCollectionChangedEvent);
-
         base.OnCollectionChanged(e);
-
         _inCollectionChangedEvent = true;
 
-        try
-        {
-            if (e.Action == NotifyCollectionChangedAction.Reset)
-            {
+        try {
+            if (e.Action == NotifyCollectionChangedAction.Reset) {
                 if (_inner.Count > 0)
-                {
                     OnItemsRemoved(_inner);
-                }
 
                 _inner.Clear();
             }
 
-            if (e.OldItems != null)
-            {
-                foreach (T item in e.OldItems)
-                {
+            if (e.OldItems != null) {
+                foreach (T item in e.OldItems) {
                     _inner.Remove(item);
                 }
 
                 OnItemsRemoved(e.OldItems);
             }
 
-            if (e.NewItems != null)
-            {
-                foreach (T item in e.NewItems)
-                {
+            if (e.NewItems != null) {
+                foreach (T item in e.NewItems) {
                     _inner.Add(item);
                 }
 
                 OnItemsAdded(e.NewItems);
             }
-        }
-        finally
-        {
+        } finally {
             _inCollectionChangedEvent = false;
         }
     }
 
-    protected virtual void OnItemsAdded(ICollection items)
-    {
+    protected virtual void OnItemsAdded(ICollection items) =>
         ItemsAdded?.Invoke(this, new CollectionItemsChangedEventArgs(items));
-    }
 
-    protected virtual void OnItemsRemoved(ICollection items)
-    {
+    protected virtual void OnItemsRemoved(ICollection items) =>
         ItemsRemoved?.Invoke(this, new CollectionItemsChangedEventArgs(items));
-    }
 
     /// <summary>
     /// Event raised when items have been added.
@@ -199,18 +156,14 @@ public class ImpObservableCollection<T> : ObservableCollection<T>, ICloneable
     /// </summary>
     public event EventHandler<CollectionItemsChangedEventArgs> ItemsRemoved;
 
-    public T[] ToArray()
-    {
-        return _inner.ToArray();
-    }
+    public T[] ToArray() =>
+        _inner.ToArray();
 
-    public T2[] ToArray<T2>()
-        where T2 : class
-    {
+    public T2[] ToArray<T2>() where T2 : class {
         T2[] array = new T2[Count];
         int i = 0;
-        foreach (T obj in this)
-        {
+
+        foreach (T obj in this) {
             array[i] = obj as T2;
             ++i;
         }
@@ -218,11 +171,10 @@ public class ImpObservableCollection<T> : ObservableCollection<T>, ICloneable
         return array;
     }
 
-    public object Clone()
-    {
-        ImpObservableCollection<T> clone = new ImpObservableCollection<T>();
-        foreach (ICloneable obj in this)
-        {
+    public object Clone() {
+        ImpObservableCollection<T> clone = new();
+
+        foreach (ICloneable obj in this.Select(v => (ICloneable)v)) {
             clone.Add((T)obj.Clone());
         }
 

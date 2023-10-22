@@ -1,31 +1,22 @@
 ﻿using System.Collections;
 
-namespace Common
-{
+namespace tech.sublink.SubLinkEditor.Controls.Utils;
+
+/// <summary>
+/// Arguments to the ItemsAdded and ItemsRemoved events.
+/// </summary>
+internal class CollectionItemsEventArgs : EventArgs {
     /// <summary>
-    /// Arguments to the ItemsAdded and ItemsRemoved events.
+    /// The list of items that were cleared from the list.
     /// </summary>
-    public class CollectionItemsEventArgs : EventArgs
-    {
-        /// <summary>
-        /// The list of items that were cleared from the list.
-        /// </summary>
-        private ICollection items = null;
+    private readonly ICollection _items = null;
 
-        public CollectionItemsEventArgs(ICollection items)
-        {
-            this.items = items;
-        }
-
-        /// <summary>
-        /// The list of items that were cleared from the list.
-        /// </summary>
-        public ICollection Items
-        {
-            get
-            {
-                return items;
-            }
-        }
+    public CollectionItemsEventArgs(ICollection items) {
+        _items = items;
     }
+
+    /// <summary>
+    /// The list of items that were cleared from the list.
+    /// </summary>
+    public ICollection Items => _items;
 }

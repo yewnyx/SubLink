@@ -8,7 +8,7 @@ namespace tech.sublink.SubLinkEditor.Controls.MouseDragScrollViewer;
 /// <summary>
 /// 
 /// </summary>
-public class MouseUtilities {
+internal class MouseUtilities {
     [StructLayout(LayoutKind.Sequential)]
     private readonly struct Win32Point {
         public readonly Int32 X;
@@ -21,20 +21,14 @@ public class MouseUtilities {
     [DllImport("user32.dll")]
     private static extern bool ScreenToClient(IntPtr hwnd, ref Win32Point pt);
 
-    public static Point GetMousePosition(Visual relativeTo)
-    {
+    public static Point GetMousePosition(Visual relativeTo) {
         Win32Point mouse = new();
         GetCursorPos(ref mouse);
 
-        HwndSource presentationSource =
-            (HwndSource)PresentationSource.FromVisual(relativeTo);
-
+        HwndSource presentationSource = (HwndSource)PresentationSource.FromVisual(relativeTo);
         ScreenToClient(presentationSource.Handle, ref mouse);
-
         GeneralTransform transform = relativeTo.TransformToAncestor(presentationSource.RootVisual);
-
         Point offset = transform.Transform(new(0, 0));
-        // 
         //             Point p = new Point(mouse.X - offset.X, mouse.Y - offset.Y);
         //             System.Diagnostics.Debug.WriteLine(string.Format("mouse {0:0.0}|{1:0.0} offset {2:0.0}|{3:0.0} res {4:0.0}|{5:0.0}",
         //                 mouse.X, mouse.Y, offset.X, offset.Y, p.X, p.Y));

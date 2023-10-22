@@ -1,7 +1,6 @@
 ﻿namespace tech.sublink.SubLinkEditor.Undo;
 
-public interface IUndoCommand
-{
+internal interface IUndoCommand {
     void Redo();
     void Undo();
 }

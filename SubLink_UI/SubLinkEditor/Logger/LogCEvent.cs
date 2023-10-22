@@ -2,19 +2,13 @@
 
 namespace tech.sublink.SubLinkEditor.Logger;
 
-public class LogCEvent : ILog
-{
-    public void Close()
-    {
+internal class LogCEvent : ILog {
+    public void Close() { }
 
-    }
-
-    public void Write(LogVerbosity verbose, string msg)
-    {
+    public void Write(LogVerbosity verbose, string msg) {
         msg = msg.Replace("{", "{{").Replace("}", "}}");
 
-        switch (verbose)
-        {
+        switch (verbose) {
             case LogVerbosity.Trace:
                 LogFile.OnDebug(msg);
                 break;

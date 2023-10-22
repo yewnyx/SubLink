@@ -8,8 +8,7 @@ namespace tech.sublink.SubLinkEditor.Undo;
 /// <summary>
 /// Used to copy info from a ConnectionViewModel
 /// </summary>
-struct ConnectionInfo
-{
+struct ConnectionInfo {
     public ConnectionViewModel ConnectionVm;
     public ConnectorViewModel DestConnector;
     public Point DestConnectorHotspot;
@@ -21,8 +20,7 @@ struct ConnectionInfo
 /// <summary>
 /// 
 /// </summary>
-class CreateConnectionUndoCommand : IUndoCommand
-{
+class CreateConnectionUndoCommand : IUndoCommand {
     readonly FlowGraphControlViewModel _flowGraphVm;
 
     ConnectionViewModel _connectionVm;
@@ -35,8 +33,7 @@ class CreateConnectionUndoCommand : IUndoCommand
     /// <summary>
     /// 
     /// </summary>
-    public CreateConnectionUndoCommand(FlowGraphControlViewModel fgvm, ConnectionViewModel connectionVm)
-    {
+    public CreateConnectionUndoCommand(FlowGraphControlViewModel fgvm, ConnectionViewModel connectionVm) {
         _flowGraphVm = fgvm;
         //_ConnectionVM = connectionVM_.Copy();
         _destConnector = connectionVm.DestConnector;
@@ -49,18 +46,14 @@ class CreateConnectionUndoCommand : IUndoCommand
     /// <summary>
     /// 
     /// </summary>
-    public void Redo()
-    {
+    public void Redo() =>
         _flowGraphVm.AddConnection(_connectionVm);
-    }
 
     /// <summary>
     /// 
     /// </summary>
-    public void Undo()
-    {
-        ConnectionViewModel copy = new ConnectionViewModel
-        {
+    public void Undo() {
+        ConnectionViewModel copy = new() {
             DestConnector = _destConnector,
             DestConnectorHotspot = _destConnectorHotspot,
             Points = _points,
@@ -78,8 +71,7 @@ class CreateConnectionUndoCommand : IUndoCommand
 /// <summary>
 /// 
 /// </summary>
-class DeleteConnectionUndoCommand : IUndoCommand
-{
+class DeleteConnectionUndoCommand : IUndoCommand {
     readonly FlowGraphControlViewModel _flowGraphVm;
 
     ConnectionViewModel _connectionVm;
@@ -92,8 +84,7 @@ class DeleteConnectionUndoCommand : IUndoCommand
     /// <summary>
     /// 
     /// </summary>
-    public DeleteConnectionUndoCommand(FlowGraphControlViewModel fgv, ConnectionViewModel connectionVm)
-    {
+    public DeleteConnectionUndoCommand(FlowGraphControlViewModel fgv, ConnectionViewModel connectionVm) {
         _flowGraphVm = fgv;
         //_ConnectionVM = connectionVM_.Copy();
         _destConnector = connectionVm.DestConnector;
@@ -106,19 +97,14 @@ class DeleteConnectionUndoCommand : IUndoCommand
     /// <summary>
     /// 
     /// </summary>
-    public void Redo()
-    {
+    public void Redo() =>
         _flowGraphVm.DeleteConnection(_connectionVm);
-
-    }
 
     /// <summary>
     /// 
     /// </summary>
-    public void Undo()
-    {
-        ConnectionViewModel copy = new ConnectionViewModel
-        {
+    public void Undo() {
+        ConnectionViewModel copy = new() {
             DestConnector = _destConnector,
             DestConnectorHotspot = _destConnectorHotspot,
             Points = _points,
@@ -134,16 +120,14 @@ class DeleteConnectionUndoCommand : IUndoCommand
 /// <summary>
 /// 
 /// </summary>
-class CreateConnectionsUndoCommand : IUndoCommand
-{
+class CreateConnectionsUndoCommand : IUndoCommand {
     readonly FlowGraphControlViewModel _flowGraphVm;
     readonly IEnumerable<ConnectionViewModel> _connectionsVm;
 
     /// <summary>
     /// 
     /// </summary>
-    public CreateConnectionsUndoCommand(FlowGraphControlViewModel fgv, IEnumerable<ConnectionViewModel> connectionsVm)
-    {
+    public CreateConnectionsUndoCommand(FlowGraphControlViewModel fgv, IEnumerable<ConnectionViewModel> connectionsVm) {
         _flowGraphVm = fgv;
         _connectionsVm = connectionsVm;
     }
@@ -151,39 +135,31 @@ class CreateConnectionsUndoCommand : IUndoCommand
     /// <summary>
     /// 
     /// </summary>
-    public void Redo()
-    {
+    public void Redo() =>
         _flowGraphVm.AddConnections(_connectionsVm);
-    }
 
     /// <summary>
     /// 
     /// </summary>
-    public void Undo()
-    {
+    public void Undo() =>
         _flowGraphVm.DeleteConnections(_connectionsVm);
-    }
 }
 
 /// <summary>
 /// 
 /// </summary>
-class DeleteConnectionsUndoCommand : IUndoCommand
-{
+class DeleteConnectionsUndoCommand : IUndoCommand {
     readonly FlowGraphControlViewModel _flowGraphVm;
-    readonly List<ConnectionInfo> _connectionInfoList = new List<ConnectionInfo>();
+    readonly List<ConnectionInfo> _connectionInfoList = new();
 
     /// <summary>
     /// 
     /// </summary>
-    public DeleteConnectionsUndoCommand(FlowGraphControlViewModel fgv, IEnumerable<ConnectionViewModel> connectionsVm)
-    {
+    public DeleteConnectionsUndoCommand(FlowGraphControlViewModel fgv, IEnumerable<ConnectionViewModel> connectionsVm) {
         _flowGraphVm = fgv;
 
-        foreach (ConnectionViewModel c in connectionsVm)
-        {
-            _connectionInfoList.Add(new ConnectionInfo
-            {
+        foreach (ConnectionViewModel c in connectionsVm) {
+            _connectionInfoList.Add(new() {
                 ConnectionVm = null,
                 DestConnector = c.DestConnector,
                 DestConnectorHotspot = c.DestConnectorHotspot,
@@ -197,12 +173,10 @@ class DeleteConnectionsUndoCommand : IUndoCommand
     /// <summary>
     /// 
     /// </summary>
-    public void Redo()
-    {
-        List<ConnectionViewModel> connList = new List<ConnectionViewModel>();
+    public void Redo() {
+        List<ConnectionViewModel> connList = new();
 
-        for (int i = 0; i < _connectionInfoList.Count; i++)
-        {
+        for (int i = 0; i < _connectionInfoList.Count; i++) {
             connList.Add(_connectionInfoList[i].ConnectionVm);
         }
 
@@ -212,14 +186,11 @@ class DeleteConnectionsUndoCommand : IUndoCommand
     /// <summary>
     /// 
     /// </summary>
-    public void Undo()
-    {
-        List<ConnectionViewModel> connList = new List<ConnectionViewModel>();
+    public void Undo() {
+        List<ConnectionViewModel> connList = new();
 
-        for (int i = 0; i < _connectionInfoList.Count; i++)
-        {
-            ConnectionViewModel copy = new ConnectionViewModel
-            {
+        for (int i = 0; i < _connectionInfoList.Count; i++) {
+            ConnectionViewModel copy = new() {
                 DestConnector = _connectionInfoList[i].DestConnector,
                 DestConnectorHotspot = _connectionInfoList[i].DestConnectorHotspot,
                 Points = _connectionInfoList[i].Points,

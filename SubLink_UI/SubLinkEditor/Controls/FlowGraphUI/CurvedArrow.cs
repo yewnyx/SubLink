@@ -9,7 +9,7 @@ namespace tech.sublink.SubLinkEditor.Controls.FlowGraphUI;
 /// <summary>
 /// Defines an arrow that has multiple points.
 /// </summary>
-public class CurvedArrow : Shape {
+internal class CurvedArrow : Shape {
     public static readonly DependencyProperty ArrowHeadLengthProperty =
         DependencyProperty.Register("ArrowHeadLength", typeof(double), typeof(CurvedArrow),
             new FrameworkPropertyMetadata(8.0, FrameworkPropertyMetadataOptions.AffectsRender));
@@ -116,7 +116,7 @@ public class CurvedArrow : Shape {
             //
             Geometry geometry = GenerateGeometry();
 
-            GeometryGroup group = new GeometryGroup();
+            GeometryGroup group = new();
             group.Children.Add(geometry);
 
             //GenerateArrowHeadGeometry(group);
@@ -177,8 +177,7 @@ public class CurvedArrow : Shape {
 
             pathGeometry.Figures.Add(fig);
         } else {
-            PointCollection adjustedPoints = new();
-            adjustedPoints.Add(Points[0]);
+            PointCollection adjustedPoints = new() { Points[0] };
 
             for (int i = 1; i < Points.Count; ++i) {
                 adjustedPoints.Add(Points[i]);

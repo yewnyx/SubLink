@@ -5,8 +5,7 @@ namespace tech.sublink.SubLinkEditor.Controls.Utils;
 /// <summary>
 /// Abstract base for view-model classes that need to implement INotifyPropertyChanged.
 /// </summary>
-public abstract class AbstractModelBase : INotifyPropertyChanged
-{
+internal abstract class AbstractModelBase : INotifyPropertyChanged {
 #if DEBUG
     private static int _nextObjectId;
 
@@ -16,10 +15,8 @@ public abstract class AbstractModelBase : INotifyPropertyChanged
     /// <summary>
     /// Raises the PropertyChanged event.
     /// </summary>
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
+    protected virtual void OnPropertyChanged(string propertyName) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 
     /// <summary>
     /// Event raised to indicate that a property value has changed.

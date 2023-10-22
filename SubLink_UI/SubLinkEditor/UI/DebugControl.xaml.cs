@@ -5,13 +5,11 @@ namespace tech.sublink.SubLinkEditor.UI;
 /// <summary>
 /// Interaction logic for DebugControl.xaml
 /// </summary>
-public partial class DebugControl : UserControl
-{
+public partial class DebugControl : UserControl {
     /// <summary>
     /// 
     /// </summary>
-    public DebugControl()
-    {
+    public DebugControl() {
         InitializeComponent();
     }
 }

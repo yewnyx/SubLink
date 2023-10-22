@@ -8,8 +8,7 @@ namespace tech.sublink.SubLinkEditor.Controls.ZoomAndPan;
 /// <summary>
 /// A class that wraps up zooming and panning of it's content.
 /// </summary>
-public partial class ZoomAndPanControl : ContentControl, IScrollInfo
-{
+internal partial class ZoomAndPanControl : ContentControl, IScrollInfo {
     /// <summary>
     /// Reference to the underlying content, which is named PART_Content in the template.
     /// </summary>
@@ -80,13 +79,13 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// Records the unscaled extent of the content.
     /// This is calculated during the measure and arrange.
     /// </summary>
-    private Size _unScaledExtent = new Size(0, 0);
+    private Size _unScaledExtent = new(0, 0);
 
     /// <summary>
     /// Records the size of the viewport (in viewport coordinates) onto the content.
     /// This is calculated during the measure and arrange.
     /// </summary>
-    private Size _viewport = new Size(0, 0);
+    private Size _viewport = new(0, 0);
 
     /// <summary>
     /// Reference to the ScrollViewer that is wrapped (in XAML) around the ZoomAndPanControl.
@@ -153,8 +152,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Get/set the X offset (in content coordinates) of the view on the content.
     /// </summary>
-    public double ContentOffsetX
-    {
+    public double ContentOffsetX {
         get => (double)GetValue(ContentOffsetXProperty);
         set => SetValue(ContentOffsetXProperty, value);
     }
@@ -167,8 +165,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Get/set the Y offset (in content coordinates) of the view on the content.
     /// </summary>
-    public double ContentOffsetY
-    {
+    public double ContentOffsetY {
         get => (double)GetValue(ContentOffsetYProperty);
         set => SetValue(ContentOffsetYProperty, value);
     }
@@ -181,8 +178,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Get/set the current scale (or zoom factor) of the content.
     /// </summary>
-    public double ContentScale
-    {
+    public double ContentScale {
         get => (double)GetValue(ContentScaleProperty);
         set => SetValue(ContentScaleProperty, value);
     }
@@ -195,8 +191,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Get/set the minimum value for 'ContentScale'.
     /// </summary>
-    public double MinContentScale
-    {
+    public double MinContentScale {
         get => (double)GetValue(MinContentScaleProperty);
         set => SetValue(MinContentScaleProperty, value);
     }
@@ -204,8 +199,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Get/set the maximum value for 'ContentScale'.
     /// </summary>
-    public double MaxContentScale
-    {
+    public double MaxContentScale {
         get => (double)GetValue(MaxContentScaleProperty);
         set => SetValue(MaxContentScaleProperty, value);
     }
@@ -213,8 +207,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// The X coordinate of the content focus, this is the point that we are focusing on when zooming.
     /// </summary>
-    public double ContentZoomFocusX
-    {
+    public double ContentZoomFocusX {
         get => (double)GetValue(ContentZoomFocusXProperty);
         set => SetValue(ContentZoomFocusXProperty, value);
     }
@@ -222,8 +215,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// The Y coordinate of the content focus, this is the point that we are focusing on when zooming.
     /// </summary>
-    public double ContentZoomFocusY
-    {
+    public double ContentZoomFocusY {
         get => (double)GetValue(ContentZoomFocusYProperty);
         set => SetValue(ContentZoomFocusYProperty, value);
     }
@@ -232,8 +224,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// The X coordinate of the viewport focus, this is the point in the viewport (in viewport coordinates) 
     /// that the content focus point is locked to while zooming in.
     /// </summary>
-    public double ViewportZoomFocusX
-    {
+    public double ViewportZoomFocusX {
         get => (double)GetValue(ViewportZoomFocusXProperty);
         set => SetValue(ViewportZoomFocusXProperty, value);
     }
@@ -242,8 +233,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// The Y coordinate of the viewport focus, this is the point in the viewport (in viewport coordinates) 
     /// that the content focus point is locked to while zooming in.
     /// </summary>
-    public double ViewportZoomFocusY
-    {
+    public double ViewportZoomFocusY {
         get => (double)GetValue(ViewportZoomFocusYProperty);
         set => SetValue(ViewportZoomFocusYProperty, value);
     }
@@ -251,8 +241,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// The duration of the animations (in seconds) started by calling AnimatedZoomTo and the other animation methods.
     /// </summary>
-    public double AnimationDuration
-    {
+    public double AnimationDuration {
         get => (double)GetValue(AnimationDurationProperty);
         set => SetValue(AnimationDurationProperty, value);
     }
@@ -260,8 +249,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Get the viewport width, in content coordinates.
     /// </summary>
-    public double ContentViewportWidth
-    {
+    public double ContentViewportWidth {
         get => (double)GetValue(ContentViewportWidthProperty);
         set => SetValue(ContentViewportWidthProperty, value);
     }
@@ -269,8 +257,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Get the viewport height, in content coordinates.
     /// </summary>
-    public double ContentViewportHeight
-    {
+    public double ContentViewportHeight {
         get => (double)GetValue(ContentViewportHeightProperty);
         set => SetValue(ContentViewportHeightProperty, value);
     }
@@ -279,8 +266,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// Set to 'true' to enable the mouse wheel to scroll the zoom and pan control.
     /// This is set to 'false' by default.
     /// </summary>
-    public bool IsMouseWheelScrollingEnabled
-    {
+    public bool IsMouseWheelScrollingEnabled {
         get => (bool)GetValue(IsMouseWheelScrollingEnabledProperty);
         set => SetValue(IsMouseWheelScrollingEnabledProperty, value);
     }
@@ -288,11 +274,9 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Do an animated zoom to view a specific scale and rectangle (in content coordinates).
     /// </summary>
-    public void AnimatedZoomTo(double newScale, Rect contentRect)
-    {
-        AnimatedZoomPointToViewportCenter(newScale, new Point(contentRect.X + (contentRect.Width / 2), contentRect.Y + (contentRect.Height / 2)),
-            delegate
-            {
+    public void AnimatedZoomTo(double newScale, Rect contentRect) {
+        AnimatedZoomPointToViewportCenter(newScale,
+            new(contentRect.X + (contentRect.Width / 2), contentRect.Y + (contentRect.Height / 2)), delegate {
                 //
                 // At the end of the animation, ensure that we are snapped to the specified content offset.
                 // Due to zooming in on the content focus point and rounding errors, the content offset may
@@ -306,32 +290,31 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Do an animated zoom to the specified rectangle (in content coordinates).
     /// </summary>
-    public void AnimatedZoomTo(Rect contentRect)
-    {
+    public void AnimatedZoomTo(Rect contentRect) {
         double scaleX = ContentViewportWidth / contentRect.Width;
         double scaleY = ContentViewportHeight / contentRect.Height;
         double newScale = ContentScale * Math.Min(scaleX, scaleY);
 
-        AnimatedZoomPointToViewportCenter(newScale, new Point(contentRect.X + (contentRect.Width / 2), contentRect.Y + (contentRect.Height / 2)), null);
+        AnimatedZoomPointToViewportCenter(newScale,
+            new(contentRect.X + (contentRect.Width / 2), contentRect.Y + (contentRect.Height / 2)), null);
     }
 
     /// <summary>
     /// Instantly zoom to the specified rectangle (in content coordinates).
     /// </summary>
-    public void ZoomTo(Rect contentRect)
-    {
+    public void ZoomTo(Rect contentRect) {
         double scaleX = ContentViewportWidth / contentRect.Width;
         double scaleY = ContentViewportHeight / contentRect.Height;
         double newScale = ContentScale * Math.Min(scaleX, scaleY);
 
-        ZoomPointToViewportCenter(newScale, new Point(contentRect.X + (contentRect.Width / 2), contentRect.Y + (contentRect.Height / 2)));
+        ZoomPointToViewportCenter(newScale,
+            new(contentRect.X + (contentRect.Width / 2), contentRect.Y + (contentRect.Height / 2)));
     }
 
     /// <summary>
     /// Instantly center the view on the specified point (in content coordinates).
     /// </summary>
-    public void SnapContentOffsetTo(Point contentOffset)
-    {
+    public void SnapContentOffsetTo(Point contentOffset) {
         AnimationHelper.CancelAnimation(this, ContentOffsetXProperty);
         AnimationHelper.CancelAnimation(this, ContentOffsetYProperty);
 
@@ -342,8 +325,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Instantly center the view on the specified point (in content coordinates).
     /// </summary>
-    public void SnapTo(Point contentPoint)
-    {
+    public void SnapTo(Point contentPoint) {
         AnimationHelper.CancelAnimation(this, ContentOffsetXProperty);
         AnimationHelper.CancelAnimation(this, ContentOffsetYProperty);
 
@@ -354,8 +336,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Use animation to center the view on the specified point (in content coordinates).
     /// </summary>
-    public void AnimatedSnapTo(Point contentPoint)
-    {
+    public void AnimatedSnapTo(Point contentPoint) {
         double newX = contentPoint.X - (ContentViewportWidth / 2);
         double newY = contentPoint.Y - (ContentViewportHeight / 2);
 
@@ -367,8 +348,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// Zoom in/out centered on the specified point (in content coordinates).
     /// The focus point is kept locked to it's on screen position (ala google maps).
     /// </summary>
-    public void AnimatedZoomAboutPoint(double newContentScale, Point contentZoomFocus)
-    {
+    public void AnimatedZoomAboutPoint(double newContentScale, Point contentZoomFocus) {
         newContentScale = Math.Min(Math.Max(newContentScale, MinContentScale), MaxContentScale);
 
         AnimationHelper.CancelAnimation(this, ContentZoomFocusXProperty);
@@ -386,21 +366,17 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
         //
         _enableContentOffsetUpdateFromScale = true;
 
-        AnimationHelper.StartAnimation(this, ContentScaleProperty, newContentScale, AnimationDuration,
-            delegate
-            {
-                _enableContentOffsetUpdateFromScale = false;
-
-                ResetViewportZoomFocus();
-            });
+        AnimationHelper.StartAnimation(this, ContentScaleProperty, newContentScale, AnimationDuration, delegate {
+            _enableContentOffsetUpdateFromScale = false;
+            ResetViewportZoomFocus();
+        });
     }
 
     /// <summary>
     /// Zoom in/out centered on the specified point (in content coordinates).
     /// The focus point is kept locked to it's on screen position (ala google maps).
     /// </summary>
-    public void ZoomAboutPoint(double newContentScale, Point contentZoomFocus)
-    {
+    public void ZoomAboutPoint(double newContentScale, Point contentZoomFocus) {
         newContentScale = Math.Min(Math.Max(newContentScale, MinContentScale), MaxContentScale);
 
         double screenSpaceZoomOffsetX = (contentZoomFocus.X - ContentOffsetX) * ContentScale;
@@ -422,30 +398,25 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Zoom in/out centered on the viewport center.
     /// </summary>
-    public void AnimatedZoomTo(double contentScale)
-    {
-        Point zoomCenter = new Point(ContentOffsetX + (ContentViewportWidth / 2), ContentOffsetY + (ContentViewportHeight / 2));
+    public void AnimatedZoomTo(double contentScale) {
+        Point zoomCenter = new(ContentOffsetX + (ContentViewportWidth / 2), ContentOffsetY + (ContentViewportHeight / 2));
         AnimatedZoomAboutPoint(contentScale, zoomCenter);
     }
 
     /// <summary>
     /// Zoom in/out centered on the viewport center.
     /// </summary>
-    public void ZoomTo(double contentScale)
-    {
-        Point zoomCenter = new Point(ContentOffsetX + (ContentViewportWidth / 2), ContentOffsetY + (ContentViewportHeight / 2));
+    public void ZoomTo(double contentScale) {
+        Point zoomCenter = new(ContentOffsetX + (ContentViewportWidth / 2), ContentOffsetY + (ContentViewportHeight / 2));
         ZoomAboutPoint(contentScale, zoomCenter);
     }
 
     /// <summary>
     /// Do animation that scales the content so that it fits completely in the control.
     /// </summary>
-    public void AnimatedScaleToFit()
-    {
+    public void AnimatedScaleToFit() {
         if (_content == null)
-        {
             throw new ApplicationException("PART_Content was not found in the ZoomAndPanControl visual template!");
-        }
 
         AnimatedZoomTo(new Rect(0, 0, _content.ActualWidth, _content.ActualHeight));
     }
@@ -453,12 +424,9 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Instantly scale the content so that it fits completely in the control.
     /// </summary>
-    public void ScaleToFit()
-    {
+    public void ScaleToFit() {
         if (_content == null)
-        {
             throw new ApplicationException("PART_Content was not found in the ZoomAndPanControl visual template!");
-        }
 
         ZoomTo(new Rect(0, 0, _content.ActualWidth, _content.ActualHeight));
     }
@@ -466,37 +434,26 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Static constructor to define metadata for the control (and link it to the style in Generic.xaml).
     /// </summary>
-    static ZoomAndPanControl()
-    {
+    static ZoomAndPanControl() =>
         DefaultStyleKeyProperty.OverrideMetadata(typeof(ZoomAndPanControl), new FrameworkPropertyMetadata(typeof(ZoomAndPanControl)));
-    }
 
     /// <summary>
     /// Called when a template has been applied to the control.
     /// </summary>
-    public override void OnApplyTemplate()
-    {
+    public override void OnApplyTemplate() {
         base.OnApplyTemplate();
-
         _content = Template.FindName("PART_Content", this) as FrameworkElement;
-        if (_content != null)
-        {
-            //
-            // Setup the transform on the content so that we can scale it by 'ContentScale'.
-            //
-            _contentScaleTransform = new ScaleTransform(ContentScale, ContentScale);
 
-            //
+        if (_content != null) {
+            // Setup the transform on the content so that we can scale it by 'ContentScale'.
+            _contentScaleTransform = new(ContentScale, ContentScale);
             // Setup the transform on the content so that we can translate it by 'ContentOffsetX' and 'ContentOffsetY'.
-            //
-            _contentOffsetTransform = new TranslateTransform();
+            _contentOffsetTransform = new();
             UpdateTranslationX();
             UpdateTranslationY();
 
-            //
             // Setup a transform group to contain the translation and scale transforms, and then
             // assign this to the content's 'RenderTransform'.
-            //
             TransformGroup transformGroup = new TransformGroup();
             transformGroup.Children.Add(_contentOffsetTransform);
             transformGroup.Children.Add(_contentScaleTransform);
@@ -507,8 +464,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Zoom to the specified scale and move the specified focus point to the center of the viewport.
     /// </summary>
-    private void AnimatedZoomPointToViewportCenter(double newContentScale, Point contentZoomFocus, EventHandler? callback)
-    {
+    private void AnimatedZoomPointToViewportCenter(double newContentScale, Point contentZoomFocus, EventHandler? callback) {
         newContentScale = Math.Min(Math.Max(newContentScale, MinContentScale), MaxContentScale);
 
         AnimationHelper.CancelAnimation(this, ContentZoomFocusXProperty);
@@ -526,13 +482,10 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
         //
         _enableContentOffsetUpdateFromScale = true;
 
-        AnimationHelper.StartAnimation(this, ContentScaleProperty, newContentScale, AnimationDuration,
-            delegate
-            {
-                _enableContentOffsetUpdateFromScale = false;
-
-                callback?.Invoke(this, EventArgs.Empty);
-            });
+        AnimationHelper.StartAnimation(this, ContentScaleProperty, newContentScale, AnimationDuration, delegate {
+            _enableContentOffsetUpdateFromScale = false;
+            callback?.Invoke(this, EventArgs.Empty);
+        });
 
         AnimationHelper.StartAnimation(this, ViewportZoomFocusXProperty, ViewportWidth / 2, AnimationDuration);
         AnimationHelper.StartAnimation(this, ViewportZoomFocusYProperty, ViewportHeight / 2, AnimationDuration);
@@ -541,8 +494,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Zoom to the specified scale and move the specified focus point to the center of the viewport.
     /// </summary>
-    private void ZoomPointToViewportCenter(double newContentScale, Point contentZoomFocus)
-    {
+    private void ZoomPointToViewportCenter(double newContentScale, Point contentZoomFocus) {
         newContentScale = Math.Min(Math.Max(newContentScale, MinContentScale), MaxContentScale);
 
         AnimationHelper.CancelAnimation(this, ContentScaleProperty);
@@ -557,63 +509,47 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Event raised when the 'ContentScale' property has changed value.
     /// </summary>
-    private static void ContentScale_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
-    {
+    private static void ContentScale_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e) {
         ZoomAndPanControl c = (ZoomAndPanControl)o;
 
-        if (c._contentScaleTransform != null)
-        {
-            //
+        if (c._contentScaleTransform != null) {
             // Update the content scale transform whenever 'ContentScale' changes.
-            //
             c._contentScaleTransform.ScaleX = c.ContentScale;
             c._contentScaleTransform.ScaleY = c.ContentScale;
         }
 
-        //
         // Update the size of the viewport in content coordinates.
-        //
         c.UpdateContentViewportSize();
 
-        if (c._enableContentOffsetUpdateFromScale)
-        {
-            try
-            {
-                // 
+        if (c._enableContentOffsetUpdateFromScale) {
+            try {
                 // Disable content focus syncronization.  We are about to update content offset whilst zooming
                 // to ensure that the viewport is focused on our desired content focus point.  Setting this
                 // to 'true' stops the automatic update of the content focus when content offset changes.
-                //
                 c._disableContentFocusSync = true;
 
-                //
                 // Whilst zooming in or out keep the content offset up-to-date so that the viewport is always
                 // focused on the content focus point (and also so that the content focus is locked to the 
                 // viewport focus point - this is how the google maps style zooming works).
-                //
                 double viewportOffsetX = c.ViewportZoomFocusX - (c.ViewportWidth / 2);
                 double viewportOffsetY = c.ViewportZoomFocusY - (c.ViewportHeight / 2);
                 double contentOffsetX = viewportOffsetX / c.ContentScale;
                 double contentOffsetY = viewportOffsetY / c.ContentScale;
                 c.ContentOffsetX = (c.ContentZoomFocusX - (c.ContentViewportWidth / 2)) - contentOffsetX;
                 c.ContentOffsetY = (c.ContentZoomFocusY - (c.ContentViewportHeight / 2)) - contentOffsetY;
-            }
-            finally
-            {
+            } finally {
                 c._disableContentFocusSync = false;
             }
         }
 
         c.ContentScaleChanged?.Invoke(c, EventArgs.Empty);
-
         c._scrollOwner?.InvalidateScrollInfo();
     }
 
     /// <summary>
     /// Method called to clamp the 'ContentScale' value to its valid range.
     /// </summary>
-    private static object ContentScale_Coerce(DependencyObject d, object baseValue)
-    {
+    private static object ContentScale_Coerce(DependencyObject d, object baseValue) {
         ZoomAndPanControl c = (ZoomAndPanControl)d;
         double value = (double)baseValue;
         value = Math.Min(Math.Max(value, c.MinContentScale), c.MaxContentScale);
@@ -623,8 +559,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Event raised 'MinContentScale' or 'MaxContentScale' has changed.
     /// </summary>
-    private static void MinOrMaxContentScale_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
-    {
+    private static void MinOrMaxContentScale_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e) {
         ZoomAndPanControl c = (ZoomAndPanControl)o;
         c.ContentScale = Math.Min(Math.Max(c.ContentScale, c.MinContentScale), c.MaxContentScale);
     }
@@ -632,40 +567,27 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Event raised when the 'ContentOffsetX' property has changed value.
     /// </summary>
-    private static void ContentOffsetX_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
-    {
+    private static void ContentOffsetX_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e) {
         ZoomAndPanControl c = (ZoomAndPanControl)o;
-
         c.UpdateTranslationX();
 
         if (!c._disableContentFocusSync)
-        {
-            //
             // Normally want to automatically update content focus when content offset changes.
             // Although this is disabled using 'disableContentFocusSync' when content offset changes due to in-progress zooming.
-            //
             c.UpdateContentZoomFocusX();
-        }
 
-        //
         // Raise an event to let users of the control know that the content offset has changed.
-        //
         c.ContentOffsetXChanged?.Invoke(c, EventArgs.Empty);
 
         if (!c._disableScrollOffsetSync && c._scrollOwner != null)
-        {
-            //
             // Notify the owning ScrollViewer that the scrollbar offsets should be updated.
-            //
             c._scrollOwner.InvalidateScrollInfo();
-        }
     }
 
     /// <summary>
     /// Method called to clamp the 'ContentOffsetX' value to its valid range.
     /// </summary>
-    private static object ContentOffsetX_Coerce(DependencyObject d, object baseValue)
-    {
+    private static object ContentOffsetX_Coerce(DependencyObject d, object baseValue) {
         ZoomAndPanControl c = (ZoomAndPanControl)d;
         double value = (double)baseValue;
         double minOffsetX = 0.0;
@@ -677,41 +599,28 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Event raised when the 'ContentOffsetY' property has changed value.
     /// </summary>
-    private static void ContentOffsetY_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
-    {
+    private static void ContentOffsetY_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e) {
         ZoomAndPanControl c = (ZoomAndPanControl)o;
-
         c.UpdateTranslationY();
 
         if (!c._disableContentFocusSync)
-        {
-            //
             // Normally want to automatically update content focus when content offset changes.
             // Although this is disabled using 'disableContentFocusSync' when content offset changes due to in-progress zooming.
-            //
             c.UpdateContentZoomFocusY();
-        }
 
-        //
         // Raise an event to let users of the control know that the content offset has changed.
-        //
         c.ContentOffsetYChanged?.Invoke(c, EventArgs.Empty);
 
         if (!c._disableScrollOffsetSync && c._scrollOwner != null)
-        {
-            //
             // Notify the owning ScrollViewer that the scrollbar offsets should be updated.
-            //
             c._scrollOwner.InvalidateScrollInfo();
-        }
 
     }
 
     /// <summary>
     /// Method called to clamp the 'ContentOffsetY' value to its valid range.
     /// </summary>
-    private static object ContentOffsetY_Coerce(DependencyObject d, object baseValue)
-    {
+    private static object ContentOffsetY_Coerce(DependencyObject d, object baseValue) {
         ZoomAndPanControl c = (ZoomAndPanControl)d;
         double value = (double)baseValue;
         double minOffsetY = 0.0;
@@ -723,8 +632,7 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Reset the viewport zoom focus to the center of the viewport.
     /// </summary>
-    private void ResetViewportZoomFocus()
-    {
+    private void ResetViewportZoomFocus() {
         ViewportZoomFocusX = ViewportWidth / 2;
         ViewportZoomFocusY = ViewportHeight / 2;
     }
@@ -732,52 +640,32 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Update the viewport size from the specified size.
     /// </summary>
-    private void UpdateViewportSize(Size newSize)
-    {
-        if (_viewport == newSize)
-        {
-            //
-            // The viewport is already the specified size.
-            //
+    private void UpdateViewportSize(Size newSize) {
+        if (_viewport == newSize) // The viewport is already the specified size.
             return;
-        }
 
         _viewport = newSize;
 
-        //
         // Update the viewport size in content coordiates.
-        //
         UpdateContentViewportSize();
-
-        //
         // Initialise the content zoom focus point.
-        //
         UpdateContentZoomFocusX();
         UpdateContentZoomFocusY();
-
-        //
         // Reset the viewport zoom focus to the center of the viewport.
-        //
         ResetViewportZoomFocus();
 
-        //
         // Update content offset from itself when the size of the viewport changes.
         // This ensures that the content offset remains properly clamped to its valid range.
-        //
         ContentOffsetX = ContentOffsetX;
         ContentOffsetY = ContentOffsetY;
-
-        //
         // Tell that owning ScrollViewer that scrollbar data has changed.
-        //
         _scrollOwner?.InvalidateScrollInfo();
     }
 
     /// <summary>
     /// Update the size of the viewport in content coordinates after the viewport size or 'ContentScale' has changed.
     /// </summary>
-    private void UpdateContentViewportSize()
-    {
+    private void UpdateContentViewportSize() {
         ContentViewportWidth = ViewportWidth / ContentScale;
         ContentViewportHeight = ViewportHeight / ContentScale;
 
@@ -791,104 +679,73 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Update the X coordinate of the translation transformation.
     /// </summary>
-    private void UpdateTranslationX()
-    {
-        if (_contentOffsetTransform != null)
-        {
+    private void UpdateTranslationX() {
+        if (_contentOffsetTransform != null) {
             double scaledContentWidth = _unScaledExtent.Width * ContentScale;
+
             if (scaledContentWidth < ViewportWidth)
-            {
-                //
                 // When the content can fit entirely within the viewport, center it.
-                //
                 _contentOffsetTransform.X = (ContentViewportWidth - _unScaledExtent.Width) / 2;
-            }
             else
-            {
                 _contentOffsetTransform.X = -ContentOffsetX;
-            }
         }
     }
 
     /// <summary>
     /// Update the Y coordinate of the translation transformation.
     /// </summary>
-    private void UpdateTranslationY()
-    {
-        if (_contentOffsetTransform != null)
-        {
+    private void UpdateTranslationY() {
+        if (_contentOffsetTransform != null) {
             double scaledContentHeight = _unScaledExtent.Height * ContentScale;
+
             if (scaledContentHeight < ViewportHeight)
-            {
-                //
                 // When the content can fit entirely within the viewport, center it.
-                //
                 _contentOffsetTransform.Y = (ContentViewportHeight - _unScaledExtent.Height) / 2;
-            }
             else
-            {
                 _contentOffsetTransform.Y = -ContentOffsetY;
-            }
         }
     }
 
     /// <summary>
     /// Update the X coordinate of the zoom focus point in content coordinates.
     /// </summary>
-    private void UpdateContentZoomFocusX()
-    {
+    private void UpdateContentZoomFocusX() {
         ContentZoomFocusX = ContentOffsetX + (_constrainedContentViewportWidth / 2);
     }
 
     /// <summary>
     /// Update the Y coordinate of the zoom focus point in content coordinates.
     /// </summary>
-    private void UpdateContentZoomFocusY()
-    {
+    private void UpdateContentZoomFocusY() {
         ContentZoomFocusY = ContentOffsetY + (_constrainedContentViewportHeight / 2);
     }
 
     /// <summary>
     /// Measure the control and it's children.
     /// </summary>
-    protected override Size MeasureOverride(Size constraint)
-    {
-        Size infiniteSize = new Size(double.PositiveInfinity, double.PositiveInfinity);
+    protected override Size MeasureOverride(Size constraint) {
+        Size infiniteSize = new(double.PositiveInfinity, double.PositiveInfinity);
         Size childSize = base.MeasureOverride(infiniteSize);
 
-        if (childSize != _unScaledExtent)
-        {
-            //
+        if (childSize != _unScaledExtent) {
             // Use the size of the child as the un-scaled extent content.
-            //
             _unScaledExtent = childSize;
-
             _scrollOwner?.InvalidateScrollInfo();
         }
 
-        //
         // Update the size of the viewport onto the content based on the passed in 'constraint'.
-        //
         UpdateViewportSize(constraint);
 
         double width = constraint.Width;
         double height = constraint.Height;
 
         if (double.IsInfinity(width))
-        {
-            //
             // Make sure we don't return infinity!
-            //
             width = childSize.Width;
-        }
 
         if (double.IsInfinity(height))
-        {
-            //
             // Make sure we don't return infinity!
-            //
             height = childSize.Height;
-        }
 
         UpdateTranslationX();
         UpdateTranslationY();
@@ -899,23 +756,16 @@ public partial class ZoomAndPanControl : ContentControl, IScrollInfo
     /// <summary>
     /// Arrange the control and it's children.
     /// </summary>
-    protected override Size ArrangeOverride(Size arrangeBounds)
-    {
+    protected override Size ArrangeOverride(Size arrangeBounds) {
         Size size = base.ArrangeOverride(DesiredSize);
 
-        if (_content != null && _content.DesiredSize != _unScaledExtent)
-        {
-            //
+        if (_content != null && _content.DesiredSize != _unScaledExtent) {
             // Use the size of the child as the un-scaled extent content.
-            //
             _unScaledExtent = _content.DesiredSize;
-
             _scrollOwner?.InvalidateScrollInfo();
         }
 
-        //
         // Update the size of the viewport onto the content based on the passed in 'arrangeBounds'.
-        //
         UpdateViewportSize(arrangeBounds);
 
         return size;

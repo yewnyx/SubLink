@@ -2,7 +2,7 @@
 
 namespace tech.sublink.SubLinkEditor;
 
-public static class XmlExtension {
+internal static class XmlExtension {
     public static XmlElement AddRootNode(this XmlDocument xmlDoc, string nodeName) {
         XmlNode xmlnode = xmlDoc.CreateNode(XmlNodeType.XmlDeclaration, "", "");
         xmlDoc.AppendChild(xmlnode);

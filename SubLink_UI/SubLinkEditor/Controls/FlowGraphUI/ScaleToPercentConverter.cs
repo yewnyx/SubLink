@@ -7,7 +7,7 @@ namespace tech.sublink.SubLinkEditor.Controls.FlowGraphUI;
 /// Used in MainWindow.xaml to converts a scale value to a percentage.
 /// It is used to display the 50%, 100%, etc that appears underneath the zoom and pan control.
 /// </summary>
-public class ScaleToPercentConverter : IValueConverter {
+internal class ScaleToPercentConverter : IValueConverter {
     /// <summary>
     /// Convert a fraction to a percentage.
     /// <returns></returns>

@@ -9,15 +9,11 @@ namespace tech.sublink.SubLinkEditor.Controls.NetworkModel;
 /// Defines a node in the view-model.
 /// Nodes are connected to other nodes through attached connectors (aka anchor/connection points).
 /// </summary>
-public sealed class NodeViewModel : AbstractModelBase
-{
+internal sealed class NodeViewModel : AbstractModelBase {
     /// <summary>
     /// The sequence link with this MVVM
     /// </summary>
-    public SequenceNode SeqNode
-    {
-        get;
-    }
+    public SequenceNode SeqNode { get; }
     /// <summary>
     /// 
     /// </summary>
@@ -57,7 +53,7 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// List of all connectors (connections points) attached to the node.
     /// </summary>
-    private readonly ImpObservableCollection<ConnectorViewModel> _allConnectors = new ImpObservableCollection<ConnectorViewModel>();
+    private readonly ImpObservableCollection<ConnectorViewModel> _allConnectors = new();
 
     /// <summary>
     /// Set to 'true' when the node is selected.
@@ -68,8 +64,7 @@ public sealed class NodeViewModel : AbstractModelBase
     /// 
     /// </summary>
     /// <param name="node_"></param>
-    public NodeViewModel(SequenceNode node)
-    {
+    public NodeViewModel(SequenceNode node) {
         SeqNode = node;
         SeqNode.PropertyChanged += OnSeqNodePropertyChanged;
 
@@ -87,14 +82,10 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// 
     /// </summary>
-    public ActionNode.LogicState State
-    {
-        get
-        {
+    public ActionNode.LogicState State {
+        get {
             if (SeqNode is ActionNode node)
-            {
                 return node.State.State;
-            }
 
             return ActionNode.LogicState.Ok;
         }
@@ -103,27 +94,18 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// The value of the variable node.
     /// </summary>
-    public object Value
-    {
-        get
-        {
+    public object Value {
+        get {
             if (SeqNode is VariableNode node)
-            {
                 return node.Value;
-            }
 
             return null;
         }
-        set
-        {
-            if (SeqNode is VariableNode node)
-            {
-                try
-                {
+        set {
+            if (SeqNode is VariableNode node) {
+                try {
                     node.Value = value;
-                }
-                catch (System.Exception /*ex*/)
-                {
+                } catch (System.Exception /*ex*/) {
                     //set error to false
                 }
             }
@@ -133,109 +115,82 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// The comments of the node.
     /// </summary>
-    public string Comment
-    {
+    public string Comment {
         get => SeqNode.Comment;
-        set
-        {
+        set {
             if (SeqNode.Comment == value)
-            {
                 return;
-            }
 
             SeqNode.Comment = value;
-            OnPropertyChanged("Comment");
+            OnPropertyChanged(nameof(Comment));
         }
     }
 
     /// <summary>
     /// The custom text of the node.
     /// </summary>
-    public string CustomText
-    {
+    public string CustomText {
         get => SeqNode.CustomText;
-        set
-        {
+        set {
             if (SeqNode.CustomText == value)
-            {
                 return;
-            }
 
             SeqNode.CustomText = value;
-            OnPropertyChanged("CustomText");
+            OnPropertyChanged(nameof(CustomText));
         }
     }
 
     /// <summary>
     /// The error message of the node.
     /// </summary>
-    public string ErrorMessage
-    {
-        get
-        {
+    public string ErrorMessage {
+        get {
             if (SeqNode is ActionNode node)
-            {
                 return node.ErrorMessage;
-            }
 
-            return "";
+            return string.Empty;
         }
     }
 
     /// <summary>
     /// The X coordinate for the position of the node.
     /// </summary>
-    public double X
-    {
+    public double X {
         get => _x;
-        set
-        {
+        set {
             if (_x == value)
-            {
                 return;
-            }
 
             _x = value;
-
-            OnPropertyChanged("X");
+            OnPropertyChanged(nameof(X));
         }
     }
 
     /// <summary>
     /// The Y coordinate for the position of the node.
     /// </summary>
-    public double Y
-    {
+    public double Y {
         get => _y;
-        set
-        {
+        set {
             if (_y == value)
-            {
                 return;
-            }
 
             _y = value;
-
-            OnPropertyChanged("Y");
+            OnPropertyChanged(nameof(Y));
         }
     }
 
     /// <summary>
     /// The Z index of the node.
     /// </summary>
-    public int ZIndex
-    {
+    public int ZIndex {
         get => _zIndex;
-        set
-        {
+        set {
             if (_zIndex == value)
-            {
                 return;
-            }
 
             _zIndex = value;
-
-            OnPropertyChanged("ZIndex");
+            OnPropertyChanged(nameof(ZIndex));
         }
     }
 
@@ -248,18 +203,13 @@ public sealed class NodeViewModel : AbstractModelBase
     ///     When the size is computed via the UI it is then pushed into the view-model
     ///     so that our application code has access to the size of a node.
     /// </summary>
-    public Size Size
-    {
+    public Size Size {
         get => _size;
-        set
-        {
+        set {
             if (_size == value)
-            {
                 return;
-            }
 
             _size = value;
-
             SizeChanged?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -280,17 +230,11 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// List of all input connectors (connections points) attached to the node.
     /// </summary>
-    public IEnumerable<ConnectorViewModel> AllInputConnectors
-    {
-        get
-        {
-            foreach (ConnectorViewModel c in _allConnectors)
-            {
-                if (c.Type == ConnectorType.Input
-                    || c.Type == ConnectorType.VariableInput)
-                {
+    public IEnumerable<ConnectorViewModel> AllInputConnectors {
+        get {
+            foreach (ConnectorViewModel c in _allConnectors) {
+                if (c.Type == ConnectorType.Input || c.Type == ConnectorType.VariableInput)
                     yield return c;
-                }
             }
         }
     }
@@ -298,17 +242,11 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// List of all output connectors (connections points) attached to the node.
     /// </summary>
-    public IEnumerable<ConnectorViewModel> AllOutputConnectors
-    {
-        get
-        {
-            foreach (ConnectorViewModel c in _allConnectors)
-            {
-                if (c.Type == ConnectorType.Output
-                    || c.Type == ConnectorType.VariableOutput)
-                {
+    public IEnumerable<ConnectorViewModel> AllOutputConnectors {
+        get {
+            foreach (ConnectorViewModel c in _allConnectors) {
+                if (c.Type == ConnectorType.Output || c.Type == ConnectorType.VariableOutput)
                     yield return c;
-                }
             }
         }
     }
@@ -316,16 +254,11 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// List of input connectors (connections points) attached to the node.
     /// </summary>
-    public IEnumerable<ConnectorViewModel> InputConnectors
-    {
-        get
-        {
-            foreach (ConnectorViewModel c in _allConnectors)
-            {
+    public IEnumerable<ConnectorViewModel> InputConnectors {
+        get {
+            foreach (ConnectorViewModel c in _allConnectors) {
                 if (c.Type == ConnectorType.Input)
-                {
                     yield return c;
-                }
             }
         }
     }
@@ -333,16 +266,11 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// List of input connectors (connections points) attached to the node.
     /// </summary>
-    public IEnumerable<ConnectorViewModel> InputVariableConnectors
-    {
-        get
-        {
-            foreach (ConnectorViewModel c in _allConnectors)
-            {
+    public IEnumerable<ConnectorViewModel> InputVariableConnectors {
+        get {
+            foreach (ConnectorViewModel c in _allConnectors) {
                 if (c.Type == ConnectorType.VariableInput)
-                {
                     yield return c;
-                }
             }
         }
     }
@@ -350,16 +278,11 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// List of output connectors (connections points) attached to the node.
     /// </summary>
-    public IEnumerable<ConnectorViewModel> OutputConnectors
-    {
-        get
-        {
-            foreach (ConnectorViewModel c in _allConnectors)
-            {
+    public IEnumerable<ConnectorViewModel> OutputConnectors {
+        get {
+            foreach (ConnectorViewModel c in _allConnectors) {
                 if (c.Type == ConnectorType.Output)
-                {
                     yield return c;
-                }
             }
         }
     }
@@ -367,16 +290,11 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// List of output connectors (connections points) attached to the node.
     /// </summary>
-    public IEnumerable<ConnectorViewModel> OutputVariableConnectors
-    {
-        get
-        {
-            foreach (ConnectorViewModel c in _allConnectors)
-            {
+    public IEnumerable<ConnectorViewModel> OutputVariableConnectors {
+        get {
+            foreach (ConnectorViewModel c in _allConnectors) {
                 if (c.Type == ConnectorType.VariableOutput)
-                {
                     yield return c;
-                }
             }
         }
     }
@@ -384,16 +302,11 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// List of output connectors (connections points) attached to the node.
     /// </summary>
-    public IEnumerable<ConnectorViewModel> InOutVariableConnectors
-    {
-        get
-        {
-            foreach (ConnectorViewModel c in _allConnectors)
-            {
+    public IEnumerable<ConnectorViewModel> InOutVariableConnectors {
+        get {
+            foreach (ConnectorViewModel c in _allConnectors) {
                 if (c.Type == ConnectorType.VariableInputOutput)
-                {
                     yield return c;
-                }
             }
         }
     }
@@ -401,34 +314,27 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// A helper property that retrieves a list (a new list each time) of all connections attached to the node. 
     /// </summary>
-    public ICollection<ConnectionViewModel> AttachedConnections
-    {
-        get
-        {
-            List<ConnectionViewModel> attachedConnections = new List<ConnectionViewModel>();
+    public ICollection<ConnectionViewModel> AttachedConnections {
+        get {
+            List<ConnectionViewModel> attachedConnections = new();
 
-            foreach (var connector in InputConnectors)
-            {
+            foreach (var connector in InputConnectors) {
                 attachedConnections.AddRange(connector.AttachedConnections);
             }
 
-            foreach (var connector in OutputConnectors)
-            {
+            foreach (var connector in OutputConnectors) {
                 attachedConnections.AddRange(connector.AttachedConnections);
             }
 
-            foreach (var connector in InputVariableConnectors)
-            {
+            foreach (var connector in InputVariableConnectors) {
                 attachedConnections.AddRange(connector.AttachedConnections);
             }
 
-            foreach (var connector in OutputVariableConnectors)
-            {
+            foreach (var connector in OutputVariableConnectors) {
                 attachedConnections.AddRange(connector.AttachedConnections);
             }
 
-            foreach (var connector in InOutVariableConnectors)
-            {
+            foreach (var connector in InOutVariableConnectors) {
                 attachedConnections.AddRange(connector.AttachedConnections);
             }
 
@@ -439,33 +345,24 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// Set to 'true' when the node is selected.
     /// </summary>
-    public bool IsSelected
-    {
+    public bool IsSelected {
         get => _isSelected;
-        set
-        {
+        set {
             if (_isSelected == value)
-            {
                 return;
-            }
 
             _isSelected = value;
-
-            OnPropertyChanged("IsSelected");
+            OnPropertyChanged(nameof(IsSelected));
         }
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public ConnectorViewModel GetConnectorFromSlotId(int id)
-    {
-        foreach (ConnectorViewModel c in _allConnectors)
-        {
+    public ConnectorViewModel GetConnectorFromSlotId(int id) {
+        foreach (ConnectorViewModel c in _allConnectors) {
             if (c.SourceSlot.Id == id)
-            {
                 return c;
-            }
         }
 
         return null;
@@ -474,51 +371,42 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// 
     /// </summary>
-    private void InitializeConnectors()
-    {
+    private void InitializeConnectors() {
         //if we need to add a new slot
-        foreach (NodeSlot slot in SeqNode.Slots)
-        {
+        foreach (NodeSlot slot in SeqNode.Slots) {
             if (ContainsConnectorFromNodeSlots(slot) == false)
-            {
-                _allConnectors.Add(new ConnectorViewModel(slot));
-            }
+                _allConnectors.Add(new(slot));
         }
 
         //if we need to remove a slot
-        List<ConnectorViewModel> connectorToRemove = new List<ConnectorViewModel>();
-        foreach (var c in _allConnectors)
-        {
+        List<ConnectorViewModel> connectorToRemove = new();
+
+        foreach (var c in _allConnectors) {
             bool contains = false;
 
-            foreach (NodeSlot slot in SeqNode.Slots)
-            {
-                if (slot.Id == c.SourceSlot.Id)
-                {
+            foreach (NodeSlot slot in SeqNode.Slots) {
+                if (slot.Id == c.SourceSlot.Id) {
                     contains = true;
                     break;
                 }
             }
 
             if (contains == false)
-            {
                 connectorToRemove.Add(c);
-            }
         }
 
-        foreach (var slot in connectorToRemove)
-        {
+        foreach (var slot in connectorToRemove) {
             _allConnectors.Remove(slot);
         }
 
-        OnPropertyChanged("Connectors");
-        OnPropertyChanged("AllInputConnectors");
-        OnPropertyChanged("AllOutputConnectors");
-        OnPropertyChanged("InputConnectors");
-        OnPropertyChanged("InputVariableConnectors");
-        OnPropertyChanged("OutputConnectors");
-        OnPropertyChanged("OutputVariableConnectors");
-        OnPropertyChanged("InOutVariableConnectors");
+        OnPropertyChanged(nameof(Connectors));
+        OnPropertyChanged(nameof(AllInputConnectors));
+        OnPropertyChanged(nameof(AllOutputConnectors));
+        OnPropertyChanged(nameof(InputConnectors));
+        OnPropertyChanged(nameof(InputVariableConnectors));
+        OnPropertyChanged(nameof(OutputConnectors));
+        OnPropertyChanged(nameof(OutputVariableConnectors));
+        OnPropertyChanged(nameof(InOutVariableConnectors));
     }
 
     /// <summary>
@@ -526,14 +414,10 @@ public sealed class NodeViewModel : AbstractModelBase
     /// </summary>
     /// <param name="slot_"></param>
     /// <returns></returns>
-    private bool ContainsConnectorFromNodeSlots(NodeSlot slot)
-    {
-        foreach (ConnectorViewModel c in _allConnectors)
-        {
+    private bool ContainsConnectorFromNodeSlots(NodeSlot slot) {
+        foreach (ConnectorViewModel c in _allConnectors) {
             if (c.SourceSlot.Id == slot.Id)
-            {
                 return true;
-            }
         }
 
         return false;
@@ -542,10 +426,8 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// Event raised when connectors are added to the node.
     /// </summary>
-    private void allConnectors_ItemsAdded(object sender, CollectionItemsChangedEventArgs e)
-    {
-        foreach (ConnectorViewModel connector in e.Items)
-        {
+    private void allConnectors_ItemsAdded(object sender, CollectionItemsChangedEventArgs e) {
+        foreach (ConnectorViewModel connector in e.Items) {
             connector.ParentNode = this;
         }
     }
@@ -553,10 +435,8 @@ public sealed class NodeViewModel : AbstractModelBase
     /// <summary>
     /// Event raised when connectors are removed from the node.
     /// </summary>
-    private void allConnectors_ItemsRemoved(object sender, CollectionItemsChangedEventArgs e)
-    {
-        foreach (ConnectorViewModel connector in e.Items)
-        {
+    private void allConnectors_ItemsRemoved(object sender, CollectionItemsChangedEventArgs e) {
+        foreach (ConnectorViewModel connector in e.Items) {
             connector.ParentNode = null;
         }
     }
@@ -566,10 +446,8 @@ public sealed class NodeViewModel : AbstractModelBase
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    void OnSeqNodePropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
+    void OnSeqNodePropertyChanged(object sender, PropertyChangedEventArgs e) {
+        switch (e.PropertyName) {
             case "Slots":
                 InitializeConnectors();
                 break;
@@ -583,10 +461,8 @@ public sealed class NodeViewModel : AbstractModelBase
     /// </summary>
     /// <param name="copyConnections_"></param>
     /// <returns></returns>
-    public NodeViewModel Copy(bool copyConnections = false)
-    {
-        NodeViewModel node = new NodeViewModel(SeqNode.Copy())
-        {
+    public NodeViewModel Copy(bool copyConnections = false) {
+        NodeViewModel node = new(SeqNode.Copy()) {
             _name = _name,
             _x = _x,
             _y = _y,
@@ -596,9 +472,7 @@ public sealed class NodeViewModel : AbstractModelBase
         };
 
         if (copyConnections)
-        {
             throw new NotImplementedException("NodeViewModel.Copy()");
-        }
 
         return node;
     }

@@ -7,7 +7,7 @@ namespace tech.sublink.SubLinkEditor.Logger;
 /// <summary>
 /// 
 /// </summary>
-public class LogEntry : PropertyChangedBase {
+internal class LogEntry : PropertyChangedBase {
     public DateTime DateTime { get; set; }
     public string Severity { get; set; }
     public string Message { get; set; }
@@ -16,14 +16,14 @@ public class LogEntry : PropertyChangedBase {
 /// <summary>
 /// 
 /// </summary>
-public class CollapsibleLogEntry : LogEntry {
+internal class CollapsibleLogEntry : LogEntry {
     public List<LogEntry> Contents { get; set; }
 }
 
 /// <summary>
 /// 
 /// </summary>
-public class LogEditor : ILog {
+internal class LogEditor : ILog {
     /// <summary>
     /// 
     /// </summary>
@@ -48,7 +48,7 @@ public class LogEditor : ILog {
     /// <param name="msg"></param>
     public void Write(LogVerbosity verbose, string msg) {
         if (Application.Current.Dispatcher.CheckAccess())
-            LogEntries.Add(new LogEntry {
+            LogEntries.Add(new() {
                 Severity = "[" + Enum.GetName(typeof(LogVerbosity), verbose) + "]",
                 DateTime = DateTime.Now,
                 Message = msg,

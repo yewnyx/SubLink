@@ -11,15 +11,11 @@ using Microsoft.Win32;
 
 namespace tech.sublink.SubLinkEditor;
 
-using StringList = List<String>;
-using StringEnumerator = IEnumerator<String>;
-
 /// <summary>
 /// MRU manager - manages Most Recently Used Files list
 /// for Windows Form application.
 /// </summary>
-public class MruManager
-{
+internal class MruManager {
     // Event raised when user selects file from MRU list
     public event MruFileOpenEventHandler MruOpenEvent;
 
@@ -34,42 +30,34 @@ public class MruManager
 
     private int _maxDisplayLength = 40;      // maximum length of file name for display
 
-    private readonly StringList _mruList;    // MRU list (file names)
+    private readonly List<String> _mruList;    // MRU list (file names)
 
     private const string RegEntryName = "file";  // entry name to keep MRU (file0, file1...)
 
-    [DllImport("shlwapi.dll", CharSet = CharSet.Auto)]
-    private static extern bool PathCompactPathEx(
-        StringBuilder pszOut,
-        string pszPath,
-        int cchMax,
-        int reserved);
+    [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]
+    private static extern bool PathCompactPathEx(StringBuilder pszOut, string pszPath, int cchMax, int reserved);
 
-    public MruManager()
-    {
-        _mruList = new StringList();
+    public MruManager() {
+        _mruList = new();
     }
 
     /// <summary>
-		/// Gets the first file name in the list, otherwise return null
-		/// </summary>
-		public string GetFirstFileName => _mruList.Count == 0 ? null : _mruList[0];
+	/// Gets the first file name in the list, otherwise return null
+	/// </summary>
+	public string GetFirstFileName => _mruList.Count == 0 ? null : _mruList[0];
 
     /// <summary>
     /// Maximum length of displayed file name in menu (default is 40).
     /// 
     /// Set this property to change default value (optional).
     /// </summary>
-    public int MaxDisplayNameLength
-    {
-        set
-        {
+    public int MaxDisplayNameLength {
+        set {
             _maxDisplayLength = value;
 
             if (_maxDisplayLength < 10)
                 _maxDisplayLength = 10;
         }
-
         get => _maxDisplayLength;
     }
 
@@ -78,10 +66,8 @@ public class MruManager
     /// 
     /// Set this property to change default value (optional).
     /// </summary>
-    public int MaxMruLength
-    {
-        set
-        {
+    public int MaxMruLength {
+        set {
             _maxNumberOfFiles = value;
 
             if (_maxNumberOfFiles < 1)
@@ -90,7 +76,6 @@ public class MruManager
             if (_mruList.Count > _maxNumberOfFiles)
                 _mruList.RemoveRange(_maxNumberOfFiles - 1, _mruList.Count - _maxNumberOfFiles);
         }
-
         get => _maxNumberOfFiles;
     }
 
@@ -112,20 +97,16 @@ public class MruManager
     /// <param name="mruItem">Recent Files menu item</param>
     /// <param name="mruItemParent">parent menu item</param>
     /// <param name="regPath">Registry Path to keep MRU list</param>
-    public void Initialize(Window owner, MenuItem mruItem, MenuItem mruItemParent, string regPath)
-    {
+    public void Initialize(Window owner, MenuItem mruItem, MenuItem mruItemParent, string regPath) {
         // keep reference to owner form
         _ownerForm = owner;
-
         // keep reference to MRU menu item
         _menuItemMru = mruItem;
-
         // keep reference to MRU menu item parent
         _menuItemParent = mruItemParent;
-
-
         // keep Registry path adding MRU key to it
         _registryPath = regPath;
+
         if (_registryPath.EndsWith("\\"))
             _registryPath += "MRU";
         else
@@ -134,10 +115,8 @@ public class MruManager
 
         // keep current directory in the time of initialization
         CurrentDir = Directory.GetCurrentDirectory();
-
         // subscribe to MRU parent Popup event
         _menuItemParent.SubmenuOpened += OnMRUParentPopup;
-
         // subscribe to owner form Closing event
         _ownerForm.Closing += OnOwnerClosing;
 
@@ -151,8 +130,7 @@ public class MruManager
     /// If file already exists in the list, it is moved to the first place.
     /// </summary>
     /// <param name="file">File Name</param>
-    public void Add(string file)
-    {
+    public void Add(string file) {
         Remove(file);
 
         // if array has maximum length, remove last element
@@ -168,16 +146,12 @@ public class MruManager
     /// Call this function when File - Open operation failed.
     /// </summary>
     /// <param name="file">File Name</param>
-    public void Remove(string file)
-    {
+    public void Remove(string file) {
         int i = 0;
+        var myEnumerator = _mruList.GetEnumerator();
 
-        StringEnumerator myEnumerator = _mruList.GetEnumerator();
-
-        while (myEnumerator.MoveNext())
-        {
-            if (myEnumerator.Current == file)
-            {
+        while (myEnumerator.MoveNext()) {
+            if (myEnumerator.Current == file) {
                 _mruList.RemoveAt(i);
                 return;
             }
@@ -191,40 +165,31 @@ public class MruManager
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void OnMRUParentPopup(object sender, RoutedEventArgs e)
-    {
+    private void OnMRUParentPopup(object sender, RoutedEventArgs e) {
         // remove all childs
-        //if (_menuItemMru.IsParent)
-        //{
         _menuItemMru.Items.Clear();
-        //}
 
         // Disable menu item if MRU list is empty
-        if (_mruList.Count == 0)
-        {
+        if (_mruList.Count == 0) {
             _menuItemMru.IsEnabled = false;
             return;
         }
 
         // enable menu item and add child items
         _menuItemMru.IsEnabled = true;
-
         MenuItem item;
 
-        StringEnumerator myEnumerator = _mruList.GetEnumerator();
+        var myEnumerator = _mruList.GetEnumerator();
         int i = 0;
 
-        while (myEnumerator.MoveNext())
-        {
-            item = new MenuItem
-            {
+        while (myEnumerator.MoveNext()) {
+            item = new() {
                 Header = GetDisplayName(myEnumerator.Current),
                 Tag = i++
             };
 
             // subscribe to item's Click event
             item.Click += OnMRUClicked;
-
             _menuItemMru.Items.Add(item);
         }
     }
@@ -234,24 +199,20 @@ public class MruManager
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void OnMRUClicked(object sender, EventArgs e)
-    {
+    private void OnMRUClicked(object sender, EventArgs e) {
         string s;
 
         // cast sender object to MenuItem
         MenuItem item = (MenuItem)sender;
 
-        if (item != null)
-        {
+        if (item != null) {
             // Get file name from list using item index
             s = _mruList[(int)item.Tag];
 
             // Raise event to owner and pass file name.
             // Owner should handle this event and open file.
             if (s.Length > 0)
-            {
-                MruOpenEvent?.Invoke(this, new MruFileOpenEventArgs(s));
-            }
+                MruOpenEvent?.Invoke(this, new(s));
         }
     }
 
@@ -260,28 +221,21 @@ public class MruManager
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void OnOwnerClosing(object sender, CancelEventArgs e)
-    {
+    private void OnOwnerClosing(object sender, CancelEventArgs e) {
         int i, n;
 
-        try
-        {
+        try {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(_registryPath);
 
-            if (key != null)
-            {
+            if (key != null) {
                 n = _mruList.Count;
 
-                for (i = 0; i < _maxNumberOfFiles; i++)
-                {
-                    key.DeleteValue(RegEntryName +
-                        i.ToString(CultureInfo.InvariantCulture), false);
+                for (i = 0; i < _maxNumberOfFiles; i++) {
+                    key.DeleteValue(RegEntryName + i.ToString(CultureInfo.InvariantCulture), false);
                 }
 
-                for (i = 0; i < n; i++)
-                {
-                    key.SetValue(RegEntryName +
-                        i.ToString(CultureInfo.InvariantCulture), _mruList[i]);
+                for (i = 0; i < n; i++) {
+                    key.SetValue(RegEntryName + i.ToString(CultureInfo.InvariantCulture), _mruList[i]);
                 }
             }
 
@@ -298,18 +252,14 @@ public class MruManager
     /// Load MRU list from Registry.
     /// Called from Initialize.
     /// </summary>
-    private void LoadMru()
-    {
-        try
-        {
+    private void LoadMru() {
+        try {
             _mruList.Clear();
 
             RegistryKey key = Registry.CurrentUser.OpenSubKey(_registryPath);
 
-            if (key != null)
-            {
-                for (int i = 0; i < _maxNumberOfFiles; i++)
-                {
+            if (key != null) {
+                for (int i = 0; i < _maxNumberOfFiles; i++) {
                     var sKey = RegEntryName + i.ToString(CultureInfo.InvariantCulture);
                     var s = (string)key.GetValue(sKey, "");
 
@@ -331,19 +281,15 @@ public class MruManager
     /// Handle error from OnOwnerClosing function
     /// </summary>
     /// <param name="ex"></param>
-    private void HandleReadError(System.Exception ex)
-    {
+    private void HandleReadError(System.Exception ex) =>
         Trace.WriteLine("Loading MRU from Registry failed: " + ex.Message);
-    }
 
     /// <summary>
     /// Handle error from OnOwnerClosing function
     /// </summary>
     /// <param name="ex"></param>
-    private void HandleWriteError(System.Exception ex)
-    {
+    private void HandleWriteError(System.Exception ex) =>
         Trace.WriteLine("Saving MRU to Registry failed: " + ex.Message);
-    }
 
 
     /// <summary>
@@ -351,10 +297,9 @@ public class MruManager
     /// </summary>
     /// <param name="fullName">Full file name</param>
     /// <returns>Short display name</returns>
-    private string GetDisplayName(string fullName)
-    {
+    private string GetDisplayName(string fullName) {
         // if file is in current directory, show only file name
-        FileInfo fileInfo = new FileInfo(fullName);
+        FileInfo fileInfo = new(fullName);
 
         if (fileInfo.DirectoryName == CurrentDir)
             return GetShortDisplayName(fileInfo.Name, _maxDisplayLength);
@@ -373,14 +318,11 @@ public class MruManager
     /// <param name="longName">Long file name</param>
     /// <param name="maxLen">Maximum length</param>
     /// <returns>Truncated file name</returns>
-    private string GetShortDisplayName(string longName, int maxLen)
-    {
+    private string GetShortDisplayName(string longName, int maxLen) {
         StringBuilder pszOut = new StringBuilder(maxLen + maxLen + 2);  // for safety
 
         if (PathCompactPathEx(pszOut, longName, maxLen, 0))
-        {
             return pszOut.ToString();
-        }
 
         return longName;
     }
@@ -388,10 +330,8 @@ public class MruManager
 
 public delegate void MruFileOpenEventHandler(object sender, MruFileOpenEventArgs e);
 
-public class MruFileOpenEventArgs : EventArgs
-{
-    public MruFileOpenEventArgs(string fileName)
-    {
+public class MruFileOpenEventArgs : EventArgs {
+    public MruFileOpenEventArgs(string fileName) {
         FileName = fileName;
     }
 
