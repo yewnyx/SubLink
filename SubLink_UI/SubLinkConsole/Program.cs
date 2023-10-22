@@ -7,30 +7,36 @@ using FlowGraph.Process;
 namespace tech.sublink.SubLinkConsole;
 
 class Program {
+    const string sequenceName = "appelsap";
+    readonly static string sequenceFile = Path.GetFullPath($"../../../../{sequenceName}.xml");
+    static bool _starting = true;
+
     static void Main(string[] args) {
         try {
-            ProcessLauncher.Instance.StartLoop();
-
             LogManager.Instance.AddLogger(new ConsoleLogger());
             LogManager.Instance.Verbosity = LogVerbosity.Trace;
+            ProcessLauncher.Instance.PropertyChanged += ProcessLauncher_PropertyChanged;
+            ProcessLauncher.Instance.StartLoop();
 
             XmlDocument xmlDoc = new();
-            xmlDoc.Load("../../../../appelsap.xml");
+            xmlDoc.Load(sequenceFile);
+            XmlNode? rootNode = xmlDoc.SelectSingleNode("SubLinkEditor");
 
-            // TODO : how load NamedVariableList and Sequence
-            // if the structure of the xml is not defined in the library ?
-            // It is the user who build the xml
-            XmlNode rootNode = xmlDoc.FirstChild.NextSibling;
+            if (rootNode == null || rootNode.Attributes == null) {
+                LogManager.Instance.WriteLine(LogVerbosity.Error, "Invalid XML document");
+                return;
+            }
+
             NamedVariableManager.Instance.Load(rootNode);
             GraphDataManager.Instance.Load(rootNode);
 
-            Sequence seq = new("appelsap");
-            seq.Load(xmlDoc.SelectSingleNode("SubLinkEditor/GraphList/Graph[@name='appelsap']"));
+            LogManager.Instance.WriteLine(LogVerbosity.Info, "'{0}' successfully loaded", sequenceFile);
 
+            Sequence seq = GraphDataManager.Instance.GraphList.First(g => g.Name.Equals(sequenceName));
             ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventNodeTestStarted), 0, "test");
 
-            while (ProcessLauncher.Instance.State == SequenceState.Running) {
-                Thread.Sleep(100);
+            while (_starting || ProcessLauncher.Instance.State == SequenceState.Running) {
+                Thread.Sleep(25);
             }
 
             ProcessLauncher.Instance.StopLoop();
@@ -41,5 +47,11 @@ class Program {
 
         Console.WriteLine("Press any keys...");
         Console.ReadKey();
+    }
+
+    private static void ProcessLauncher_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName.Equals("State") && ProcessLauncher.Instance.State == SequenceState.Running)
+            _starting = false;
     }
 }
