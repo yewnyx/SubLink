@@ -10,6 +10,8 @@
 		<StartupObject>tech.sublink.SubLinkEditor.App</StartupObject>
 		<ApplicationIcon>Resources\SubLink.ico</ApplicationIcon>
 		<RootNamespace>tech.sublink.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

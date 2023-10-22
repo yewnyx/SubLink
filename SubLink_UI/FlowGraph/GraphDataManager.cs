@@ -118,16 +118,20 @@ public class GraphDataManager {
 
     public void Load(XmlNode node) {
         try {
-            //int version = int.Parse(node.SelectSingleNode("GraphList").Attributes["version"].Value);
-
             var functionNodes = node.SelectNodes("GraphList/Graph[@type='" + SequenceFunction.XmlAttributeTypeValue + "']");
+
             if (functionNodes != null) {
                 foreach (XmlNode graphNode in functionNodes) {
                     GraphFunctionList.Add(new SequenceFunction(graphNode));
                 }
             }
 
+            foreach (var seq in GraphFunctionList) {
+                ResolveLinks(node, seq);
+            }
+
             var graphNodes = node.SelectNodes("GraphList/Graph[@type='" + Sequence.XmlAttributeTypeValue + "']");
+
             if (graphNodes != null) {
                 foreach (XmlNode graphNode in graphNodes) {
                     GraphList.Add(new Sequence(graphNode));
@@ -135,10 +139,6 @@ public class GraphDataManager {
             }
 
             foreach (var seq in GraphList) {
-                ResolveLinks(node, seq);
-            }
-
-            foreach (var seq in GraphFunctionList) {
                 ResolveLinks(node, seq);
             }
         } catch (Exception ex) {

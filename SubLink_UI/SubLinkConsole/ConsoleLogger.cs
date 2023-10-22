@@ -1,26 +1,35 @@
 ﻿using System.Text;
 using FlowGraph.Logger;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace tech.sublink.SubLinkConsole;
 
 class ConsoleLogger : ILog {
+    private readonly ILogger _logger;
+    private readonly IHostApplicationLifetime _applicationLifetime;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+
+    public ConsoleLogger(
+        ILogger logger,
+        IHostApplicationLifetime applicationLifetime,
+        IServiceScopeFactory serviceScopeFactory
+    ) {
+        _logger = logger;
+        _applicationLifetime = applicationLifetime;
+        _serviceScopeFactory = serviceScopeFactory;
+    }
+
     public void Close() { }
 
     public void Write(LogVerbosity verbose, string msg) {
-        ConsoleColor color = Console.ForegroundColor;
-        StringBuilder sb = new();
-
-        sb.AppendFormat("{0:HH:mm:ss.fff} [{1}] {2}", DateTime.Now, Enum.GetName(typeof(LogVerbosity), verbose), msg);
-
         switch (verbose) {
-            case LogVerbosity.Trace: Console.ForegroundColor = ConsoleColor.DarkGray; break;
-            case LogVerbosity.Debug: Console.ForegroundColor = ConsoleColor.Green; break;
-            case LogVerbosity.Info: Console.ForegroundColor = ConsoleColor.White; break;
-            case LogVerbosity.Warning: Console.ForegroundColor = ConsoleColor.DarkYellow; break;
-            case LogVerbosity.Error: Console.ForegroundColor = ConsoleColor.Red; break;
+            case LogVerbosity.Trace:   _logger.Verbose(msg);     break;
+            case LogVerbosity.Debug:   _logger.Debug(msg);       break;
+            case LogVerbosity.Info:    _logger.Information(msg); break;
+            case LogVerbosity.Warning: _logger.Warning(msg);     break;
+            case LogVerbosity.Error:   _logger.Error(msg);       break;
         }
-
-        Console.WriteLine(sb.ToString());
-        Console.ForegroundColor = color;
     }
 }

@@ -27,7 +27,7 @@ public class ProcessLauncher : INotifyPropertyChanged {
         private set {
             if (_state != value) {
                 _state = value;
-                OnPropertyChanged("State");
+                OnPropertyChanged(nameof(State));
             }
         }
     }
