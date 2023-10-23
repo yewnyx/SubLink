@@ -1,6 +1,7 @@
 ﻿using FlowGraph;
 using FlowGraph.Logger;
 using FlowGraph.Node.StandardEventNode;
+using FlowGraph.Plugin;
 using FlowGraph.Process;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -28,6 +29,7 @@ internal class SubLinkService : BackgroundService {
         using var sublinkScope = _serviceScopeFactory.CreateScope();
         var provider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
         var script = provider.GetFileInfo("SubLink.cs");
+        var plugins = sublinkScope.ServiceProvider.GetServices<IPlugin>();
 
         try {
             LogManager.Instance.AddLogger(_consoleLogger);
@@ -51,11 +53,22 @@ internal class SubLinkService : BackgroundService {
             Sequence seq = GraphDataManager.Instance.GraphList.First(g => g.Name.Equals(sequenceName));
             ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventNodeTestStarted), 0, "test");
 
+            foreach (var plugin in plugins) {
+                await plugin.LoadAsync();
+            }
+
             while (!stoppingToken.IsCancellationRequested) {
                 using var loopScope = _serviceScopeFactory.CreateScope();
                 await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken);
             }
         } finally {
+            List<Task> tasks = new();
+
+            foreach (var plugin in plugins) {
+                tasks.Add(plugin.UnloadAsync());
+            }
+
+            await Task.WhenAny(Task.WhenAll(tasks), Task.Delay(TimeSpan.FromSeconds(10)));
             ProcessLauncher.Instance.StopLoop();
         }
     }

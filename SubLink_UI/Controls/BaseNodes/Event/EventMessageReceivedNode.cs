@@ -4,7 +4,7 @@ using FlowGraph.Node;
 
 namespace BaseNodes.Event;
 
-[Name("Message Received")]
+[Name("Message Received"), Category("Event")]
 public class EventMessageReceivedNode : EventNode {
     public EventMessageReceivedNode(XmlNode node) : base(node) { }
 

@@ -4,7 +4,7 @@ using FlowGraph.Node;
 
 namespace BaseNodes.Event;
 
-[Name("Task Started")]
+[Name("Task Started"), Category("Event")]
 public class EventTaskStartedNode : EventNode {
     public EventTaskStartedNode(XmlNode node) : base(node) { }
 

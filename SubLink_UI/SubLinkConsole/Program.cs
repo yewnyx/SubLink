@@ -1,5 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Figgle;
+using FlowGraph;
+using FlowGraph.Plugin;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +25,9 @@ internal partial class Program {
                     .Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true)
                     .AddSingleton<ConsoleLogger>()
                     .AddHostedService<SubLinkService>();
+
+                foreach (var plugin in ExtensionManager.Plugins)
+                    services.AddScoped(typeof(IPlugin), plugin);
             })
             .UseSerilog((context, configuration) => {
                 const string outputTemplate = "[{Timestamp:HH:mm:ss} {Level}] {Message:l}{NewLine}{Exception}";
@@ -64,7 +69,12 @@ and __                           ____              _
 
         using var host = CreateHostBuilder(args).Build();
         await host.StartAsync();
+
         await host.WaitForShutdownAsync();
+
+        foreach (var plugin in host.Services.GetServices<IPlugin>()) {
+            await plugin.UnloadAsync();
+        }
     }
 
     [GeneratedRegex(@"^\s+$[\r\n]*", RegexOptions.Multiline)]

@@ -1,10 +1,12 @@
-﻿using FlowGraph.Node;
+﻿using FlowGraph.Logger;
+using FlowGraph.Node;
+using FlowGraph.Plugin;
+using System;
 using System.Reflection;
 
 namespace FlowGraph;
 
-public static class NodeAssemblyCache
-{
+public static class ExtensionManager {
     private static string _dllPath;
 
     private static readonly List<Assembly> _assemblies = new();
@@ -23,17 +25,26 @@ public static class NodeAssemblyCache
                 t.IsSubclassOf(typeof(SequenceNode)));
     }
 
-    static NodeAssemblyCache()
-    {
+    public static IEnumerable<Type> Plugins {
+        get => Assemblies
+            .SelectMany(t => t.GetTypes())
+            .Where(t => t.IsClass &&
+                t.IsGenericType == false &&
+                t.IsInterface == false &&
+                t.IsAbstract == false &&
+                typeof(IPlugin).IsAssignableFrom(t));
+    }
+
+    static ExtensionManager() {
         _dllPath = Path.Combine(
             Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location) ?? ".",
-            "Extentions"
+            "Extensions"
         );
+        AppDomain.CurrentDomain.AppendPrivatePath(_dllPath);
         Refresh();
     }
 
-    public static void Refresh()
-    {
+    public static void Refresh() {
         Assembly curAsm;
         IEnumerable<Type> nodeTypes;
 
@@ -44,9 +55,21 @@ public static class NodeAssemblyCache
             x => x.Name != null && !x.Name.StartsWith("Microsoft") && !x.Name.StartsWith("System")
         )) {
             if (!_assemblyNames.Contains(reference.FullName)) {
-                var assembly = Assembly.Load(reference);
-                _assemblyNames.Add(reference.FullName);
-                _assemblies.Add(assembly);
+                curAsm = Assembly.Load(reference);
+
+                nodeTypes = curAsm.GetTypes().Where(t => t.IsClass &&
+                    t.IsGenericType == false &&
+                    t.IsInterface == false &&
+                    t.IsAbstract == false &&
+                    t.IsSubclassOf(typeof(SequenceNode)));
+
+#pragma warning disable CS8604 // Possible null reference argument.
+                if (!nodeTypes.Any())
+                    continue;
+#pragma warning restore CS8604 // Possible null reference argument.
+
+                _assemblyNames.Add(curAsm.FullName);
+                _assemblies.Add(curAsm);
             }
         }
 
@@ -57,7 +80,7 @@ public static class NodeAssemblyCache
             try {
                 curAsm = Assembly.LoadFrom(file);
 
-                if (curAsm == null)
+                if (curAsm == null || _assemblyNames.Contains(curAsm.FullName))
                     continue;
 
                 nodeTypes = curAsm.GetTypes().Where(t => t.IsClass &&
@@ -67,7 +90,7 @@ public static class NodeAssemblyCache
                     t.IsSubclassOf(typeof(SequenceNode)));
 
 #pragma warning disable CS8604 // Possible null reference argument.
-                if (!nodeTypes.Any() || _assemblyNames.Contains(curAsm.FullName))
+                if (!nodeTypes.Any())
                     continue;
 #pragma warning restore CS8604 // Possible null reference argument.
 

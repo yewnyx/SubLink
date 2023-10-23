@@ -3,7 +3,6 @@ using FlowGraph.Process;
 
 namespace FlowGraph.Node
 {
-    [Category("Event")]
     public abstract class EventNode : SequenceNode
     {
 #if EDITOR

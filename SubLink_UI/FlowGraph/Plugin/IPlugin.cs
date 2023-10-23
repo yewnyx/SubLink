@@ -1,11 +1,6 @@
-﻿namespace FlowGraph.Plugin
-{
-    public interface IPlugin
-    {
-        IEnumerable<string> GetNodeNames();
-        IEnumerable<object> GetEditor();
+﻿namespace FlowGraph.Plugin;
 
-        void Load();
-        void UnLoad();
-    }
+public interface IPlugin {
+    Task LoadAsync();
+    Task UnloadAsync();
 }

@@ -2,7 +2,7 @@
 
 namespace FlowGraph.Node.StandardEventNode;
 
-[Name("Test Trigger Event")]
+[Name("Test Trigger Event"), Category("Event")]
 public class EventNodeTestStarted : EventNode {
     public override string Title => "Test Trigger Event";
 

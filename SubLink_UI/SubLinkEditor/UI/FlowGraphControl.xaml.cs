@@ -77,7 +77,7 @@ public partial class FlowGraphControl : UserControl
         if (_isContextMenuCreated == false) {
             _isContextMenuCreated = true;
 
-            foreach (Type type in NodeAssemblyCache.Nodes) {
+            foreach (Type type in ExtensionManager.Nodes) {
                 Attribute browsableAtt = Attribute.GetCustomAttribute(type, typeof(Visible), true);
 
                 if (browsableAtt != null && ((Visible)browsableAtt).Value == false)

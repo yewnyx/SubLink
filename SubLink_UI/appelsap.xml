@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
 <SubLinkEditor version="1">
   <GraphList version="1" designerVersion="1">
-    <Graph version="1" id="0" name="appelsap" description="" type="Sequence" designerVersion="1">
+    <Graph version="1" id="0" name="appelsap" description="Applesap example" type="Sequence" designerVersion="1">
       <NodeList>
-        <Node version="1" comment="" id="8" type="FlowGraph.Node.StandardEventNode.EventNodeTestStarted, FlowGraph" designerVersion="1" x="43,508333333333326" y="80,57776649475096" z="81">
+        <Node version="1" comment="" id="8" type="FlowGraph.Node.StandardEventNode.EventNodeTestStarted, FlowGraph" designerVersion="1" x="26,008333333333326" y="126,82776649475096" z="217">
           <Slot version="1" index="0" />
           <Slot version="1" index="1" saveValue="True">
             <ValueContainer version="1" type="System.String, System.Private.CoreLib">test</ValueContainer>
           </Slot>
         </Node>
-        <Node version="1" comment="" id="9" type="BaseNodes.Action.DelayNode, BaseNodes" designerVersion="1" x="298,8266671053568" y="27,57776649475096" z="84">
+        <Node version="1" comment="Appelsap" id="9" type="BaseNodes.Action.DelayNode, BaseNodes" designerVersion="1" x="281,3266671053568" y="73,82776649475096" z="218">
           <Slot version="1" index="0" />
           <Slot version="1" index="1" />
           <Slot version="1" index="2" saveValue="True">
             <ValueContainer version="1" type="System.Int32, System.Private.CoreLib">1</ValueContainer>
           </Slot>
         </Node>
-        <Node version="1" comment="" id="10" type="BaseNodes.Action.DoNNode, BaseNodes" designerVersion="1" x="596" y="62,59776649475097" z="85">
+        <Node version="1" comment="" id="10" type="BaseNodes.Action.DoNNode, BaseNodes" designerVersion="1" x="578,5" y="108,84776649475097" z="219">
           <Slot version="1" index="0" />
           <Slot version="1" index="3" saveValue="True">
             <ValueContainer version="1" type="System.Int32, System.Private.CoreLib">10</ValueContainer>
@@ -27,18 +27,18 @@
             <ValueContainer version="1" type="System.Int32, System.Private.CoreLib">9</ValueContainer>
           </Slot>
         </Node>
-        <Node version="1" comment="" id="11" type="BaseNodes.Action.DelayNode, BaseNodes" designerVersion="1" x="276,8266671053568" y="155,57776649475093" z="100">
+        <Node version="1" comment="" id="11" type="BaseNodes.Action.DelayNode, BaseNodes" designerVersion="1" x="259,3266671053568" y="201,82776649475093" z="220">
           <Slot version="1" index="0" />
           <Slot version="1" index="1" />
           <Slot version="1" index="2" saveValue="True">
             <ValueContainer version="1" type="System.Int32, System.Private.CoreLib">1000</ValueContainer>
           </Slot>
         </Node>
-        <Node version="1" comment="" id="12" type="FlowGraph.Node.StandardActionNode.CallFunctionNode, FlowGraph" functionID="1" designerVersion="1" x="822" y="101,03776649475097" z="87">
+        <Node version="1" comment="" id="12" type="FlowGraph.Node.StandardActionNode.CallFunctionNode, FlowGraph" functionID="1" designerVersion="1" x="804,5" y="147,28776649475097" z="221">
           <Slot version="1" index="0" />
           <Slot version="1" index="1" />
         </Node>
-        <Node version="1" comment="" id="13" type="BaseNodes.Action.StringConcatNode, BaseNodes" designerVersion="1" x="677,3783333333333" y="297,59776649475094" z="101">
+        <Node version="1" comment="" id="13" type="BaseNodes.Action.StringConcatNode, BaseNodes" designerVersion="1" x="659,8783333333333" y="343,84776649475094" z="222">
           <Slot version="1" index="0" />
           <Slot version="1" index="1" />
           <Slot version="1" index="2" saveValue="True">
@@ -51,18 +51,18 @@
             <ValueContainer version="1" type="System.String, System.Private.CoreLib">Applejuice 9</ValueContainer>
           </Slot>
         </Node>
-        <Node version="1" comment="" id="14" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="895,1383333333333" y="297,5777664947509" z="96">
+        <Node version="1" comment="" id="14" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="877,6383333333333" y="343,8277664947509" z="223">
           <Slot version="1" index="0" />
           <Slot version="1" index="1" />
           <Slot version="1" index="2" saveValue="True">
             <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
           </Slot>
         </Node>
-        <Node version="1" comment="" id="15" type="FlowGraph.Node.StandardVariableNode.NamedVariableNode, FlowGraph" designerVersion="1" x="484" y="316,03776649475094" z="99">
+        <Node version="1" comment="" id="15" type="FlowGraph.Node.StandardVariableNode.NamedVariableNode, FlowGraph" designerVersion="1" x="466,5" y="362,28776649475094" z="224">
           <Slot version="1" index="0" />
           <Value varName="globalStr" />
         </Node>
-        <Node version="1" comment="" id="16" type="BaseNodes.Action.ToStringNodeInteger, BaseNodes" designerVersion="1" x="825,7483333333334" y="175,57776649475093" z="98">
+        <Node version="1" comment="" id="16" type="BaseNodes.Action.ToStringNodeInteger, BaseNodes" designerVersion="1" x="808,2483333333334" y="221,82776649475093" z="225">
           <Slot version="1" index="0" />
           <Slot version="1" index="1" />
           <Slot version="1" index="2" saveValue="False" />
@@ -83,6 +83,131 @@
         <Connection version="1" srcNodeID="14" srcNodeSlotID="2" destNodeID="13" destNodeSlotID="4" />
         <Connection version="1" srcNodeID="16" srcNodeSlotID="1" destNodeID="13" destNodeSlotID="0" />
         <Connection version="1" srcNodeID="16" srcNodeSlotID="2" destNodeID="10" destNodeSlotID="4" />
+      </ConnectionList>
+    </Graph>
+    <Graph version="1" id="2" name="Kick OnChatMessage" description="Kick Chat Message Event example" type="Sequence" designerVersion="1">
+      <NodeList>
+        <Node version="1" comment="" id="99" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="986,709761904762" y="146,43714285714276" z="401">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="100" type="BaseNodes.Action.StringConcatNode, BaseNodes" designerVersion="1" x="747,5211904761904" y="145,93936507936522" z="400">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="101" type="BaseNodes.Action.StringConcatNode, BaseNodes" designerVersion="1" x="413,6124603174603" y="38,208253968253985" z="390">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="102" type="BaseNodes.Variable.VariableNodeString, BaseNodes" designerVersion="1" x="160,3769841269842" y="336,1168253968255" z="365">
+          <Slot version="1" index="0" />
+          <Value> - </Value>
+        </Node>
+        <Node version="1" comment="" id="106" type="tech.sublink.KickExtension.Event.EventChatMessageNode, KickExtension" designerVersion="1" x="86,93809523809522" y="42,83999999999995" z="387">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="5" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="6" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.KickUser, KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="110" type="tech.sublink.KickExtension.Action.KickUserNode, KickExtension" designerVersion="1" x="127,14666666666665" y="201,64000000000001" z="388">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.KickUser, KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="5" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="6" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.KickIdentity, KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="111" type="BaseNodes.Action.StringConcatNode, BaseNodes" designerVersion="1" x="411,37833333333333" y="201,6" z="393">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="114" type="BaseNodes.Action.StringConcatNode, BaseNodes" designerVersion="1" x="414,37833333333333" y="299,6" z="395">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+      </NodeList>
+      <ConnectionList>
+        <Connection version="1" srcNodeID="99" srcNodeSlotID="2" destNodeID="100" destNodeSlotID="4" />
+        <Connection version="1" srcNodeID="100" srcNodeSlotID="1" destNodeID="99" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="100" srcNodeSlotID="2" destNodeID="114" destNodeSlotID="4" />
+        <Connection version="1" srcNodeID="100" srcNodeSlotID="3" destNodeID="106" destNodeSlotID="3" />
+        <Connection version="1" srcNodeID="101" srcNodeSlotID="1" destNodeID="111" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="101" srcNodeSlotID="2" destNodeID="106" destNodeSlotID="5" />
+        <Connection version="1" srcNodeID="101" srcNodeSlotID="3" destNodeID="102" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="106" srcNodeSlotID="0" destNodeID="110" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="110" srcNodeSlotID="1" destNodeID="101" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="110" srcNodeSlotID="2" destNodeID="106" destNodeSlotID="6" />
+        <Connection version="1" srcNodeID="111" srcNodeSlotID="1" destNodeID="114" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="111" srcNodeSlotID="2" destNodeID="101" destNodeSlotID="4" />
+        <Connection version="1" srcNodeID="111" srcNodeSlotID="3" destNodeID="110" destNodeSlotID="4" />
+        <Connection version="1" srcNodeID="114" srcNodeSlotID="1" destNodeID="100" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="114" srcNodeSlotID="2" destNodeID="111" destNodeSlotID="4" />
+        <Connection version="1" srcNodeID="114" srcNodeSlotID="3" destNodeID="102" destNodeSlotID="0" />
       </ConnectionList>
     </Graph>
     <Graph version="1" id="1" name="Concat Func" description="Concatenates apple and juice" type="Function" designerVersion="1">

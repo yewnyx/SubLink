@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Xml;
 using FlowGraph;
 using FlowGraph.Logger;
+using FlowGraph.Plugin;
 using FlowGraph.Process;
 using tech.sublink.SubLinkEditor.FlowGraphs;
 using tech.sublink.SubLinkEditor.UI;
@@ -35,6 +36,8 @@ public partial class MainWindow : Window {
 
     internal DetailsControl DetailsControl => detailsControl;
 
+    private List<IPlugin> _loadedPlugins = new();
+
     public MainWindow() {
         InitializeComponent();
 
@@ -53,7 +56,7 @@ public partial class MainWindow : Window {
         Closed += OnClosed;
     }
 
-    void OnLoaded(object sender, RoutedEventArgs e) {
+    private async void OnLoaded(object sender, RoutedEventArgs e) {
         try {
             _mruManager = new MruManager();
             _mruManager.Initialize(
@@ -78,12 +81,25 @@ public partial class MainWindow : Window {
             _lastHeight = Height;
 
             ProcessLauncher.Instance.StartLoop();
+
+            foreach (var plugin in ExtensionManager.Plugins) {
+                var pluginObj = (IPlugin)Activator.CreateInstance(plugin);
+                _loadedPlugins.Add(pluginObj);
+                await pluginObj.LoadAsync();
+            }
         } catch (System.Exception ex) {
             LogManager.Instance.WriteException(ex);
         }
     }
 
-    private void OnClosed(object sender, EventArgs e) {
+    private async void OnClosed(object sender, EventArgs e) {
+        List<Task> tasks = new();
+
+        foreach (var plugin in _loadedPlugins) {
+            tasks.Add(plugin.UnloadAsync());
+        }
+
+        await Task.WhenAny(Task.WhenAll(tasks), Task.Delay(TimeSpan.FromSeconds(10)));
         ProcessLauncher.Instance.StopLoop();
         LogManager.Instance.WriteLine(LogVerbosity.Info, "Closed by user");
 

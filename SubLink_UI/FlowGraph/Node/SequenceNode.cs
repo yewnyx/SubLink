@@ -342,7 +342,7 @@ namespace FlowGraph.Node
 
             try
             {
-                var type = NodeAssemblyCache.Nodes
+                var type = ExtensionManager.Nodes
                        .Single(t => t.AssemblyQualifiedName!
                             .Substring(0, t.AssemblyQualifiedName
                                 .IndexOf(',', t.AssemblyQualifiedName
