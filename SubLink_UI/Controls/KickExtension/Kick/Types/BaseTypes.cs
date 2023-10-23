@@ -21,7 +21,7 @@ public class KickBadgeConverter : TypeConverter {
     public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) =>
         sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
-    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
+    public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
         var casted = value as string;
 
         if (casted != null) {
@@ -32,7 +32,7 @@ public class KickBadgeConverter : TypeConverter {
         return base.ConvertFrom(context, culture, value);
     }
 
-    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
+    public override object? ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
         var casted = value as KickBadge;
 
         if (destinationType == typeof(string) && casted != null) {
@@ -57,7 +57,7 @@ public class KickIdentityConverter : TypeConverter {
     public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) =>
         sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
-    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
+    public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
         var casted = value as string;
 
         if (casted != null) {
@@ -68,7 +68,7 @@ public class KickIdentityConverter : TypeConverter {
         return base.ConvertFrom(context, culture, value);
     }
 
-    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
+    public override object? ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
         var casted = value as KickIdentity;
 
         if (destinationType == typeof(string) && casted != null) {
@@ -99,7 +99,7 @@ public class KickUserConverter : TypeConverter {
     public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) =>
         sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
-    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
+    public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
         var casted = value as string;
 
         if (casted != null) {
@@ -110,7 +110,7 @@ public class KickUserConverter : TypeConverter {
         return base.ConvertFrom(context, culture, value);
     }
 
-    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
+    public override object? ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
         var casted = value as KickUser;
 
         if (destinationType == typeof(string) && casted != null) {
@@ -138,7 +138,7 @@ public class KickUserShortConverter : TypeConverter {
     public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) =>
         sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
-    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
+    public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
         var casted = value as string;
 
         if (casted != null) {
@@ -149,8 +149,47 @@ public class KickUserShortConverter : TypeConverter {
         return base.ConvertFrom(context, culture, value);
     }
 
-    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
+    public override object? ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
         var casted = value as KickUserShort;
+
+        if (destinationType == typeof(string) && casted != null) {
+            var json = JsonSerializer.Serialize(casted);
+            return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json));
+        }
+
+        return base.ConvertTo(context, culture, value, destinationType);
+    }
+}
+
+[TypeConverter(typeof(PollOptionInfoConverter))]
+public sealed class PollOptionInfo {
+    [JsonPropertyName("id"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+    public uint Id { get; set; } = 0;
+
+    [JsonPropertyName("label")]
+    public string Label { get; set; } = string.Empty;
+
+    [JsonPropertyName("votes"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+    public uint Votes { get; set; } = 0;
+}
+
+public class PollOptionInfoConverter : TypeConverter {
+    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) =>
+        sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+
+    public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
+        var casted = value as string;
+
+        if (casted != null) {
+            byte[] data = Convert.FromBase64String(casted);
+            return JsonSerializer.Deserialize<PollOptionInfo>(System.Text.Encoding.UTF8.GetString(data));
+        }
+
+        return base.ConvertFrom(context, culture, value);
+    }
+
+    public override object? ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
+        var casted = value as PollOptionInfo;
 
         if (destinationType == typeof(string) && casted != null) {
             var json = JsonSerializer.Serialize(casted);

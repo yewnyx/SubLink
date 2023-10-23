@@ -210,6 +210,315 @@
         <Connection version="1" srcNodeID="114" srcNodeSlotID="3" destNodeID="102" destNodeSlotID="0" />
       </ConnectionList>
     </Graph>
+    <Graph version="1" id="3" name="Event Test" description="Event Test Graph" type="Sequence" designerVersion="1">
+      <NodeList>
+        <Node version="1" comment="" id="116" type="tech.sublink.KickExtension.Event.EventChatroomClearNode, KickExtension" designerVersion="1" x="118,26499999999999" y="13,579999999999984" z="112">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="117" type="tech.sublink.KickExtension.Event.EventChatMessageNode, KickExtension" designerVersion="1" x="97,36666666666667" y="87,67999999999998" z="113">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="5" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="6" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.KickUser, KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="118" type="tech.sublink.KickExtension.Event.EventChatroomUpdatedNode, KickExtension" designerVersion="1" x="4,274999999999977" y="253,7399999999999" z="114">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.Boolean, System.Private.CoreLib">True</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.Boolean, System.Private.CoreLib">True</ValueContainer>
+          </Slot>
+          <Slot version="1" index="5" saveValue="True">
+            <ValueContainer version="1" type="System.Boolean, System.Private.CoreLib">True</ValueContainer>
+          </Slot>
+          <Slot version="1" index="6" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="7" saveValue="True">
+            <ValueContainer version="1" type="System.Boolean, System.Private.CoreLib">True</ValueContainer>
+          </Slot>
+          <Slot version="1" index="8" saveValue="True">
+            <ValueContainer version="1" type="System.Boolean, System.Private.CoreLib">True</ValueContainer>
+          </Slot>
+          <Slot version="1" index="9" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="119" type="tech.sublink.KickExtension.Event.EventGiftedSubscriptionsNode, KickExtension" designerVersion="1" x="60,31833333333333" y="472,07999999999987" z="115">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.String[], System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+          <Slot version="1" index="5" saveValue="True">
+            <ValueContainer version="1" type="System.Int32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="120" type="tech.sublink.KickExtension.Event.EventMessageDeletedNode, KickExtension" designerVersion="1" x="75,92166666666662" y="619,2228571428569" z="118">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="121" type="tech.sublink.KickExtension.Event.EventPinnedMessageCreatedNode, KickExtension" designerVersion="1" x="32,44666666666694" y="941,5799999999997" z="94">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+          <Slot version="1" index="5" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+          <Slot version="1" index="6" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.KickUser, KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="7" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="122" type="tech.sublink.KickExtension.Event.EventPinnedMessageDeletedNode, KickExtension" designerVersion="1" x="33,50333333333356" y="1118,5599999999997" z="88">
+          <Slot version="1" index="0" />
+        </Node>
+        <Node version="1" comment="" id="123" type="tech.sublink.KickExtension.Event.EventPollDeleteNode, KickExtension" designerVersion="1" x="106,74000000000024" y="1171,5599999999997" z="89">
+          <Slot version="1" index="0" />
+        </Node>
+        <Node version="1" comment="" id="124" type="tech.sublink.KickExtension.Event.EventPollUpdateNode, KickExtension" designerVersion="1" x="82,44166666666683" y="1226,6599999999996" z="81">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.PollOptionInfo[], KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.Int32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="5" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="126" type="tech.sublink.KickExtension.Event.EventStreamHostNode, KickExtension" designerVersion="1" x="100,08000000000038" y="1375,0799999999995" z="78">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="127" type="tech.sublink.KickExtension.Event.EventSubscriptionNode, KickExtension" designerVersion="1" x="99,66166666666709" y="1501,0799999999995" z="74">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.UInt32, System.Private.CoreLib">0</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="129" type="tech.sublink.KickExtension.Event.EventUserBannedNode, KickExtension" designerVersion="1" x="100,3457142857144" y="708,365714285714" z="119">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.KickUserShort, KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.KickUserShort, KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="4" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">
+            </ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="130" type="tech.sublink.KickExtension.Event.EventUserUnbannedNode, KickExtension" designerVersion="1" x="84,3138095238096" y="831,7942857142854" z="99">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.KickUserShort, KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+          <Slot version="1" index="3" saveValue="True">
+            <ValueContainer version="1" type="tech.sublink.KickExtension.Kick.Types.KickUserShort, KickExtension">&lt;null&gt;</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="132" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="406,69388888888875" y="1501,6598412698404" z="124">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Subscription Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="133" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="414,4716666666667" y="1374,9931746031737" z="123">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Stream Host Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="134" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="410,0272222222221" y="1274,9931746031739" z="82">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Poll Update Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="135" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="412,2494444444444" y="1196,1042857142847" z="87">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Poll Delete Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="136" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="408,91611111111104" y="1118,3265079365071" z="122">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Pinned Message Deleted Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="137" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="414,4716666666666" y="942,7709523809515" z="95">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Pinned Message Created Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="138" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="413,3605555555554" y="831,6598412698405" z="121">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick User Unbanned Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="139" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="420,0272222222221" y="707,215396825396" z="102">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick User Banned Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="140" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="416,80499999999984" y="472,3820634920626" z="129">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Gifted Subscriptions Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="141" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="416,80499999999984" y="253,65984126984029" z="127">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Chatroom Update Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="142" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="418,58277777777766" y="88,10428571428483" z="126">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Chat Message Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="143" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="412,80499999999984" y="13,437619047618142" z="125">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Chat Clear Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+        <Node version="1" comment="" id="144" type="BaseNodes.Action.LogMessageNode, BaseNodes" designerVersion="1" x="416,69388888888875" y="619,437619047618" z="120">
+          <Slot version="1" index="0" />
+          <Slot version="1" index="1" />
+          <Slot version="1" index="2" saveValue="True">
+            <ValueContainer version="1" type="System.String, System.Private.CoreLib">Kick Message Deleted Event Triggered</ValueContainer>
+          </Slot>
+        </Node>
+      </NodeList>
+      <ConnectionList>
+        <Connection version="1" srcNodeID="116" srcNodeSlotID="0" destNodeID="143" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="117" srcNodeSlotID="0" destNodeID="142" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="118" srcNodeSlotID="0" destNodeID="141" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="119" srcNodeSlotID="0" destNodeID="140" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="120" srcNodeSlotID="0" destNodeID="144" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="121" srcNodeSlotID="0" destNodeID="137" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="122" srcNodeSlotID="0" destNodeID="136" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="123" srcNodeSlotID="0" destNodeID="135" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="124" srcNodeSlotID="0" destNodeID="134" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="126" srcNodeSlotID="0" destNodeID="133" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="127" srcNodeSlotID="0" destNodeID="132" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="129" srcNodeSlotID="0" destNodeID="139" destNodeSlotID="0" />
+        <Connection version="1" srcNodeID="130" srcNodeSlotID="0" destNodeID="138" destNodeSlotID="0" />
+      </ConnectionList>
+    </Graph>
     <Graph version="1" id="1" name="Concat Func" description="Concatenates apple and juice" type="Function" designerVersion="1">
       <NodeList>
         <Node version="1" comment="" id="1" type="FlowGraph.Node.StandardEventNode.OnEnterFunctionEvent, FlowGraph" functionID="1" designerVersion="1" x="163" y="64" z="34">

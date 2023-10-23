@@ -5,6 +5,7 @@ using PusherClient;
 using System.Text.Json;
 using tech.sublink.KickExtension.Kick.Types;
 using tech.sublink.KickExtension.Event;
+using FlowGraph.Logger;
 
 namespace tech.sublink.KickExtension.Kick;
 
@@ -61,29 +62,22 @@ public class KickPusherClient : IPlugin {
         await _pusher.DisconnectAsync();
     }
 
-    private void Pusher_Connected(object sender) { }// => PusherConnected?.Invoke(this, EventArgs.Empty);
+    private void Pusher_Connected(object sender) =>
+        LogManager.Instance.WriteLine(LogVerbosity.Info, "Kick Pusher client connected");
 
-    private void Pusher_ConnectionStateChanged(object sender, ConnectionState state) { }// =>
-    // PusherConnectionStateChanged?.Invoke(this, new PusherConnectionStateChangedArgs { State = state });
+    private void Pusher_ConnectionStateChanged(object sender, ConnectionState state) =>
+        LogManager.Instance.WriteLine(LogVerbosity.Debug, $"Kick Pusher client connection state changed : {state}");
 
-    private void Pusher_Disconnected(object sender) { }// => PusherDisconnected?.Invoke(this, EventArgs.Empty);
+    private void Pusher_Disconnected(object sender) =>
+        LogManager.Instance.WriteLine(LogVerbosity.Info, "Kick Pusher client disconnected");
 
-    private void Pusher_Error(object sender, PusherException error) { }// =>
-        //PusherError?.Invoke(this, new PusherErrorArgs
-        //{
-        //    Exception = error,
-        //    Message = error.Message
-        //});
+    private void Pusher_Error(object sender, PusherException error) =>
+        LogManager.Instance.WriteException(error);
 
-    private void Pusher_Subscribed(object sender, Channel channel) { }// =>
-        //PusherSubscribed?.Invoke(this, new PusherSubscribedArgs
-        //{
-        //    SubscriptionCount = channel.SubscriptionCount,
-        //    Name = channel.Name
-        //});
+    private void Pusher_Subscribed(object sender, Channel channel) =>
+        LogManager.Instance.WriteLine(LogVerbosity.Debug, $"Kick Pusher client subscribed to `{channel.Name}`");
 
-    private void OnChatMessageEvent(PusherEvent eventData)
-    {
+    private void OnChatMessageEvent(PusherEvent eventData) {
         var data = JsonSerializer.Deserialize<ChatMessage>(eventData.Data);
 
         if (data != null)
@@ -92,89 +86,105 @@ public class KickPusherClient : IPlugin {
             }
     }
 
-    private void OnGiftedSubscriptionsEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<GiftedSubscriptionsEvent>(eventData.Data);
+    private void OnGiftedSubscriptionsEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<GiftedSubscriptions>(eventData.Data);
 
         if (data != null)
-            GiftedSubscriptionsEvent?.Invoke(this, new GiftedSubscriptionsEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventGiftedSubscriptionsNode), 0, data);
+            }
     }
 
-    private void OnSubscriptionEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<SubscriptionEvent>(eventData.Data);
+    private void OnSubscriptionEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<Subscription>(eventData.Data);
 
         if (data != null)
-            SubscriptionEvent?.Invoke(this, new SubscriptionEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventSubscriptionNode), 0, data);
+            }
     }
 
-    private void OnStreamHostEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<StreamHostEvent>(eventData.Data);
+    private void OnStreamHostEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<StreamHost>(eventData.Data);
 
         if (data != null)
-            StreamHostEvent?.Invoke(this, new StreamHostEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventStreamHostNode), 0, data);
+            }
     }
 
-    private void OnUserBannedEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<UserBannedEvent>(eventData.Data);
+    private void OnUserBannedEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<UserBanned>(eventData.Data);
 
         if (data != null)
-            UserBannedEvent?.Invoke(this, new UserBannedEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventUserBannedNode), 0, data);
+            }
     }
 
-    private void OnUserUnbannedEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<UserUnbannedEvent>(eventData.Data);
+    private void OnUserUnbannedEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<UserUnbanned>(eventData.Data);
 
         if (data != null)
-            UserUnbannedEvent?.Invoke(this, new UserUnbannedEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventUserUnbannedNode), 0, data);
+            }
     }
 
-    private void OnMessageDeletedEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<MessageDeletedEvent>(eventData.Data);
+    private void OnMessageDeletedEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<MessageDeleted>(eventData.Data);
 
         if (data != null)
-            MessageDeletedEvent?.Invoke(this, new MessageDeletedEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventMessageDeletedNode), 0, data);
+            }
     }
 
-    private void OnChatroomClearEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<ChatroomClearEvent>(eventData.Data);
+    private void OnChatroomClearEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<ChatroomClear>(eventData.Data);
 
         if (data != null)
-            ChatroomClearEvent?.Invoke(this, new ChatroomClearEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventChatroomClearNode), 0, data);
+            }
     }
 
-    private void OnChatroomUpdatedEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<ChatroomUpdatedEvent>(eventData.Data);
+    private void OnChatroomUpdatedEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<ChatroomUpdated>(eventData.Data);
 
         if (data != null)
-            ChatroomUpdatedEvent?.Invoke(this, new ChatroomUpdatedEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventChatroomUpdatedNode), 0, data);
+            }
     }
 
-    private void OnPollUpdateEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<PollUpdateEvent>(eventData.Data);
+    private void OnPollUpdateEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<PollUpdate>(eventData.Data);
 
         if (data != null)
-            PollUpdateEvent?.Invoke(this, new PollUpdateEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventPollUpdateNode), 0, data);
+            }
     }
 
-    private void OnPollDeleteEvent(PusherEvent eventData) { }// =>
-        //PollDeleteEvent?.Invoke(this, EventArgs.Empty);
+    private void OnPollDeleteEvent(PusherEvent eventData) {
+        foreach (var seq in GraphDataManager.Instance.GraphList) {
+            ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventPollDeleteNode), 0, null);
+        }
+    }
 
-    private void OnPinnedMessageCreatedEvent(PusherEvent eventData)
-    {/*
-        var data = JsonSerializer.Deserialize<PinnedMessageCreatedEvent>(eventData.Data);
+    private void OnPinnedMessageCreatedEvent(PusherEvent eventData) {
+        var data = JsonSerializer.Deserialize<PinnedMessageCreated>(eventData.Data);
 
         if (data != null)
-            PinnedMessageCreatedEvent?.Invoke(this, new PinnedMessageCreatedEventArgs { Data = data });*/
+            foreach (var seq in GraphDataManager.Instance.GraphList) {
+                ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventPinnedMessageCreatedNode), 0, data);
+            }
     }
 
-    private void OnPinnedMessageDeletedEvent(PusherEvent eventData) { }// =>
-        //PinnedMessageDeletedEvent?.Invoke(this, EventArgs.Empty);
+    private void OnPinnedMessageDeletedEvent(PusherEvent eventData) {
+        foreach (var seq in GraphDataManager.Instance.GraphList) {
+            ProcessLauncher.Instance.LaunchSequence(seq, typeof(EventPinnedMessageDeletedNode), 0, null);
+        }
+    }
 }

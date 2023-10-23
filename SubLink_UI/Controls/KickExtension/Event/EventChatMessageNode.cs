@@ -5,7 +5,7 @@ using tech.sublink.KickExtension.Kick.Types;
 
 namespace tech.sublink.KickExtension.Event;
 
-[Name("Chat Message"), Category("Event/Kick")]
+[Name("Chat Message"), Category("Kick/Event")]
 public class EventChatMessageNode : EventNode {
     private enum SlotId {
         FlowOut,
@@ -31,7 +31,7 @@ public class EventChatMessageNode : EventNode {
         AddSlot((int)SlotId.VarContent, "Content", SlotType.VarOut, typeof(string));
         AddSlot((int)SlotId.VarType, "Type", SlotType.VarOut, typeof(string));
         AddSlot((int)SlotId.VarCreatedAt, "Created At", SlotType.VarOut, typeof(string));
-        AddSlot((int)SlotId.VarSender, "Sender KickUser", SlotType.VarOut, typeof(KickUser));
+        AddSlot((int)SlotId.VarSender, "Sender - KickUser", SlotType.VarOut, typeof(KickUser));
     }
 
     protected override void TriggeredImpl(object? para) {

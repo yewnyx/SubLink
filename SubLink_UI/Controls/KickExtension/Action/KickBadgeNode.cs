@@ -7,7 +7,7 @@ using tech.sublink.KickExtension.Kick.Types;
 
 namespace tech.sublink.KickExtension.Action;
 
-[Name("KickBadge"), Category("Objects/Kick")]
+[Name("KickBadge"), Category("Kick/Object")]
 public class KickBadgeNode : ActionNode {
     private enum NodeSlotId {
         FlowIn,

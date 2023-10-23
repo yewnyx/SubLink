@@ -32,7 +32,7 @@ public class ProcessLauncher : INotifyPropertyChanged {
         }
     }
 
-    public IEnumerable<ProcessingContext> CallStack => _callStacks;
+    public IEnumerable<ProcessingContext> CallStack => _callStacks.ToArray();
 
     private ProcessLauncher() { }
 

@@ -7,7 +7,7 @@ using tech.sublink.KickExtension.Kick.Types;
 
 namespace tech.sublink.KickExtension.Action;
 
-[Name("KickUser"), Category("Objects/Kick")]
+[Name("KickUser"), Category("Kick/Object")]
 public class KickUserNode : ActionNode {
     private enum NodeSlotId {
         FlowIn,
@@ -32,7 +32,7 @@ public class KickUserNode : ActionNode {
         AddSlot((int)NodeSlotId.VarId, "ID", SlotType.VarOut, typeof(uint));
         AddSlot((int)NodeSlotId.VarUsername, "Username", SlotType.VarOut, typeof(string));
         AddSlot((int)NodeSlotId.VarSlug, "Slug", SlotType.VarOut, typeof(string));
-        AddSlot((int)NodeSlotId.VarIdentity, "KickIdentity", SlotType.VarOut, typeof(KickIdentity));
+        AddSlot((int)NodeSlotId.VarIdentity, "Identity - KickIdentity", SlotType.VarOut, typeof(KickIdentity));
     }
 
     public override ProcessingInfo ActivateLogic(ProcessingContext context, NodeSlot slot) {

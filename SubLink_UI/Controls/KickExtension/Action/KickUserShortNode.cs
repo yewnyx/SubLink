@@ -7,7 +7,7 @@ using tech.sublink.KickExtension.Kick.Types;
 
 namespace tech.sublink.KickExtension.Action;
 
-[Name("KickUserShort"), Category("Objects/Kick")]
+[Name("KickUserShort"), Category("Kick/Object")]
 public class KickUserShortNode : ActionNode {
     private enum NodeSlotId {
         FlowIn,
