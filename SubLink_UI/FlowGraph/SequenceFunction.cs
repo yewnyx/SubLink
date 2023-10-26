@@ -73,8 +73,8 @@ public class SequenceFunction : SequenceBase {
     }
 
     private void OnSlotCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-        OnPropertyChanged("Inputs");
-        OnPropertyChanged("Outputs");
+        OnPropertyChanged(nameof(Inputs));
+        OnPropertyChanged(nameof(Outputs));
     }
 
     public override void Load(XmlNode node) {

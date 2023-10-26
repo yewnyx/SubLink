@@ -2,31 +2,22 @@
 
 namespace FlowGraph.Node;
 
-public class NodeFunctionSlot : NodeSlotVar
-{
+public class NodeFunctionSlot : NodeSlotVar {
     private readonly SequenceFunctionSlot? _funcSlot;
 
-    public override string? Text
-    {
+    public override string? Text {
         get => _funcSlot == null ? string.Empty : _funcSlot.Name;
-        set
-        {
+        set {
             if (_funcSlot != null)
-            {
                 _funcSlot.Name = value;
-            }
         }
     }
 
-    public override Type VariableType
-    {
+    public override Type VariableType {
         get => _funcSlot?.VariableType!;
-        set
-        {
+        set {
             if (_funcSlot != null)
-            {
                 _funcSlot.VariableType = value;
-            }
         }
     }
 
@@ -38,30 +29,19 @@ public class NodeFunctionSlot : NodeSlotVar
         VariableControlType controlType = VariableControlType.ReadOnly,
         object? tag = null,
         bool saveValue = true) :
-
-        base(slotId,
-            node,
-            slot.Name,
-            connectionType,
-            slot.VariableType,
-            controlType,
-            tag,
-            saveValue)
-    {
+        base(slotId, node, slot.Name, connectionType, slot.VariableType, controlType, tag, saveValue) {
         _funcSlot = slot;
         _funcSlot.PropertyChanged += OnFunctionSlotPropertyChanged!;
     }
 
-    void OnFunctionSlotPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
+    void OnFunctionSlotPropertyChanged(object sender, PropertyChangedEventArgs e) {
+        switch (e.PropertyName) {
             case "Name":
-                OnPropertyChanged("Text");
+                OnPropertyChanged(nameof(Text));
                 break;
 
             case "VariableType":
-                OnPropertyChanged("VariableType");
+                OnPropertyChanged(nameof(VariableType));
                 break;
             //IsArray
         }

@@ -1,9 +1,7 @@
-﻿namespace FlowGraph.Node
-{
-    public enum NodeType
-    {
-        Action,
-        Event,
-        Variable
-    }
+﻿namespace FlowGraph.Node;
+
+public enum NodeType {
+    Action,
+    Event,
+    Variable
 }

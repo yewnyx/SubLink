@@ -28,7 +28,35 @@ public class ProcessLauncher : INotifyPropertyChanged {
             if (_state != value) {
                 _state = value;
                 OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(NumberOfErrorProcess));
+                OnPropertyChanged(nameof(NumberOfActiveProcess));
             }
+        }
+    }
+
+    public int NumberOfErrorProcess {
+        get {
+            var count = 0;
+
+            foreach (var c in CallStack) {
+                if (c.IsOnError)
+                    count++;
+            }
+
+            return count;
+        }
+    }
+
+    public int NumberOfActiveProcess {
+        get {
+            var count = 0;
+
+            foreach (var c in CallStack) {
+                if (!c.IsOnError)
+                    count++;
+            }
+
+            return count;
         }
     }
 
@@ -90,9 +118,9 @@ public class ProcessLauncher : INotifyPropertyChanged {
     public void OnGlobalEvent(Type eventType, int index, object para) {
         var seqList = new List<Sequence>();
 
-        foreach (var c in _callStacks) {
+        foreach (var c in CallStack) {
             if (c.SequenceBase is Sequence seq) {
-                if (seq.ContainsEventNodeWithType(eventType) && seqList.Contains(seq) == false) {
+                if (seq.ContainsEventNodeWithType(eventType) && !seqList.Contains(seq)) {
                     seqList.Add(seq);
                     seq.OnEvent(c, eventType, index, para);
                 }
@@ -117,8 +145,8 @@ public class ProcessLauncher : INotifyPropertyChanged {
     private void ProcessLoop(bool sleep = true) {
         var processing = true;
 
-        while (processing && _mustStop == false) {
-            if (_isOnPause == false) {
+        while (processing && !_mustStop) {
+            if (!_isOnPause) {
                 processing = DoOneStep();
 
                 if (processing)
@@ -141,13 +169,13 @@ public class ProcessLauncher : INotifyPropertyChanged {
         State = SequenceState.Stop;
         _lastExecution = null;
 
-        foreach (var c in _callStacks) {
+        foreach (var c in CallStack) {
             c.SequenceBase.ResetNodes();
         }
     }
 
     public bool DoOneStep() {
-        if (GetNumberOfActiveProcess() > 0) {
+        if (NumberOfActiveProcess > 0) {
             if (State == SequenceState.Pause && _lastExecution != null)
                 _lastExecution.Slot.Node.IsProcessing = false;
 
@@ -173,17 +201,6 @@ public class ProcessLauncher : INotifyPropertyChanged {
         }
 
         return SetNextProcess();
-    }
-
-    private int GetNumberOfActiveProcess() {
-        var count = 0;
-
-        foreach (var c in _callStacks) {
-            if (c.IsOnError == false)
-                count++;
-        }
-
-        return count;
     }
 
     private bool SetNextProcess() {

@@ -18,7 +18,7 @@ public class SequenceBase : INotifyPropertyChanged {
         set {
             if (string.Equals(_name, value) == false) {
                 _name = value;
-                OnPropertyChanged("Name");
+                OnPropertyChanged(nameof(Name));
             }
         }
     }
@@ -28,7 +28,7 @@ public class SequenceBase : INotifyPropertyChanged {
         set {
             if (string.Equals(_description, value) == false) {
                 _description = value;
-                OnPropertyChanged("Description");
+                OnPropertyChanged(nameof(Description));
             }
         }
     }

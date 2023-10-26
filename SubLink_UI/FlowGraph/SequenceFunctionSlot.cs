@@ -21,7 +21,7 @@ public class SequenceFunctionSlot : INotifyPropertyChanged {
         set {
             if (_name != value) {
                 _name = value;
-                OnPropertyChanged("Name");
+                OnPropertyChanged(nameof(Name));
             }
         }
     }
@@ -31,7 +31,7 @@ public class SequenceFunctionSlot : INotifyPropertyChanged {
         set {
             if (_varType != value) {
                 _varType = value;
-                OnPropertyChanged("VariableType");
+                OnPropertyChanged(nameof(VariableType));
             }
         }
     }
@@ -41,7 +41,7 @@ public class SequenceFunctionSlot : INotifyPropertyChanged {
         set {
             if (_isArray != value) {
                 _isArray = value;
-                OnPropertyChanged("IsArray");
+                OnPropertyChanged(nameof(IsArray));
             }
         }
     }

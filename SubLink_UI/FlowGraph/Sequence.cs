@@ -1,38 +1,28 @@
 ﻿using System.Xml;
 using FlowGraph.Node;
 
-namespace FlowGraph
-{
-    public enum SequenceState
-    {
-        Running,
-        Pause,
-        Stop
-    }
+namespace FlowGraph;
 
-    public class Sequence : SequenceBase
-    {
-        public const string? XmlAttributeTypeValue = "Sequence";
+public enum SequenceState {
+    Running,
+    Pause,
+    Stop
+}
 
-        public Sequence(string? name)
-            : base(name)
-        { }
+public class Sequence : SequenceBase {
+    public const string? XmlAttributeTypeValue = "Sequence";
 
-        public Sequence(XmlNode node)
-            : base(node)
-        { }
+    public Sequence(string? name) : base(name) { }
 
-        public bool ContainsEventNodeWithType(Type type)
-        {
-            return SequenceNodes.Any(pair => pair.Value is EventNode && pair.Value.GetType() == type);
-        }
+    public Sequence(XmlNode node) : base(node) { }
 
-        public override void Save(XmlNode node)
-        {
-            base.Save(node);
+    public bool ContainsEventNodeWithType(Type type) =>
+        SequenceNodes.Any(pair => pair.Value is EventNode && pair.Value.GetType() == type);
 
-            var graphNode = node.SelectSingleNode("Graph[@id='" + Id + "']");
-            graphNode?.AddAttribute("type", XmlAttributeTypeValue);
-        }
+    public override void Save(XmlNode node) {
+        base.Save(node);
+
+        var graphNode = node.SelectSingleNode("Graph[@id='" + Id + "']");
+        graphNode?.AddAttribute("type", XmlAttributeTypeValue);
     }
 }

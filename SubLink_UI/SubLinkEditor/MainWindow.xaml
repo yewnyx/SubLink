@@ -292,10 +292,14 @@
                     HorizontalContentAlignment="Center" />
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <Label x:Name="labelNbError" Content="0 Error(s)" />
+                <Label x:Name="labelNbError"
+                       Content="{Binding Source={x:Static process:ProcessLauncher.Instance}, Path=NumberOfErrorProcess}"
+                       ContentStringFormat="{}{0} Error(s)" />
             </StatusBarItem>
             <StatusBarItem Grid.Column="3">
-                <Label x:Name="labelNbTask" Content="0 Task(s) running" />
+                <Label x:Name="labelNbTask"
+                       Content="{Binding Source={x:Static process:ProcessLauncher.Instance}, Path=NumberOfActiveProcess}"
+                       ContentStringFormat="{}{0} Task(s) running" />
             </StatusBarItem>
 
         </StatusBar>

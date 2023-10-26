@@ -36,7 +36,7 @@ public partial class MainWindow : Window {
 
     internal DetailsControl DetailsControl => detailsControl;
 
-    private List<IPlugin> _loadedPlugins = new();
+    private readonly List<IPlugin> _loadedPlugins = new();
 
     public MainWindow() {
         InitializeComponent();
@@ -92,7 +92,7 @@ public partial class MainWindow : Window {
         }
     }
 
-    private async void OnClosed(object sender, EventArgs e) {
+    private async void OnClosed(object? sender, EventArgs e) {
         List<Task> tasks = new();
 
         foreach (var plugin in _loadedPlugins) {

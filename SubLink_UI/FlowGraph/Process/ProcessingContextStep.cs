@@ -1,20 +1,17 @@
 ﻿using FlowGraph.Node;
 
-namespace FlowGraph.Process
-{
-    public class ProcessingContextStep
-    {
-        public SequenceBase SequenceBase { get; }
+namespace FlowGraph.Process;
 
-        public MemoryStack MemoryStack { get; }
+public class ProcessingContextStep {
+    public SequenceBase SequenceBase { get; }
 
-        public NodeSlot Slot { get; }
+    public MemoryStack MemoryStack { get; }
 
-        public ProcessingContextStep(SequenceBase seq, MemoryStack stack, NodeSlot slot)
-        {
-            SequenceBase = seq;
-            MemoryStack = stack;
-            Slot = slot;
-        }
+    public NodeSlot Slot { get; }
+
+    public ProcessingContextStep(SequenceBase seq, MemoryStack stack, NodeSlot slot) {
+        SequenceBase = seq;
+        MemoryStack = stack;
+        Slot = slot;
     }
 }
