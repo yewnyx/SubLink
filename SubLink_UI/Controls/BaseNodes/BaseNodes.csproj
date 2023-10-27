@@ -27,4 +27,8 @@
     <ProjectReference Include="..\..\FlowGraph\FlowGraph.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Event\" />
+  </ItemGroup>
+
 </Project>
