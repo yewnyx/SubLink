@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <ApplicationIcon>..\Icon\SubLink.ico</ApplicationIcon>
+    <ApplicationIcon>..\Icon\SubLinkStreamElements.ico</ApplicationIcon>
     <RootNamespace>xyz.yewnyx.SubLink</RootNamespace>
     <Authors>yewnyx</Authors>
     <Product>SubLinkStreamElements</Product>
