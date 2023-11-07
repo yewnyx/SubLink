@@ -225,3 +225,40 @@ streamPad.ReactToControllerValue(async (name, value) => {
 });
 
 #endif
+#if SUBLINK_STREAMELEMENTS
+
+logger.Information("StreamElements integration enabled");
+
+streamElements.ReactToTipEvent(async tipInfo => {
+    logger.Information("Stream Elements tip recieved : {Amount} {UserCurrency} from {Name} with the following message: {Message}",
+        tipInfo.Amount, tipInfo.UserCurrency, tipInfo.Name, tipInfo.Message);
+
+    if (!tipInfo.UserCurrency.Equals("USD", StringComparison.OrdinalIgnoreCase)) {
+        logger.Information("Ignoring tip, wrong currency type");
+        return;
+    }
+
+    switch (tipInfo.CentAmount) {
+        // To compare against tipInfo.Amount instead you have to use "floats", which MUST end in an `f` like: 1.23f
+        // tipInfo.CentAmount is an integer, which doesn't support decimals.
+        case 1000: {
+            OscParameter.SendAvatarParameter("Ragdoll", true);
+            break;
+        }
+        case 1500: {
+            OscParameter.SendAvatarParameter("Yeet", true);
+            break;
+        }
+        case 2500: {
+            OscParameter.SendAvatarParameter("PopConfettiType", 1);
+            break;
+        }
+        case 3000: {
+            OscParameter.SendAvatarParameter("PopConfettiType", 2);
+            break;
+        }
+        default: break;
+    }
+});
+
+#endif

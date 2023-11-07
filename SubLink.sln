@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubLinkKick", "SubLinkKick\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubLinkCommon", "SubLinkCommon\SubLinkCommon.csproj", "{232E8A75-B355-4B3A-B842-E92BE96190EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubLinkStreamPad", "SubLinkStreampad\SubLinkStreamPad.csproj", "{635FCACD-CA0E-48F6-B9C3-A9F0B5BCA3D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubLinkStreamPad", "SubLinkStreampad\SubLinkStreamPad.csproj", "{635FCACD-CA0E-48F6-B9C3-A9F0B5BCA3D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubLinkStreamElements", "SubLinkStreamElements\SubLinkStreamElements.csproj", "{C83EE70A-8CD5-48C1-AD45-D38576635BCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{635FCACD-CA0E-48F6-B9C3-A9F0B5BCA3D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{635FCACD-CA0E-48F6-B9C3-A9F0B5BCA3D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{635FCACD-CA0E-48F6-B9C3-A9F0B5BCA3D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83EE70A-8CD5-48C1-AD45-D38576635BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83EE70A-8CD5-48C1-AD45-D38576635BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C83EE70A-8CD5-48C1-AD45-D38576635BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83EE70A-8CD5-48C1-AD45-D38576635BCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

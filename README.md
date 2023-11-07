@@ -53,11 +53,24 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 }
 ```
 
-## Kick Events and data types
+### Kick Events and data types
 
 For more information on the events see [Kick_Events.md](Docs/Kick_Events.md)
 
 For more information on the data types see [Kick_Types.md](Docs/Kick_Types.md)
+
+## Setup (StreamElements)
+
+1. On the first run, the application will create a `settings.json` file.
+2. Retrieve your JWT Token, using yout browser, from the following URL: https://streamelements.com/dashboard/account/channels
+3. Add the `JWT Token` in your browser to the `settings.json` file's `JWTToken` setting.
+4. On the second run, the application will automatically connect to StreamElements' real-time API and start receiving events.
+
+```json
+{
+  "JWTToken": "your-jwt-token-that-is-super-long"
+}
+```
 
 ## Adding Support to Avatars
 
