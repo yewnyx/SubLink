@@ -9,6 +9,15 @@ oscServer.TryAddMethod("/avatar/parameters/MuteSelf", message => {
     logger.Information($"Received `/avatar/parameters/MuteSelf` value from VRChat : {message.ReadBooleanElement(0)}");
 });
 
+oscQuery.AddEndpoint("/tracking/vrsystem/head/pose", "ffffff", Attributes.AccessValues.WriteOnly);
+oscServer.TryAddMethod("/tracking/vrsystem/head/pose", message => {
+    // To make this work add the following to the top of your sublink.cs file:
+    // using BuildSoft.OscCore.UnityObjects;
+    var position = new Vector3(message.ReadFloatElement(0), message.ReadFloatElement(1), message.ReadFloatElement(2));
+    var rotation = new Vector3(message.ReadFloatElement(3), message.ReadFloatElement(4), message.ReadFloatElement(5));
+    logger.Information($"VRChat head tracking changed to : Pos{position} rot{rotation}");
+});
+
 #if SUBLINK_TWITCH
 
 logger.Information("Twitch integration enabled");
@@ -197,6 +206,22 @@ kick.ReactToPinnedMessageCreated(async pinnedMessage => {
 
 kick.ReactToPinnedMessageDeleted(async pinnedMessage => {
     logger.Information("Pinned message was deleted");
+});
+
+#endif
+#if SUBLINK_STREAMPAD
+
+streamPad.ReactToControllerValue(async (name, value) => {
+    logger.Information($"StreamPad | in rule: {name}:{value}");
+    if (name == "PRESETS")
+    {
+        // Map specific presets to camera modes on/off (or whatever)
+        // Values will be 0,1,2,3,...)
+        // if (value == 0) OscParameter.XYZ("CAMERA_1", true)
+    }
+    // Optionally ensure supported names (YAW_LEFT_RIGHT), clamp values, etc
+    // Values (currently) (-1.00,value,1.00)
+    OscParameter.SendAvatarParameter(name, value);
 });
 
 #endif

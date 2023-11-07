@@ -10,6 +10,9 @@ public sealed class Settings {
     [JsonPropertyName("Kick"), ConfigurationKeyName("Kick")]
     public KickSettings kick { get; init; }
 
+    [JsonPropertyName("StreamPad"), ConfigurationKeyName("StreamPad")]
+    public StreamPadSettings streampad { get; init; }
+
     [JsonPropertyName("Discord"), ConfigurationKeyName("Discord")]
     public DiscordSettings discord { get; init; }
 
@@ -20,12 +23,14 @@ public sealed class Settings {
     public Settings() {
         twitch = new();
         kick = new();
+        streampad = new();
         discord = new();
         sublink = new();
     }
-    public Settings(TwitchSettings twitch, KickSettings kick, DiscordSettings discord, SubLinkSettings sublink) {
+    public Settings(TwitchSettings twitch, KickSettings kick, StreamPadSettings streampad, DiscordSettings discord, SubLinkSettings sublink) {
         this.twitch = twitch;
         this.kick = kick;
+        this.streampad = streampad;
         this.discord = discord;
         this.sublink = sublink;
     }
@@ -68,6 +73,22 @@ public sealed class KickSettings {
 
     public KickSettings(string pusherKey, string pusherCluster, string chatroomId) =>
         (PusherKey, PusherCluster, ChatroomId) = (pusherKey, pusherCluster, chatroomId);
+}
+
+public sealed class StreamPadSettings {
+    [JsonPropertyName("WebSocketUrl"), ConfigurationKeyName("WebSocketUrl")]
+    public string WebSocketUrl { get; init; }
+
+    [JsonPropertyName("ChannelId"), ConfigurationKeyName("ChannelId")]
+    public string ChannelId { get; init; }
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public StreamPadSettings() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    public StreamPadSettings(string webSocketUrl, string channelId) =>
+        (WebSocketUrl, ChannelId) = (webSocketUrl, channelId);
+
 }
 
 public sealed class DiscordSettings {
