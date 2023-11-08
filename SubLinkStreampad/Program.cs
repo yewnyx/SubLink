@@ -48,6 +48,9 @@ internal partial class Program {
     "WebSocketUrl": "",
     "ChannelId": "",
   },
+  "StreamElements": {
+    "JWTToken": ""
+  },
   "Discord": {
     "Webhook": ""
   },

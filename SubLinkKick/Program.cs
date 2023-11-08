@@ -45,6 +45,13 @@ internal partial class Program {
     "PusherCluster": "",
     "ChatroomId": ""
   },
+  "StreamPad": {
+    "WebSocketUrl": "",
+    "ChannelId": "",
+  },
+  "StreamElements": {
+    "JWTToken": ""
+  },
   "Discord": {
     "Webhook": ""
   },
