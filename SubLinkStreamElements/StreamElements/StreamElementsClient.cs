@@ -31,6 +31,10 @@ internal sealed class StreamElementsClient {
         _socket.OnConnected += OnConnected;
         _socket.OnDisconnected += OnDisconnected;
         _socket.OnError += OnError;
+        _socket.OnReconnectAttempt += OnReconnectAttempt;
+        _socket.OnReconnected += OnReconnected;
+        _socket.OnReconnectError += OnReconnectError;
+        _socket.OnReconnectFailed += OnReconnectFailed;
         _socket.On("authenticated", OnAuthenticated);
         _socket.On("unauthorized", OnUnauthorized);
         _socket.On("event", OnEvent);
@@ -46,6 +50,18 @@ internal sealed class StreamElementsClient {
 
     private void OnError(object? sender, string e) =>
         _logger.Error("[{TAG}] StreamElements error: {ERROR}", "StreamElements", e);
+
+    private void OnReconnectAttempt(object? sender, int e) =>
+        _logger.Debug("[{TAG}] Socket reconnect attempt #{e}", "StreamElements", e);
+
+    private void OnReconnected(object? sender, int e) =>
+        _logger.Information("[{TAG}] Socket reconnected after {e} attempts", "StreamElements", e);
+
+    private void OnReconnectError(object? sender, Exception e) =>
+        _logger.Error("[{TAG}] Socket reconnect error:", "StreamElements", e);
+
+    private void OnReconnectFailed(object? sender, EventArgs e) =>
+        _logger.Error("[{TAG}] Socket reconnect failed", "StreamElements");
 
     private void OnAuthenticated(SocketIOResponse response) =>
         _logger.Information("[{TAG}] Authenticated with StreamElements", "StreamElements");
