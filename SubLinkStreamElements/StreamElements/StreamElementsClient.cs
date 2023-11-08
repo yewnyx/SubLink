@@ -17,12 +17,16 @@ internal sealed class StreamElementsClient {
     public StreamElementsClient(ILogger logger) {
         _logger = logger;
 
-        _socket = new(_socketUri);
-        _socket.Options.AutoUpgrade = true;
-        _socket.Options.ConnectionTimeout = TimeSpan.FromSeconds(5);
-        _socket.Options.Reconnection = true;
-        _socket.Options.ReconnectionAttempts = 3;
-        _socket.Options.Transport = SocketIOClient.Transport.TransportProtocol.WebSocket;
+        _socket = new(_socketUri, new() {
+            AutoUpgrade = true,
+            ConnectionTimeout = TimeSpan.FromSeconds(30),
+            EIO = SocketIO.Core.EngineIO.V3,
+            Reconnection = true,
+            ReconnectionAttempts = 3,
+            ReconnectionDelay = 500,
+            RandomizationFactor = 0.5,
+            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
+        });
 
         _socket.OnConnected += OnConnected;
         _socket.OnDisconnected += OnDisconnected;
