@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace xyz.yewnyx.SubLink.StreamElements;
+namespace xyz.yewnyx.SubLink;
 
-internal sealed class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<string, object?>> {
+public sealed class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<string, object?>> {
     public override bool CanConvert(Type typeToConvert) =>
         typeToConvert == typeof(Dictionary<string, object>) || typeToConvert == typeof(Dictionary<string, object?>);
 
