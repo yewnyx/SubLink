@@ -11,7 +11,7 @@ using Serilog;
 using Serilog.Context;
 using Serilog.Events;
 using Serilog.Sinks.Discord;
-using xyz.yewnyx.SubLink.Kick;
+using xyz.yewnyx.SubLink.Fansly;
 
 namespace xyz.yewnyx.SubLink;
 
@@ -19,7 +19,7 @@ internal partial class Program {
     public static async Task Main(string[] args) {
         if (!File.Exists("settings.json")) {
             var discriminator = new Random().Next(1, 9999);
-            
+
             var settingsTemplate = """
 {
   "Twitch": {
@@ -67,11 +67,11 @@ internal partial class Program {
             settingsTemplate = settingsTemplate.Replace("{discriminator}", $"{discriminator}");
             File.WriteAllText("settings.json", settingsTemplate);
         }
-        
+
         var program = new Program();
         await program.Run(args);
     }
-    
+
     IHostBuilder CreateHostBuilder(string[] args) {
         return Host.CreateDefaultBuilder(args)
             .UseConsoleLifetime()
@@ -81,15 +81,15 @@ internal partial class Program {
             .ConfigureServices((context, services) => {
                 services
                     .Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true)
-                    .Configure<KickSettings>(context.Configuration.GetSection("Kick"))
+                    .Configure<FanslySettings>(context.Configuration.GetSection("Fansly"))
                     .Configure<DiscordSettings>(context.Configuration.GetSection("Discord"))
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
-                    .AddSingleton<KickGlobals>()
-                    .AddSingleton<KickPusherClient>()
-                    .AddHostedService<SubLinkService<KickGlobals, CompilerService, KickService>>()
-                    .AddScoped<OSCSupportService<KickGlobals>>()
-                    .AddScoped<IKickRules, KickRules>()
-                    .AddScoped<KickService>()
+                    .AddSingleton<FanslyGlobals>()
+                    .AddSingleton<FanslyClient>()
+                    .AddHostedService<SubLinkService<FanslyGlobals, CompilerService, FanslyService>>()
+                    .AddScoped<OSCSupportService<FanslyGlobals>>()
+                    .AddScoped<IFanslyRules, FanslyRules>()
+                    .AddScoped<FanslyService>()
                     .AddScoped<CompilerService>();
             })
             .UseSerilog((context, configuration) => {
@@ -114,7 +114,7 @@ internal partial class Program {
                 configuration
                     .Enrich.FromLogContext()
                     .Enrich.FromGlobalLogContext();
-                
+
                 var subLinkSettings = context.Configuration.GetSection("SubLink").Get<SubLinkSettings>();
                 using (GlobalLogContext.Lock()) {
                     GlobalLogContext.PushProperty("Discriminator", subLinkSettings?.Discriminator);
@@ -139,21 +139,18 @@ and                  /____/
 and __                           ____              _
    / /   ____ ___  ___________ _/ __ \____  ____  (_)__  _____
   / /   / __ `/ / / / ___/ __ `/ /_/ / __ \/_  / / / _ \/ ___/
- / /___/ /_/ / /_/ / /  / /_/ / _, _/ /_/ / / /_/ /  __/ /    
+ / /___/ /_/ / /_/ / /  / /_/ / _, _/ /_/ / / /_/ /  __/ /
 /_____/\__,_/\__,_/_/   \__,_/_/ |_|\____/ /___/_/\___/_/
 ----------------------------Starting----------------------------");
-        var programName = FiggleFonts.Slant.Render("SubLinkKick");
+        var programName = FiggleFonts.Slant.Render("SubLinkFansly");
         programName = ProgramNameRegex().Replace(programName, string.Empty);
         Console.Write(programName);
         Console.WriteLine("----------------------------------------------------------------");
         using (var host = CreateHostBuilder(args).Build()) {
-            var ks = host.Services.GetService<IOptions<KickSettings>>();
+            var ks = host.Services.GetService<IOptions<FanslySettings>>();
 
-            if (
-                string.IsNullOrWhiteSpace(ks!.Value.PusherKey) ||
-                string.IsNullOrWhiteSpace(ks!.Value.PusherCluster) ||
-                string.IsNullOrWhiteSpace(ks!.Value.ChatroomId)) {
-                Console.WriteLine("Your Kick settings are set up incorrectly.");
+            if (string.IsNullOrWhiteSpace(ks!.Value.Token) || string.IsNullOrWhiteSpace(ks!.Value.Username)) {
+                Console.WriteLine("Your Fansly settings are set up incorrectly.");
                 return;
             }
 
