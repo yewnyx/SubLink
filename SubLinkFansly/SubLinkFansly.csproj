@@ -32,8 +32,8 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Discord" Version="1.2.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="SocketIOClient" Version="3.1.1" />
     <PackageReference Include="VRCOscLib" Version="1.4.3" />
+    <PackageReference Include="WebSocket4Net" Version="0.15.2" />
     <PackageReference Include="XSNotifications" Version="0.1.2" />
   </ItemGroup>
 

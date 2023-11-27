@@ -1,10 +1,12 @@
 ﻿using Serilog;
-using SocketIOClient;
+using SuperSocket.ClientEngine;
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Text.Json;
+using System.Timers;
 using System.Threading.Tasks;
+using WebSocket4Net;
+using xyz.yewnyx.SubLink.Fansly.EventTypes;
 
 namespace xyz.yewnyx.SubLink.Fansly;
 
@@ -12,74 +14,104 @@ internal sealed class FanslyClient {
     private const string _socketUri = "wss://chatws.fansly.com/";
     private const string _accountUri = "https://apiv3.fansly.com/api/v1/account?usernames={0}&ngsw-bypass=true";
     private const string _streamUri = "https://apiv3.fansly.com/api/v1/streaming/channel/{0}?ngsw-bypass=true";
+    private const string _origin = "https://fansly.com";
+    private const string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36";
 
     private ILogger _logger;
-    private readonly SocketIOClient.SocketIO _socket;
-    private string _token = string.Empty;
+    private readonly WebSocket _socket;
+    private SocketAuth _token = new();
     private string _username = string.Empty;
+    private SocketChatroom _chatroom = new();
+
+    private readonly Timer _timer = new(2e4) { Enabled = false, AutoReset = true };
 
     //public event EventHandler<TipEventArgs>? TipEvent;
 
     public FanslyClient(ILogger logger) {
         _logger = logger;
+        _timer.Elapsed += OnTimer;
 
-        _socket = new(_socketUri, new() {
-            AutoUpgrade = true,
-            ConnectionTimeout = TimeSpan.FromSeconds(30),
-            EIO = SocketIO.Core.EngineIO.V3,
-            Reconnection = true,
-            ReconnectionAttempts = 3,
-            ReconnectionDelay = 500,
-            RandomizationFactor = 0.5,
-            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
-        });
-
-        _socket.OnConnected += OnConnected;
-        _socket.OnDisconnected += OnDisconnected;
-        _socket.OnError += OnError;
-        _socket.OnReconnectAttempt += OnReconnectAttempt;
-        _socket.OnReconnected += OnReconnected;
-        _socket.OnReconnectError += OnReconnectError;
-        _socket.OnReconnectFailed += OnReconnectFailed;
-        _socket.On("authenticated", OnAuthenticated);
-        _socket.On("unauthorized", OnUnauthorized);
-        _socket.On("event", OnEvent);
+        _socket = new(_socketUri, version: WebSocketVersion.Rfc6455, userAgent: _userAgent, origin: _origin) {
+            EnableAutoSendPing = false,
+            NoDelay = true
+        };
+        _socket.Opened += OnSockConnected;
+        _socket.Error += OnSockError;
+        _socket.Closed += OnSockDisconnected;
+        _socket.MessageReceived += OnSockMessageReceived;
+        _socket.DataReceived += OnSockDataReceived;
     }
 
-    private async void OnConnected(object? sender, EventArgs e) {
-        _logger.Information("[{TAG}] Connected to Fansly", "Fansly");
-        //await _socket.EmitAsync("authenticate", new SocketAuth(_token));
+    private void OnTimer(object? sender, ElapsedEventArgs e) =>
+        _socket.Send("p");
+
+    private void OnSockConnected(object? sender, EventArgs e) {
+        _logger.Information("[{TAG}] Connected to socket", "Fansly");
+        _socket.Send(_token.ToSocketMsg());
     }
 
-    private void OnDisconnected(object? sender, string e) =>
-        _logger.Information("[{TAG}] Disconnected from Fansly", "Fansly");
+    private void OnSockError(object? sender, ErrorEventArgs e) =>
+        _logger.Error("[{TAG}] Error from socket : {ERR}", "Fansly", e.Exception);
 
-    private void OnError(object? sender, string e) =>
-        _logger.Error("[{TAG}] Fansly error: {ERROR}", "Fansly", e);
+    private void OnSockDisconnected(object? sender, EventArgs e) =>
+        _logger.Information("[{TAG}] Disconnected from socket", "Fansly");
 
-    private void OnReconnectAttempt(object? sender, int e) =>
-        _logger.Debug("[{TAG}] Socket reconnect attempt #{e}", "Fansly", e);
+    private void OnSockMessageReceived(object? sender, MessageReceivedEventArgs e) {
+        SocketMsg msg = JsonSerializer.Deserialize<SocketMsg>(e.Message) ?? new();
 
-    private void OnReconnected(object? sender, int e) =>
-        _logger.Information("[{TAG}] Socket reconnected after {e} attempts", "Fansly", e);
+        switch (msg.Type) {
+            case 1: { // Auth
+                _logger.Information($"[{{TAG}}] Joining chatroom {_chatroom.ChatRoomId}", "Fansly");
+                _socket.Send(_chatroom.ToSocketMsg());
+                break;
+            }
+            case 10000: { // Service
+                SocketServiceMsg ssMsg = JsonSerializer.Deserialize<SocketServiceMsg>(msg.Data) ?? new();
+                BaseEventType eventType = JsonSerializer.Deserialize<BaseEventType>(ssMsg.Event) ?? new();
 
-    private void OnReconnectError(object? sender, Exception e) =>
-        _logger.Error("[{TAG}] Socket reconnect error:", "Fansly", e);
+                switch (eventType.Type) {
+                    case 10: { // chatRoomMessage
+                        ChatRoomMessage message = JsonSerializer.Deserialize<ChatRoomMessage>(ssMsg.Event) ?? new();
+                        _logger.Information(
+                            "[{TAG}] Chat message received: (IsTip: {IsTip}) {Displayname} > {Content}", "Fansly",
+                            message.Data.Attachments.Length > 0
+                                ? message.Data.Attachments[0].ContentType == 7 // 7 = Tip
+                                : false,
+                            message.Data.Displayname,
+                            message.Data.Content
+                        );
+                        break;
+                    }
+                    case 51: { // chatRoomGoal
+                        ChatRoomGoal goal = JsonSerializer.Deserialize<ChatRoomGoal>(ssMsg.Event) ?? new();
+                        _logger.Information(
+                            "[{TAG}] Goal updated: `{Label}` {CurrentAmount} / {GoalAmount}", "Fansly",
+                            goal.Data.Label,
+                            goal.Data.CurrentAmount,
+                            goal.Data.GoalAmount
+                        );
+                        break;
+                    }
+                    default: {
+                        _logger.Information("[{TAG}] Chat message received: {Message}", "Fansly", msg.Data);
+                        break;
+                    }
+                }
+                break;
+            }
+            default: {
+                _logger.Information("[{TAG}] Unknown socket message received: {Message}", "Fansly", e.Message);
+                break;
+            }
+        }
+    }
 
-    private void OnReconnectFailed(object? sender, EventArgs e) =>
-        _logger.Error("[{TAG}] Socket reconnect failed", "Fansly");
-
-    private void OnAuthenticated(SocketIOResponse response) =>
-        _logger.Information("[{TAG}] Authenticated with Fansly", "Fansly");
-
-    private void OnUnauthorized(SocketIOResponse response) =>
-        _logger.Information("[{TAG}] Not authorized to use the Fansly Realtime API", "Fansly");
-
-    private void OnEvent(SocketIOResponse response) {
+    private void OnSockDataReceived(object? sender, DataReceivedEventArgs e) {
+        _logger.Information("[{TAG}] Data received, length: {Length}", "Fansly", e.Data.Length);
     }
 
     public async Task<bool> ConnectAsync(string token, string username) {
-        _token = token;
+        _token.Token = token;
         _username = username;
 
         try {
@@ -93,16 +125,16 @@ internal sealed class FanslyClient {
                     request.Headers.Add("authority", "apiv3.fansly.com");
                     request.Headers.Add("Accept", "application/json, text/plain, */*");
                     request.Headers.Add("accept-language", "en;q=0.8,en-US;q=0.7");
-                    request.Headers.Add("authorization", _token);
-                    request.Headers.Add("origin", "https://fansly.com");
-                    request.Headers.Add("referer", "https://fansly.com/");
+                    request.Headers.Add("authorization", _token.Token);
+                    request.Headers.Add("origin", _origin);
+                    request.Headers.Add("referer", _origin);
                     request.Headers.Add("sec-ch-ua", "Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"");
                     request.Headers.Add("sec-ch-ua-mobile", "?0");
                     request.Headers.Add("sec-ch-ua-platform", "\"Windows\"");
                     request.Headers.Add("sec-fetch-dest", "empty");
                     request.Headers.Add("sec-fetch-mode", "cors");
                     request.Headers.Add("sec-fetch-site", "same-site");
-                    request.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                    request.Headers.Add("user-agent", _userAgent);
                     var response = await client.SendAsync(request);
                     accountJsonStr = await response.Content.ReadAsStringAsync();
                     account = JsonSerializer.Deserialize<AccountInfoResponse>(accountJsonStr) ?? new();
@@ -117,35 +149,40 @@ internal sealed class FanslyClient {
                     request.Headers.Add("authority", "apiv3.fansly.com");
                     request.Headers.Add("Accept", "application/json, text/plain, */*");
                     request.Headers.Add("accept-language", "en;q=0.8,en-US;q=0.7");
-                    request.Headers.Add("authorization", _token);
-                    request.Headers.Add("origin", "https://fansly.com");
-                    request.Headers.Add("referer", "https://fansly.com/");
+                    request.Headers.Add("authorization", _token.Token);
+                    request.Headers.Add("origin", _origin);
+                    request.Headers.Add("referer", _origin);
                     request.Headers.Add("sec-ch-ua", "Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"");
                     request.Headers.Add("sec-ch-ua-mobile", "?0");
                     request.Headers.Add("sec-ch-ua-platform", "\"Windows\"");
                     request.Headers.Add("sec-fetch-dest", "empty");
                     request.Headers.Add("sec-fetch-mode", "cors");
                     request.Headers.Add("sec-fetch-site", "same-site");
-                    request.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                    request.Headers.Add("user-agent", _userAgent);
                     var response = await client.SendAsync(request);
                     streamJsonStr = await response.Content.ReadAsStringAsync();
                     stream = JsonSerializer.Deserialize<StreamInfoResponse>(streamJsonStr) ?? new();
                 }
 
-                if (!(stream.Success && stream.Response != null && stream.Response.Length > 0)) {
+                if (!(stream.Success && stream.Response != null)) {
                     _logger.Error("[{TAG}] Stream offline", "Fansly");
                     return false;
                 }
-            }
-            
 
-            //await _socket.ConnectAsync();
+                _chatroom.ChatRoomId = stream.Response.ChatRoomId;
+            }
+
+            await _socket.OpenAsync();
+            _timer.Start();
             return true;
-        } catch (Exception) {
+        } catch (Exception ex) {
+            _logger.Error("[{TAG}] Error while connecting:\r\n{ERR}", "Fansly", ex);
             return false;
         }
     }
 
-    public async Task DisconnectAsync() { await Task.CompletedTask; } /* =>
-        await _socket.DisconnectAsync();*/
+    public async Task DisconnectAsync() {
+        _timer.Stop();
+        await _socket.CloseAsync();
+    }
 }

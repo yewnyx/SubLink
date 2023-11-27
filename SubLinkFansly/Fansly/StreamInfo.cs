@@ -13,13 +13,16 @@ internal sealed class StreamInfoResponse {
             public string Title { get; set; } = string.Empty;
 
             [JsonPropertyName("status")]
-            public string Status { get; set; } = string.Empty;
+            public uint Status { get; set; } = 0;
+
+            [JsonPropertyName("viewerCount")]
+            public uint ViewerCount { get; set; } = 0;
 
             [JsonPropertyName("lastFetchedAt")]
-            public string LastFetchedAt { get; set; } = string.Empty;
+            public ulong LastFetchedAt { get; set; } = 0;
 
             [JsonPropertyName("startedAt")]
-            public string StartedAt { get; set; } = string.Empty;
+            public ulong StartedAt { get; set; } = 0;
 
             [JsonPropertyName("playbackUrl")]
             public string PlaybackUrl { get; set; } = string.Empty;
@@ -34,6 +37,9 @@ internal sealed class StreamInfoResponse {
         [JsonPropertyName("playbackUrl")]
         public string PlaybackUrl { get; set; } = string.Empty;
 
+        [JsonPropertyName("chatRoomId")]
+        public string ChatRoomId { get; set; } = string.Empty;
+
         [JsonPropertyName("stream")]
         public StreamData Stream { get; set; } = new();
     }
@@ -42,5 +48,5 @@ internal sealed class StreamInfoResponse {
     public bool Success { get; set; } = false;
 
     [JsonPropertyName("response")]
-    public StreamInfo[] Response { get; set; } = Array.Empty<StreamInfo>();
+    public StreamInfo Response { get; set; } = new();
 }
