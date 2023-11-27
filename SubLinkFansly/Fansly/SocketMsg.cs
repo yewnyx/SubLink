@@ -2,15 +2,21 @@
 
 namespace xyz.yewnyx.SubLink.Fansly;
 
+internal enum SocketMessageType : uint {
+    Unknown =     0,
+    Auth    =     1,
+    Service = 10000
+}
+
 internal sealed class SocketMsg {
     [JsonPropertyName("t")]
-    public uint Type { get; set; } = 0;
+    public SocketMessageType Type { get; set; } = SocketMessageType.Unknown;
 
     [JsonPropertyName("d")]
     public string Data { get; set; } = string.Empty;
 
     public SocketMsg() { }
 
-    public SocketMsg(uint type, string data) =>
+    public SocketMsg(SocketMessageType type, string data) =>
         (Type, Data) = (type, data);
 }

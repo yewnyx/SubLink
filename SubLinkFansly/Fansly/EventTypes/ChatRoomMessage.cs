@@ -3,11 +3,16 @@ using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.Fansly.EventTypes;
 
+internal enum AttachmentContentType : uint {
+    Unknown = 0,
+    Tip     = 7
+}
+
 internal sealed class ChatRoomMessage : BaseEventType {
     public sealed class InnerData {
         public sealed class AttachmentInfo {
             [JsonPropertyName("contentType")]
-            public uint ContentType { get; set; } = 0;
+            public AttachmentContentType ContentType { get; set; } = 0;
 
             [JsonPropertyName("contentId")]
             public string ContentId { get; set; } = string.Empty;

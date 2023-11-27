@@ -2,12 +2,18 @@
 
 namespace xyz.yewnyx.SubLink.Fansly.EventTypes;
 
+internal enum EventType : uint {
+    Unknown         =  0,
+    ChatRoomMessage = 10,
+    ChatRoomGoal    = 51
+}
+
 internal class BaseEventType {
     [JsonPropertyName("type")]
-    public uint Type { get; set; } = 0;
+    public EventType Type { get; set; } = EventType.Unknown;
 
     public BaseEventType() { }
 
-    public BaseEventType(uint type) =>
+    public BaseEventType(EventType type) =>
         Type = type;
 }

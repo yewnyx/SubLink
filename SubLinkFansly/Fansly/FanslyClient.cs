@@ -7,6 +7,7 @@ using System.Timers;
 using System.Threading.Tasks;
 using WebSocket4Net;
 using xyz.yewnyx.SubLink.Fansly.EventTypes;
+using System.Linq;
 
 namespace xyz.yewnyx.SubLink.Fansly;
 
@@ -60,29 +61,34 @@ internal sealed class FanslyClient {
         SocketMsg msg = JsonSerializer.Deserialize<SocketMsg>(e.Message) ?? new();
 
         switch (msg.Type) {
-            case 1: { // Auth
+            case SocketMessageType.Auth: {
                 _logger.Information($"[{{TAG}}] Joining chatroom {_chatroom.ChatRoomId}", "Fansly");
                 _socket.Send(_chatroom.ToSocketMsg());
                 break;
             }
-            case 10000: { // Service
+            case SocketMessageType.Service: {
                 SocketServiceMsg ssMsg = JsonSerializer.Deserialize<SocketServiceMsg>(msg.Data) ?? new();
                 BaseEventType eventType = JsonSerializer.Deserialize<BaseEventType>(ssMsg.Event) ?? new();
 
                 switch (eventType.Type) {
-                    case 10: { // chatRoomMessage
+                    case EventType.ChatRoomMessage: {
                         ChatRoomMessage message = JsonSerializer.Deserialize<ChatRoomMessage>(ssMsg.Event) ?? new();
+                        var attachment = message.Data.Attachments.Where(
+                            item => item.ContentType == AttachmentContentType.Tip
+                        );
+                        TipMessageMetadata? tip = attachment.Any()
+                            ? JsonSerializer.Deserialize<TipMessageMetadata>(attachment.Single().Metadata)
+                            : null;
+
                         _logger.Information(
-                            "[{TAG}] Chat message received: (IsTip: {IsTip}) {Displayname} > {Content}", "Fansly",
-                            message.Data.Attachments.Length > 0
-                                ? message.Data.Attachments[0].ContentType == 7 // 7 = Tip
-                                : false,
+                            "[{TAG}] Chat message received: {Displayname} > {Content} ; Tip: {TipAmount}", "Fansly",
                             message.Data.Displayname,
-                            message.Data.Content
+                            message.Data.Content,
+                            tip?.Amount ?? 0
                         );
                         break;
                     }
-                    case 51: { // chatRoomGoal
+                    case EventType.ChatRoomGoal: {
                         ChatRoomGoal goal = JsonSerializer.Deserialize<ChatRoomGoal>(ssMsg.Event) ?? new();
                         _logger.Information(
                             "[{TAG}] Goal updated: `{Label}` {CurrentAmount} / {GoalAmount}", "Fansly",
