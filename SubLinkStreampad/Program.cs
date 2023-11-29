@@ -46,7 +46,7 @@ internal partial class Program {
   },
   "StreamPad": {
     "WebSocketUrl": "",
-    "ChannelId": "",
+    "ChannelId": ""
   },
   "StreamElements": {
     "JWTToken": ""
