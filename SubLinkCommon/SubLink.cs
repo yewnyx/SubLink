@@ -83,7 +83,7 @@ twitch.ReactToSubscribe(async channelSubscribe => {
         channelSubscribe.UserName, channelSubscribe.UserLogin, channelSubscribe.IsGift ? "was gifted a sub" : "subscribed", channelSubscribe.Tier);
 
     if (!channelSubscribe.IsGift) {
-        OscParameter.SendAvatarParameter("TwitchSubscription", channelSubscribe.Tier);
+        OscParameter.SendAvatarParameter("TwitchSubscription", 1);
     }
 });
 
@@ -98,7 +98,7 @@ twitch.ReactToSubscriptionMessage(async channelSubscriptionMessage => {
     logger.Information(
         "User {UserName} ({Login}) resubscribed at tier \"{Tier}\" for {Months} months (streak: {Streak}) with message: \"{Message}\"",
         channelSubscriptionMessage.UserName, channelSubscriptionMessage.UserLogin, channelSubscriptionMessage.Tier, channelSubscriptionMessage.DurationMonths, channelSubscriptionMessage.StreakMonths, channelSubscriptionMessage.Message);
-    OscParameter.SendAvatarParameter("TwitchResub", channelSubscriptionMessage.DurationMonths);
+    OscParameter.SendAvatarParameter("TwitchSubscription", channelSubscriptionMessage.DurationMonths);
 });
 
 twitch.ReactToChannelUpdate(async channelUpdate => {
@@ -139,6 +139,11 @@ kick.ReactToChatMessage(async chatMessage => {
         chatMessage.Sender.Username, chatMessage.Sender.Slug, chatMessage.CreatedAt, chatMessage.Content);
 });
 
+kick.ReactToSubscription(async sub => {
+    logger.Information("Subscription {Username} subscribed for {Months} months", sub.Username, sub.Months);
+    OscParameter.SendAvatarParameter("KickSubscription", sub.Months);
+});
+
 kick.ReactToGiftedSubscriptions(async giftedSubs => {
     logger.Information("Gifter {Gifter} gifted {GiftCount} subs", giftedSubs.Gifter, giftedSubs.GetGiftCount());
     OscParameter.SendAvatarParameter("KickCommunityGift", giftedSubs.GetGiftCount());
@@ -162,11 +167,6 @@ kick.ReactToGiftedSubscriptions(async giftedSubs => {
         }
         default: break;
     }
-});
-
-kick.ReactToSubscription(async sub => {
-    logger.Information("Subscription {Username} subscribed for {Months} months", sub.Username, sub.Months);
-    OscParameter.SendAvatarParameter("KickSubscription", sub.Months);
 });
 
 kick.ReactToStreamHost(async streamHost => {
@@ -247,6 +247,8 @@ streamElements.ReactToTipEvent(async tipInfo => {
         return;
     }
 
+    OscParameter.SendAvatarParameter("StreamElementsTip", tipInfo.CentAmount);
+
     switch (tipInfo.CentAmount) {
         // To compare against tipInfo.Amount instead you have to use "floats", which MUST end in an `f` like: 1.23f
         // tipInfo.CentAmount is an integer, which doesn't support decimals.
@@ -290,6 +292,8 @@ fansly.ReactToChatMessage(async chatMessage => {
 fansly.ReactToTip(async tipInfo => {
     logger.Information("Fansly tip recieved : ${Amount} from {Displayname} with the following message: {Content}",
         tipInfo.Amount, tipInfo.Displayname, tipInfo.Content);
+
+    OscParameter.SendAvatarParameter("FanslyTip", tipInfo.CentAmount);
 
     switch (tipInfo.CentAmount) {
         // To compare against tipInfo.Amount instead you have to use "floats", which MUST end in an `f` like: 1.23f

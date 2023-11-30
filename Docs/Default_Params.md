@@ -3,14 +3,13 @@
 ## Twitch
 
 - TwitchCheer | int | The amount of bits that have been cheered
-- TwitchSubscription | int | The tier of the new natural sub
+- TwitchSubscription | int | The sub duration in months
 - TwitchCommunityGift | int | The amount of gifted subs
-- TwitchResub | int | The sub duration in months
 
 ## Kick
 
-- KickCommunityGift | int | The amount of gifted subs
 - KickSubscription | int | The sub duration in months
+- KickCommunityGift | int | The amount of gifted subs
 
 ## StreamElements
 
