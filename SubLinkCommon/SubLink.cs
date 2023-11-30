@@ -262,3 +262,59 @@ streamElements.ReactToTipEvent(async tipInfo => {
 });
 
 #endif
+#if SUBLINK_FANSLY
+
+logger.Information("Fansly integration enabled");
+
+fansly.ReactToChatMessageEvent(async chatMessage => {
+    if ("yewnyx".Equals(chatMessage.Username, StringComparison.InvariantCultureIgnoreCase)) {
+        OscParameter.SendAvatarParameter("JacketToggle", false);
+        OscParameter.SendAvatarParameter("Sus", true);
+    }
+
+    DateTime timestamp = DateTimeOffset.FromUnixTimeMilliseconds(chatMessage.CreatedAt).DateTime;
+    logger.Information(
+        "Fansly message received > Username: {UserName}, Displayname: {Displayname}, Created At: {CreatedAt}, Content: {Content}",
+        chatMessage.Username, chatMessage.Displayname, timestamp, chatMessage.Content);
+});
+
+fansly.ReactToTipEvent(async tipInfo => {
+    logger.Information("Fansly tip recieved : ${Amount} from {Displayname} with the following message: {Content}",
+        tipInfo.Amount, tipInfo.Displayname, tipInfo.Content);
+
+    switch (tipInfo.CentAmount) {
+        // To compare against tipInfo.Amount instead you have to use "floats", which MUST end in an `f` like: 1.23f
+        // tipInfo.CentAmount is an integer, which doesn't support decimals.
+        case 1000: {
+            OscParameter.SendAvatarParameter("Ragdoll", true);
+            break;
+        }
+        case 1500: {
+            OscParameter.SendAvatarParameter("Yeet", true);
+            break;
+        }
+        case 2500: {
+            OscParameter.SendAvatarParameter("PopConfettiType", 1);
+            break;
+        }
+        case 3000: {
+            OscParameter.SendAvatarParameter("PopConfettiType", 2);
+            break;
+        }
+        default: break;
+    }
+});
+
+fansly.ReactToGoalUpdatedEvent(async goalInfo => {
+    logger.Information("Fansly goal updated : `{Label}` is now at {CurrentAmount} of {GoalAmount} (in $-cents)",
+        goalInfo.Label, goalInfo.CurrentAmount, goalInfo.GoalAmount);
+
+    if (
+        "Hocking Time".Equals(goalInfo.Label, StringComparison.InvariantCultureIgnoreCase) &&
+        goalInfo.CurrentAmount >= goalInfo.GoalAmount
+    ) {
+        OscParameter.SendAvatarParameter("Honk", true);
+    }
+});
+
+#endif

@@ -1,13 +1,15 @@
 ﻿using Serilog;
 using SuperSocket.ClientEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Timers;
 using System.Threading.Tasks;
 using WebSocket4Net;
-using xyz.yewnyx.SubLink.Fansly.EventTypes;
-using System.Linq;
+using xyz.yewnyx.SubLink.Fansly.APIDataTypes;
+using xyz.yewnyx.SubLink.Fansly.SocketDataTypes;
 
 namespace xyz.yewnyx.SubLink.Fansly;
 
@@ -17,16 +19,39 @@ internal sealed class FanslyClient {
     private const string _streamUri = "https://apiv3.fansly.com/api/v1/streaming/channel/{0}?ngsw-bypass=true";
     private const string _origin = "https://fansly.com";
     private const string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36";
+    private readonly static Dictionary<string, string> _headers = new() {
+        { "authority", "apiv3.fansly.com" },
+        { "accept", "application/json, text/plain, */*" },
+        { "accept-language", "en;q=0.8,en-US;q=0.7" },
+        { "origin", _origin },
+        { "referer", _origin },
+        { "sec-ch-ua", "Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"" },
+        { "sec-ch-ua-mobile", "?0" },
+        { "sec-ch-ua-platform", "\"Windows\"" },
+        { "sec-fetch-dest", "empty" },
+        { "sec-fetch-mode", "cors" },
+        { "sec-fetch-site", "same-site" },
+        { "user-agent", _userAgent }
+    };
+    // Fansly's own socket specifies `2e4` as ping interval
+    private readonly Timer _timer = new(2e4) { Enabled = false, AutoReset = true };
 
     private ILogger _logger;
     private readonly WebSocket _socket;
     private SocketAuth _token = new();
-    private string _username = string.Empty;
-    private SocketChatroom _chatroom = new();
+    private SocketChatroom? _chatroom;
 
-    private readonly Timer _timer = new(2e4) { Enabled = false, AutoReset = true };
+    public event EventHandler? FanslyConnected;
 
-    //public event EventHandler<TipEventArgs>? TipEvent;
+    public event EventHandler? FanslyDisconnected;
+
+    public event EventHandler<FanslyErrorArgs>? FanslyError;
+
+    public event EventHandler<ChatMessageEventArgs>? ChatMessageEvent;
+
+    public event EventHandler<TipEventArgs>? TipEvent;
+
+    public event EventHandler<GoalUpdatedEventArgs>? GoalUpdatedEvent;
 
     public FanslyClient(ILogger logger) {
         _logger = logger;
@@ -37,8 +62,8 @@ internal sealed class FanslyClient {
             NoDelay = true
         };
         _socket.Opened += OnSockConnected;
-        _socket.Error += OnSockError;
         _socket.Closed += OnSockDisconnected;
+        _socket.Error += OnSockError;
         _socket.MessageReceived += OnSockMessageReceived;
         _socket.DataReceived += OnSockDataReceived;
     }
@@ -47,22 +72,25 @@ internal sealed class FanslyClient {
         _socket.Send("p");
 
     private void OnSockConnected(object? sender, EventArgs e) {
-        _logger.Information("[{TAG}] Connected to socket", "Fansly");
+        FanslyConnected?.Invoke(this, e);
         _socket.Send(_token.ToSocketMsg());
     }
 
-    private void OnSockError(object? sender, ErrorEventArgs e) =>
-        _logger.Error("[{TAG}] Error from socket : {ERR}", "Fansly", e.Exception);
-
     private void OnSockDisconnected(object? sender, EventArgs e) =>
-        _logger.Information("[{TAG}] Disconnected from socket", "Fansly");
+        FanslyDisconnected?.Invoke(this, e);
+
+    private void OnSockError(object? sender, ErrorEventArgs e) =>
+        FanslyError?.Invoke(this, new(e.Exception));
 
     private void OnSockMessageReceived(object? sender, MessageReceivedEventArgs e) {
         SocketMsg msg = JsonSerializer.Deserialize<SocketMsg>(e.Message) ?? new();
 
         switch (msg.Type) {
             case SocketMessageType.Auth: {
-                _logger.Information($"[{{TAG}}] Joining chatroom {_chatroom.ChatRoomId}", "Fansly");
+                if (_chatroom == null)
+                    break;
+
+                _logger.Information("[{TAG}] Joining chatroom {ChatRoomId}", "Fansly", _chatroom.ChatRoomId);
                 _socket.Send(_chatroom.ToSocketMsg());
                 break;
             }
@@ -80,22 +108,45 @@ internal sealed class FanslyClient {
                             ? JsonSerializer.Deserialize<TipMessageMetadata>(attachment.Single().Metadata)
                             : null;
 
-                        _logger.Information(
-                            "[{TAG}] Chat message received: {Displayname} > {Content} ; Tip: {TipAmount}", "Fansly",
-                            message.Data.Displayname,
-                            message.Data.Content,
-                            tip?.Amount ?? 0
-                        );
+                        if (tip != null) {
+                            TipEvent?.Invoke(this, new TipEventArgs { Data = new(
+                                message.Data.Id,
+                                message.Data.ChatRoomId,
+                                message.Data.SenderId,
+                                message.Data.Username,
+                                message.Data.Displayname,
+                                message.Data.Content,
+                                tip.Amount,
+                                message.Data.CreatedAt
+                            ) });
+                        } else {
+                            ChatMessageEvent?.Invoke(this, new ChatMessageEventArgs { Data = new(
+                                message.Data.Id,
+                                message.Data.ChatRoomId,
+                                message.Data.SenderId,
+                                message.Data.Username,
+                                message.Data.Displayname,
+                                message.Data.Content,
+                                message.Data.CreatedAt
+                            ) });
+                        }
+
                         break;
                     }
                     case EventType.ChatRoomGoal: {
                         ChatRoomGoal goal = JsonSerializer.Deserialize<ChatRoomGoal>(ssMsg.Event) ?? new();
-                        _logger.Information(
-                            "[{TAG}] Goal updated: `{Label}` {CurrentAmount} / {GoalAmount}", "Fansly",
+                        GoalUpdatedEvent?.Invoke(this, new GoalUpdatedEventArgs { Data = new(
+                            goal.Data.Id,
+                            goal.Data.ChatRoomId,
+                            goal.Data.AccountId,
+                            goal.Data.Type,
                             goal.Data.Label,
-                            goal.Data.CurrentAmount,
-                            goal.Data.GoalAmount
-                        );
+                            goal.Data.Description,
+                            goal.Data.Status,
+                            (int)Math.Round(goal.Data.CurrentAmount / 10d, 0, MidpointRounding.ToZero),
+                            (int)Math.Round(goal.Data.GoalAmount / 10d, 0, MidpointRounding.ToZero),
+                            goal.Data.Version
+                        ) });
                         break;
                     }
                     default: {
@@ -112,78 +163,66 @@ internal sealed class FanslyClient {
         }
     }
 
-    private void OnSockDataReceived(object? sender, DataReceivedEventArgs e) {
+    private void OnSockDataReceived(object? sender, DataReceivedEventArgs e) =>
         _logger.Information("[{TAG}] Data received, length: {Length}", "Fansly", e.Data.Length);
-    }
 
     public async Task<bool> ConnectAsync(string token, string username) {
         _token.Token = token;
-        _username = username;
+        _headers.Remove("authorization");
+        _headers.Add("authorization", _token.Token);
 
         try {
-            string accountJsonStr = string.Empty;
-            string streamJsonStr = string.Empty;
-            AccountInfoResponse account;
-            StreamInfoResponse stream;
-
-            using (HttpClient client = new()) {
-                using (HttpRequestMessage request = new(HttpMethod.Get, string.Format(_accountUri, _username))) {
-                    request.Headers.Add("authority", "apiv3.fansly.com");
-                    request.Headers.Add("Accept", "application/json, text/plain, */*");
-                    request.Headers.Add("accept-language", "en;q=0.8,en-US;q=0.7");
-                    request.Headers.Add("authorization", _token.Token);
-                    request.Headers.Add("origin", _origin);
-                    request.Headers.Add("referer", _origin);
-                    request.Headers.Add("sec-ch-ua", "Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"");
-                    request.Headers.Add("sec-ch-ua-mobile", "?0");
-                    request.Headers.Add("sec-ch-ua-platform", "\"Windows\"");
-                    request.Headers.Add("sec-fetch-dest", "empty");
-                    request.Headers.Add("sec-fetch-mode", "cors");
-                    request.Headers.Add("sec-fetch-site", "same-site");
-                    request.Headers.Add("user-agent", _userAgent);
-                    var response = await client.SendAsync(request);
-                    accountJsonStr = await response.Content.ReadAsStringAsync();
-                    account = JsonSerializer.Deserialize<AccountInfoResponse>(accountJsonStr) ?? new();
-                }
-
-                if (!(account.Success && account.Response != null && account.Response.Length > 0)) {
-                    _logger.Error("[{TAG}] Invalid API response", "Fansly");
-                    return false;
-                }
-
-                using (HttpRequestMessage request = new(HttpMethod.Get, string.Format(_streamUri, account.Response[0].Id))) {
-                    request.Headers.Add("authority", "apiv3.fansly.com");
-                    request.Headers.Add("Accept", "application/json, text/plain, */*");
-                    request.Headers.Add("accept-language", "en;q=0.8,en-US;q=0.7");
-                    request.Headers.Add("authorization", _token.Token);
-                    request.Headers.Add("origin", _origin);
-                    request.Headers.Add("referer", _origin);
-                    request.Headers.Add("sec-ch-ua", "Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"");
-                    request.Headers.Add("sec-ch-ua-mobile", "?0");
-                    request.Headers.Add("sec-ch-ua-platform", "\"Windows\"");
-                    request.Headers.Add("sec-fetch-dest", "empty");
-                    request.Headers.Add("sec-fetch-mode", "cors");
-                    request.Headers.Add("sec-fetch-site", "same-site");
-                    request.Headers.Add("user-agent", _userAgent);
-                    var response = await client.SendAsync(request);
-                    streamJsonStr = await response.Content.ReadAsStringAsync();
-                    stream = JsonSerializer.Deserialize<StreamInfoResponse>(streamJsonStr) ?? new();
-                }
-
-                if (!(stream.Success && stream.Response != null)) {
-                    _logger.Error("[{TAG}] Stream offline", "Fansly");
-                    return false;
-                }
-
-                _chatroom.ChatRoomId = stream.Response.ChatRoomId;
-            }
-
+            _chatroom = await GetChatRoomIdAsync(username);
             await _socket.OpenAsync();
             _timer.Start();
             return true;
         } catch (Exception ex) {
             _logger.Error("[{TAG}] Error while connecting:\r\n{ERR}", "Fansly", ex);
             return false;
+        }
+    }
+
+    private async Task<SocketChatroom?> GetChatRoomIdAsync(string username) {
+        try {
+            string jsonStr = string.Empty;
+            AccountInfoResponse account;
+            StreamInfoResponse stream;
+
+            using HttpClient client = new();
+            using (HttpRequestMessage request = new(HttpMethod.Get, string.Format(_accountUri, username))) {
+                foreach (var header in _headers) {
+                    request.Headers.Add(header.Key, header.Value);
+                }
+
+                var response = await client.SendAsync(request);
+                jsonStr = await response.Content.ReadAsStringAsync();
+                account = JsonSerializer.Deserialize<AccountInfoResponse>(jsonStr) ?? new();
+            }
+
+            if (!(account.Success && account.Response != null && account.Response.Length > 0)) {
+                _logger.Error("[{TAG}] Invalid API response", "Fansly");
+                return null;
+            }
+
+            using (HttpRequestMessage request = new(HttpMethod.Get, string.Format(_streamUri, account.Response[0].Id))) {
+                foreach (var header in _headers) {
+                    request.Headers.Add(header.Key, header.Value);
+                }
+
+                var response = await client.SendAsync(request);
+                jsonStr = await response.Content.ReadAsStringAsync();
+                stream = JsonSerializer.Deserialize<StreamInfoResponse>(jsonStr) ?? new();
+            }
+
+            if (!(stream.Success && stream.Response != null)) {
+                _logger.Error("[{TAG}] Stream offline", "Fansly");
+                return null;
+            }
+
+            return new(stream.Response.ChatRoomId);
+        } catch (Exception ex) {
+            _logger.Error("[{TAG}] Error while retrieving the chatroom ID:\r\n{ERR}", "Fansly", ex);
+            return null;
         }
     }
 

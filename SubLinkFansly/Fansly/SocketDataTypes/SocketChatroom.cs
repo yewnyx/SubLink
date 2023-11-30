@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace xyz.yewnyx.SubLink.Fansly;
+namespace xyz.yewnyx.SubLink.Fansly.SocketDataTypes;
 
 internal sealed class SocketChatroom {
     [JsonPropertyName("chatRoomId")]
@@ -10,10 +10,10 @@ internal sealed class SocketChatroom {
     public SocketChatroom() { }
 
     public SocketChatroom(string chatRoomId) =>
-        (ChatRoomId) = (chatRoomId);
+        ChatRoomId = chatRoomId;
 
     public string ToSocketMsg() {
-        SocketMsg msg = new(46001, JsonSerializer.Serialize(this));
+        SocketMsg msg = new(SocketMessageType.ChatRoom, JsonSerializer.Serialize(this));
         return JsonSerializer.Serialize(msg);
     }
 }

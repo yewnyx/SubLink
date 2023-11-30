@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace xyz.yewnyx.SubLink.Fansly.EventTypes;
+namespace xyz.yewnyx.SubLink.Fansly.SocketDataTypes;
 
 internal enum AttachmentContentType : uint {
     Unknown = 0,
@@ -43,7 +43,7 @@ internal sealed class ChatRoomMessage : BaseEventType {
         public string Id { get; set; } = string.Empty;
 
         [JsonPropertyName("createdAt")]
-        public ulong CreatedAt { get; set; } = 0;
+        public long CreatedAt { get; set; } = 0;
 
         [JsonPropertyName("username")]
         public string Username { get; set; } = string.Empty;

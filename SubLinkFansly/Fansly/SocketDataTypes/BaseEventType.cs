@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace xyz.yewnyx.SubLink.Fansly.EventTypes;
+namespace xyz.yewnyx.SubLink.Fansly.SocketDataTypes;
 
 internal enum EventType : uint {
     Unknown         =  0,

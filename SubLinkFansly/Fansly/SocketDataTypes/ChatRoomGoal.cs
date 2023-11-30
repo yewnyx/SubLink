@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace xyz.yewnyx.SubLink.Fansly.EventTypes;
+namespace xyz.yewnyx.SubLink.Fansly.SocketDataTypes;
 
 internal sealed class ChatRoomGoal : BaseEventType {
     public sealed class InnerData {

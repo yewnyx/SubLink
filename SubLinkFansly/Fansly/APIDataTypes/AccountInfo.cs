@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace xyz.yewnyx.SubLink.Fansly;
+namespace xyz.yewnyx.SubLink.Fansly.APIDataTypes;
 
 internal sealed class AccountInfoResponse {
     internal sealed class AccountInfo {

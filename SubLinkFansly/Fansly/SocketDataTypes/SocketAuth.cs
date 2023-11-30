@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace xyz.yewnyx.SubLink.Fansly;
+namespace xyz.yewnyx.SubLink.Fansly.SocketDataTypes;
 
 internal sealed class SocketAuth {
     [JsonPropertyName("token")]
@@ -10,10 +10,10 @@ internal sealed class SocketAuth {
     public SocketAuth() { }
 
     public SocketAuth(string token) =>
-        (Token) = (token);
+        Token = token;
 
     public string ToSocketMsg() {
-        SocketMsg msg = new(1, JsonSerializer.Serialize(this));
+        SocketMsg msg = new(SocketMessageType.Auth, JsonSerializer.Serialize(this));
         return JsonSerializer.Serialize(msg);
     }
 }

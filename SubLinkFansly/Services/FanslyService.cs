@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.WebSockets;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,9 +55,10 @@ internal sealed partial class FanslyService : IService {
 
     public async Task Start() {
         if (await _fansly.ConnectAsync(_settings.Token, _settings.Username)) {
+            _logger.Information("[{TAG}] Connected to socket", "Fansly");
             _fanslyLoggedInScope = _serviceScopeFactory.CreateScope();
         } else {
-            _logger.Warning("[{TAG}] Failed to connect to Fansly", "Fansly");
+            _logger.Warning("[{TAG}] Failed to connect to socket", "Fansly");
             _applicationLifetime.StopApplication();
         }
     }

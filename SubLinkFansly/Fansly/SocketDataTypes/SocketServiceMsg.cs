@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace xyz.yewnyx.SubLink.Fansly;
+namespace xyz.yewnyx.SubLink.Fansly.SocketDataTypes;
 
 internal sealed class SocketServiceMsg {
     [JsonPropertyName("serviceId")]

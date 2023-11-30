@@ -13,7 +13,8 @@ public class CompilerService : BaseCompilerService<FanslyGlobals> {
 
     protected override string[] ServiceUsings {
         get => new string[] {
-            "xyz.yewnyx.SubLink.Fansly"
+            "xyz.yewnyx.SubLink.Fansly",
+            "xyz.yewnyx.SubLink.Fansly.Events"
         };
     }
 
