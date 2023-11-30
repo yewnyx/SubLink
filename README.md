@@ -1,7 +1,4 @@
-<img src="Icon/SubLink.png" alt="SubLink Logo" width="200" height="200">
-&nbsp;&nbsp;&nbsp;&nbsp;<img src="Icon/SubLinkKick.png" alt="SubLinkKick Logo" width="200" height="200">
-&nbsp;&nbsp;&nbsp;&nbsp;<img src="Icon/SubLinkStreamElements.png" alt="SubLinkStreamElements Logo" width="200" height="200">
-&nbsp;&nbsp;&nbsp;&nbsp;<img src="Icon/SubLinkFansly.png" alt="SubLinkFansly Logo" width="200" height="200">
+<img src="Icon/SubLink.png" alt="SubLink Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkKick.png" alt="SubLinkKick Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkStreamElements.png" alt="SubLinkStreamElements Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkFansly.png" alt="SubLinkFansly Logo" width="100" height="100">
 
 # SubLink
 
@@ -79,11 +76,11 @@ For more information on the data types see [Kick_Types.md](Docs/Kick_Types.md)
 
 1. On the first run, the application will create a `settings.json` file.
 2. Retrieve your Token, using your browser.
-  1. Go to the Fansly website.
-  2. Open the devtools (`F12` or `right-click`>`inspect element`).
-  3. Open the `Network` tab in the devtools.
-  4. Search for `method:GET api`, refresh the page and click on one of the requests ending in `ngsw-bypass=true`.
-  5. Look at the `Request Headers` and find the `Authorization:` line, copy the value behind it.  
+   1. Go to the Fansly website.
+   2. Open the devtools (`F12` or `right-click`>`inspect element`).
+   3. Open the `Network` tab in the devtools.
+   4. Search for `method:GET api`, refresh the page and click on one of the requests ending in `ngsw-bypass=true`.
+   5. Look at the `Request Headers` and find the `Authorization:` line, copy the value behind it.  
 ![Alt text](Docs/token-step-1.png?raw=true "Token Step 1")  
 ![Alt text](Docs/token-step-2.png?raw=true "Token Step 2")
 3. Add the `Authorization:` value in your browser to the `settings.json` file's `Token` setting.
