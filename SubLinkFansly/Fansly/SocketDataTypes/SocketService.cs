@@ -2,15 +2,15 @@
 
 namespace xyz.yewnyx.SubLink.Fansly.SocketDataTypes;
 
-internal sealed class SocketServiceMsg {
+internal sealed class SocketService {
     [JsonPropertyName("serviceId")]
     public uint ServiceId { get; set; } = 0;
 
     [JsonPropertyName("event")]
     public string Event { get; set; } = string.Empty;
 
-    public SocketServiceMsg() { }
+    public SocketService() { }
 
-    public SocketServiceMsg(uint serviceId, string event_) =>
+    public SocketService(uint serviceId, string event_) =>
         (ServiceId, Event) = (serviceId, event_);
 }

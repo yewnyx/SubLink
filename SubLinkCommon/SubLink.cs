@@ -266,7 +266,7 @@ streamElements.ReactToTipEvent(async tipInfo => {
 
 logger.Information("Fansly integration enabled");
 
-fansly.ReactToChatMessageEvent(async chatMessage => {
+fansly.ReactToChatMessage(async chatMessage => {
     if ("yewnyx".Equals(chatMessage.Username, StringComparison.InvariantCultureIgnoreCase)) {
         OscParameter.SendAvatarParameter("JacketToggle", false);
         OscParameter.SendAvatarParameter("Sus", true);
@@ -278,7 +278,7 @@ fansly.ReactToChatMessageEvent(async chatMessage => {
         chatMessage.Username, chatMessage.Displayname, timestamp, chatMessage.Content);
 });
 
-fansly.ReactToTipEvent(async tipInfo => {
+fansly.ReactToTip(async tipInfo => {
     logger.Information("Fansly tip recieved : ${Amount} from {Displayname} with the following message: {Content}",
         tipInfo.Amount, tipInfo.Displayname, tipInfo.Content);
 
@@ -305,7 +305,7 @@ fansly.ReactToTipEvent(async tipInfo => {
     }
 });
 
-fansly.ReactToGoalUpdatedEvent(async goalInfo => {
+fansly.ReactToGoalUpdated(async goalInfo => {
     logger.Information("Fansly goal updated : `{Label}` is now at {CurrentAmount} of {GoalAmount} (in $-cents)",
         goalInfo.Label, goalInfo.CurrentAmount, goalInfo.GoalAmount);
 

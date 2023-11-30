@@ -8,6 +8,16 @@ internal enum AttachmentContentType : uint {
     Tip     = 7
 }
 
+internal sealed class TipAttachmentMetadata {
+    [JsonPropertyName("amount")]
+    public uint Amount { get; set; } = 0;
+
+    public TipAttachmentMetadata() { }
+
+    public TipAttachmentMetadata(uint amount) =>
+        Amount = amount;
+}
+
 internal sealed class ChatRoomMessage : BaseEventType {
     public sealed class InnerData {
         public sealed class AttachmentInfo {

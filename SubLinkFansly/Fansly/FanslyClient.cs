@@ -34,11 +34,11 @@ internal sealed class FanslyClient {
         { "user-agent", _userAgent }
     };
     // Fansly's own socket specifies `2e4` as ping interval
-    private readonly Timer _timer = new(2e4) { Enabled = false, AutoReset = true };
+    private readonly Timer _socketPingTimer = new(2e4) { Enabled = false, AutoReset = true };
 
-    private ILogger _logger;
+    private readonly ILogger _logger;
     private readonly WebSocket _socket;
-    private SocketAuth _token = new();
+    private readonly SocketAuth _token = new();
     private SocketChatroom? _chatroom;
 
     public event EventHandler? FanslyConnected;
@@ -55,7 +55,7 @@ internal sealed class FanslyClient {
 
     public FanslyClient(ILogger logger) {
         _logger = logger;
-        _timer.Elapsed += OnTimer;
+        _socketPingTimer.Elapsed += OnTimer;
 
         _socket = new(_socketUri, version: WebSocketVersion.Rfc6455, userAgent: _userAgent, origin: _origin) {
             EnableAutoSendPing = false,
@@ -95,7 +95,7 @@ internal sealed class FanslyClient {
                 break;
             }
             case SocketMessageType.Service: {
-                SocketServiceMsg ssMsg = JsonSerializer.Deserialize<SocketServiceMsg>(msg.Data) ?? new();
+                SocketService ssMsg = JsonSerializer.Deserialize<SocketService>(msg.Data) ?? new();
                 BaseEventType eventType = JsonSerializer.Deserialize<BaseEventType>(ssMsg.Event) ?? new();
 
                 switch (eventType.Type) {
@@ -104,8 +104,8 @@ internal sealed class FanslyClient {
                         var attachment = message.Data.Attachments.Where(
                             item => item.ContentType == AttachmentContentType.Tip
                         );
-                        TipMessageMetadata? tip = attachment.Any()
-                            ? JsonSerializer.Deserialize<TipMessageMetadata>(attachment.Single().Metadata)
+                        TipAttachmentMetadata? tip = attachment.Any()
+                            ? JsonSerializer.Deserialize<TipAttachmentMetadata>(attachment.Single().Metadata)
                             : null;
 
                         if (tip != null) {
@@ -174,7 +174,7 @@ internal sealed class FanslyClient {
         try {
             _chatroom = await GetChatRoomIdAsync(username);
             await _socket.OpenAsync();
-            _timer.Start();
+            _socketPingTimer.Start();
             return true;
         } catch (Exception ex) {
             _logger.Error("[{TAG}] Error while connecting:\r\n{ERR}", "Fansly", ex);
@@ -227,7 +227,7 @@ internal sealed class FanslyClient {
     }
 
     public async Task DisconnectAsync() {
-        _timer.Stop();
+        _socketPingTimer.Stop();
         await _socket.CloseAsync();
     }
 }

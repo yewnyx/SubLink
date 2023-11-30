@@ -1,116 +1,116 @@
-## rules.Kick.ReactToChatMessage
+## kick.ReactToChatMessage
 
 - Parameter type `ChatMessageEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToChatMessage(async chatMessage => {
+kick.ReactToChatMessage(async chatMessage => {
 });
 ```
 
-## rules.Kick.ReactToGiftedSubscriptions
+## kick.ReactToGiftedSubscriptions
 
 - Parameter type `GiftedSubscriptionsEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToGiftedSubscriptions(async giftedSubs => {
+kick.ReactToGiftedSubscriptions(async giftedSubs => {
 });
 ```
 
-## rules.Kick.ReactToSubscription
+## kick.ReactToSubscription
 
 - Parameter type `SubscriptionEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToSubscription(async sub => {
+kick.ReactToSubscription(async sub => {
 });
 ```
 
-## rules.Kick.ReactToStreamHost
+## kick.ReactToStreamHost
 
 - Parameter type `StreamHostEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToStreamHost(async streamHost => {
+kick.ReactToStreamHost(async streamHost => {
 });
 ```
 
-## rules.Kick.ReactToUserBanned
+## kick.ReactToUserBanned
 
 - Parameter type `UserBannedEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToUserBanned(async banned => {
+kick.ReactToUserBanned(async banned => {
 });
 ```
 
-## rules.Kick.ReactToUserUnbanned
+## kick.ReactToUserUnbanned
 
 - Parameter type `UserUnbannedEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToUserUnbanned(async unbanned => {
+kick.ReactToUserUnbanned(async unbanned => {
 });
 ```
 
-## rules.Kick.ReactToMessageDeleted
+## kick.ReactToMessageDeleted
 
 - Parameter type `MessageDeletedEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToMessageDeleted(async deletedMessage => {
+kick.ReactToMessageDeleted(async deletedMessage => {
 });
 ```
 
-## rules.Kick.ReactToChatroomClear
+## kick.ReactToChatroomClear
 
 - Parameter type `ChatroomClearEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToChatroomClear(async chatroomClear => {
+kick.ReactToChatroomClear(async chatroomClear => {
 });
 ```
 
-## rules.Kick.ReactToChatroomUpdated
+## kick.ReactToChatroomUpdated
 
 - Parameter type `ChatroomUpdatedEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToChatroomUpdated(async chatroomUpdate => {
+kick.ReactToChatroomUpdated(async chatroomUpdate => {
 });
 ```
 
-## rules.Kick.ReactToPollUpdate
+## kick.ReactToPollUpdate
 
 - Parameter type `PollUpdateEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToPollUpdate(async pollUpdate => {
+kick.ReactToPollUpdate(async pollUpdate => {
 });
 ```
 
-## rules.Kick.ReactToPollDelete
+## kick.ReactToPollDelete
 
 - Parameter type `None`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToPollDelete(async () => {
+kick.ReactToPollDelete(async () => {
 });
 ```
 
-## rules.Kick.ReactToPinnedMessageCreated
+## kick.ReactToPinnedMessageCreated
 
 - Parameter type `PinnedMessageCreatedEvent`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToPinnedMessageCreated(async pinnedMessage => {
+kick.ReactToPinnedMessageCreated(async pinnedMessage => {
 });
 ```
 
-## rules.Kick.ReactToPinnedMessageDeleted
+## kick.ReactToPinnedMessageDeleted
 
 - Parameter type `None`
 - Boilerplate
 ```csharp
-rules.Kick.ReactToPinnedMessageDeleted(async () => {
+kick.ReactToPinnedMessageDeleted(async () => {
 });
 ```

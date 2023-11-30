@@ -65,7 +65,7 @@ For more information on the data types see [Kick_Types.md](Docs/Kick_Types.md)
 ## Setup (StreamElements)
 
 1. On the first run, the application will create a `settings.json` file.
-2. Retrieve your JWT Token, using yout browser, from the following URL: https://streamelements.com/dashboard/account/channels
+2. Retrieve your JWT Token, using your browser, from the following URL: https://streamelements.com/dashboard/account/channels
 3. Add the `JWT Token` in your browser to the `settings.json` file's `JWTToken` setting.
 4. On the second run, the application will automatically connect to StreamElements' real-time API and start receiving events.
 
@@ -74,6 +74,34 @@ For more information on the data types see [Kick_Types.md](Docs/Kick_Types.md)
   "JWTToken": "your-jwt-token-that-is-super-long"
 }
 ```
+
+## Setup (Fansly)
+
+1. On the first run, the application will create a `settings.json` file.
+2. Retrieve your Token, using your browser.
+  1. Go to the Fansly website.
+  2. Open the devtools (`F12` or `right-click`>`inspect element`).
+  3. Open the `Network` tab in the devtools.
+  4. Search for `method:GET api`, refresh the page and click on one of the requests ending in `ngsw-bypass=true`.
+  5. Look at the `Request Headers` and find the `Authorization:` line, copy the value behind it.  
+![Alt text](Docs/token-step-1.png?raw=true "Token Step 1")  
+![Alt text](Docs/token-step-2.png?raw=true "Token Step 2")
+3. Add the `Authorization:` value in your browser to the `settings.json` file's `Token` setting.
+4. Add your username to the `settings.json` file's `Username` setting.
+5. On the second run, the application will automatically connect to Fansly' real-time API and start receiving events.
+
+```json
+{
+  "Token": "your-fansly-token",
+  "Username": "your-username"
+}
+```
+
+### Fansly Events and data types
+
+For more information on the events see [Fansly_Events.md](Docs/Fansly_Events.md)
+
+For more information on the data types see [Fansly_Types.md](Docs/Fansly_Types.md)
 
 ## Adding Support to Avatars
 

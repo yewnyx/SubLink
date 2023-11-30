@@ -7,7 +7,7 @@ namespace xyz.yewnyx.SubLink;
 
 [PublicAPI]
 public interface IFanslyRules {
-    public void ReactToChatMessageEvent(Func<ChatMessageEvent, Task> with);
-    public void ReactToTipEvent(Func<TipEvent, Task> with);
-    public void ReactToGoalUpdatedEvent(Func<GoalUpdatedEvent, Task> with);
+    public void ReactToChatMessage(Func<ChatMessageEvent, Task> with);
+    public void ReactToTip(Func<TipEvent, Task> with);
+    public void ReactToGoalUpdated(Func<GoalUpdatedEvent, Task> with);
 }
