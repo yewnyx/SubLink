@@ -40,6 +40,7 @@ twitch.ReactToCheer(async channelCheer => {
     logger.Information(
         "{UserName} cheered {Bits} bits to {BroadcasterUserName} with {Message}",
         channelCheer.UserName, channelCheer.Bits, channelCheer.BroadcasterUserName, channelCheer.Message);
+    OscParameter.SendAvatarParameter("TwitchCheer", channelCheer.Bits);
 });
 
 twitch.ReactToFollow(async follow => {
@@ -80,18 +81,24 @@ twitch.ReactToRaid(async channelRaid => {
 twitch.ReactToSubscribe(async channelSubscribe => {
     logger.Information("New subscription: User {UserName} ({Login}) {WasGift} at tier \"{Tier}\" ",
         channelSubscribe.UserName, channelSubscribe.UserLogin, channelSubscribe.IsGift ? "was gifted a sub" : "subscribed", channelSubscribe.Tier);
+
+    if (!channelSubscribe.IsGift) {
+        OscParameter.SendAvatarParameter("TwitchSubscription", channelSubscribe.Tier);
+    }
 });
 
 twitch.ReactToSubscriptionGift(async channelSubscriptionGift => {
     logger.Information(
         "User {UserName} ({Login}) gifted {Total} \"{Tier}\" subs - they have gifted {CumulativeTotal} subs total",
         channelSubscriptionGift.UserName, channelSubscriptionGift.UserId, channelSubscriptionGift.Total, channelSubscriptionGift.Tier, channelSubscriptionGift.CumulativeTotal);
+    OscParameter.SendAvatarParameter("TwitchCommunityGift", channelSubscriptionGift.Total);
 });
 
 twitch.ReactToSubscriptionMessage(async channelSubscriptionMessage => {
     logger.Information(
         "User {UserName} ({Login}) resubscribed at tier \"{Tier}\" for {Months} months (streak: {Streak}) with message: \"{Message}\"",
         channelSubscriptionMessage.UserName, channelSubscriptionMessage.UserLogin, channelSubscriptionMessage.Tier, channelSubscriptionMessage.DurationMonths, channelSubscriptionMessage.StreakMonths, channelSubscriptionMessage.Message);
+    OscParameter.SendAvatarParameter("TwitchResub", channelSubscriptionMessage.DurationMonths);
 });
 
 twitch.ReactToChannelUpdate(async channelUpdate => {
@@ -134,6 +141,7 @@ kick.ReactToChatMessage(async chatMessage => {
 
 kick.ReactToGiftedSubscriptions(async giftedSubs => {
     logger.Information("Gifter {Gifter} gifted {GiftCount} subs", giftedSubs.Gifter, giftedSubs.GetGiftCount());
+    OscParameter.SendAvatarParameter("KickCommunityGift", giftedSubs.GetGiftCount());
 
     switch(giftedSubs.GetGiftCount()) {
         case 2: {
@@ -158,6 +166,7 @@ kick.ReactToGiftedSubscriptions(async giftedSubs => {
 
 kick.ReactToSubscription(async sub => {
     logger.Information("Subscription {Username} subscribed for {Months} months", sub.Username, sub.Months);
+    OscParameter.SendAvatarParameter("KickSubscription", sub.Months);
 });
 
 kick.ReactToStreamHost(async streamHost => {

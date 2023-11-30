@@ -108,6 +108,8 @@ You can then create an animator layer with a resting state that transitions to a
 
 From there, you can enqueue animations as needed based on the secondary parameters incremented by the parameter driver.
 
+Default parameters can be found here: [Default_Params.md](Docs/Default_Params.md)
+
 ## Support
 
 If you encounter any issues or need assistance, please open an issue in the project repository.
