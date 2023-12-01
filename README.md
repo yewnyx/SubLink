@@ -29,7 +29,8 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 ## Setup (Twitch)
 
 1. On the first run, the application will create a `settings.json` file.
-2. Add your `clientid` and `clientsecret` obtained from your Twitch Developer account (or provided to you by CatGirlEddie to the `settings.json` file).
+2. Add your `clientid` and `clientsecret` obtained from your Twitch Developer account (or provided to you by CatGirlEddie to the `settings.json` file).  
+If you prefer setting this up yourself, see the [Twitch Auth](#twitch-auth) section
 3. On the second run, the application will automatically authorize through Twitch and save an access token and refresh token to `settings.json`.
 
 ```json
@@ -81,8 +82,8 @@ For more information on the data types see [Kick_Types.md](Docs/Kick_Types.md)
    3. Open the `Network` tab in the devtools.
    4. Search for `method:GET api`, refresh the page and click on one of the requests ending in `ngsw-bypass=true`.
    5. Look at the `Request Headers` and find the `Authorization:` line, copy the value behind it.  
-![Alt text](Docs/token-step-1.png?raw=true "Token Step 1")  
-![Alt text](Docs/token-step-2.png?raw=true "Token Step 2")
+![Token Step 1](Docs/token-step-1.png?raw=true "Token Step 1")  
+![Token Step 2](Docs/token-step-2.png?raw=true "Token Step 2")
 3. Add the `Authorization:` value in your browser to the `settings.json` file's `Token` setting.
 4. Add your username to the `settings.json` file's `Username` setting.
 5. On the second run, the application will automatically connect to Fansly' real-time API and start receiving events.
@@ -109,6 +110,20 @@ You can then create an animator layer with a resting state that transitions to a
 From there, you can enqueue animations as needed based on the secondary parameters incremented by the parameter driver.
 
 Default parameters can be found here: [Default_Params.md](Docs/Default_Params.md)
+
+## Twitch Auth
+
+If you prefer setting Twitch up yourself without our assistance, please follow the following steps:
+
+1. Using your browser, navigate to the [Twitch Developer Console](https://dev.twitch.tv/console)
+2. Register a new `Application`
+3. Give it a fitting `Name` like `My SubLink App`, add `http://localhost:50666/authorize/` as `OAuth Redirect URL` and set the `Category` to `Application Integration`  
+![Twitch Auth 1](Docs/twitch-auth-1.png "Twitch Auth 1")
+4. Click `Manage` behind the newly generated application  
+![Twitch Auth 2](Docs/twitch-auth-2.png "Twitch Auth 2")
+5. Copy the `Client ID` (1) into your `settings.json`
+6. Click `New Secret`, confirm the pop-up and copy the generated value (2) into your `settings.json`  
+![Twitch Auth 3](Docs/twitch-auth-3.png "Twitch Auth 3")
 
 ## Support
 
