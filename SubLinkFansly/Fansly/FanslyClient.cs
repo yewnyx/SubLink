@@ -211,8 +211,7 @@ internal sealed class FanslyClient {
 
     public async Task<bool> ConnectAsync(string token, string username) {
         _token.Token = token;
-        _headers.Remove("authorization");
-        _headers.Add("authorization", _token.Token);
+        _headers["authorization"] = _token.Token;
 
         try {
             _chatroom = await GetChatRoomIdAsync(username);
