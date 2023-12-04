@@ -6,7 +6,7 @@ SubLink is an application for creating scriptable integrations between VRChat an
 
 ## Special Thanks
 
-A big thank you to [CatGirlEddie](https://www.twitch.tv/catgirleddie), my collaborator on the avatar side of SubLink, for her invaluable contributions and expertise to SubLink-compatible avatar creation.
+A big thank you to [CatGirlEddie](https://www.twitch.tv/catgirleddie), my collaborator on the avatar side of SubLink, for her invaluable contributions and expertise to SubLink-compatible avatar creation, and to LauraRozier, without whom the additional support for Kick, StreamElements, and other services would not be possible.
 
 ## Discord
 
