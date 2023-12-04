@@ -2,7 +2,7 @@
 
 namespace xyz.yewnyx.SubLink.Fansly.APIDataTypes;
 
-internal sealed class StreamInfoResponse {
+internal sealed class StreamInfoResponse : BaseApiResponse {
     internal sealed class StreamInfo {
         internal sealed class StreamData {
             [JsonPropertyName("id")]
@@ -42,9 +42,6 @@ internal sealed class StreamInfoResponse {
         [JsonPropertyName("stream")]
         public StreamData Stream { get; set; } = new();
     }
-
-    [JsonPropertyName("success")]
-    public bool Success { get; set; } = false;
 
     [JsonPropertyName("response")]
     public StreamInfo Response { get; set; } = new();

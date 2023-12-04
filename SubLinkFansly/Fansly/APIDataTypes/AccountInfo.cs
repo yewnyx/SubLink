@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.Fansly.APIDataTypes;
 
-internal sealed class AccountInfoResponse {
+internal sealed class AccountInfoResponse : BaseApiResponse {
     internal sealed class AccountInfo {
         [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
@@ -14,9 +14,6 @@ internal sealed class AccountInfoResponse {
         [JsonPropertyName("displayName")]
         public string DisplayName { get; set; } = string.Empty;
     }
-
-    [JsonPropertyName("success")]
-    public bool Success { get; set; } = false;
 
     [JsonPropertyName("response")]
     public AccountInfo[] Response { get; set; } = Array.Empty<AccountInfo>();

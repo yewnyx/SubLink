@@ -166,6 +166,49 @@ internal sealed class FanslyClient {
     private void OnSockDataReceived(object? sender, DataReceivedEventArgs e) =>
         _logger.Information("[{TAG}] Data received, length: {Length}", "Fansly", e.Data.Length);
 
+    private static async Task<T?> GetFanslyApiData<T>(HttpClient client, string uri, params object?[] args)
+        where T : BaseApiResponse, new()
+    {
+        using HttpRequestMessage request = new(HttpMethod.Get, string.Format(uri, args));
+
+        foreach (var header in _headers) {
+            request.Headers.Add(header.Key, header.Value);
+        }
+
+        HttpResponseMessage response = await client.SendAsync(request);
+        string jsonStr = await response.Content.ReadAsStringAsync();
+        T? result = JsonSerializer.Deserialize<T>(jsonStr);
+
+        return result != null && result.Success
+            ? result
+            : null;
+    }
+
+    private async Task<SocketChatroom?> GetChatRoomIdAsync(string username) {
+        try {
+            string jsonStr = string.Empty;
+            using HttpClient client = new();
+            var account = await GetFanslyApiData<AccountInfoResponse>(client, _accountUri, username);
+
+            if (account == null || account.Response.Length <= 0) {
+                _logger.Error("[{TAG}] Invalid API response", "Fansly");
+                return null;
+            }
+
+            var stream = await GetFanslyApiData<StreamInfoResponse>(client, _streamUri, account.Response[0].Id);
+
+            if (stream == null || stream.Response == null) {
+                _logger.Error("[{TAG}] Stream offline", "Fansly");
+                return null;
+            }
+
+            return new(stream.Response.ChatRoomId);
+        } catch (Exception ex) {
+            _logger.Error("[{TAG}] Error while retrieving the chatroom ID:\r\n{ERR}", "Fansly", ex);
+            return null;
+        }
+    }
+
     public async Task<bool> ConnectAsync(string token, string username) {
         _token.Token = token;
         _headers.Remove("authorization");
@@ -182,52 +225,10 @@ internal sealed class FanslyClient {
         }
     }
 
-    private async Task<SocketChatroom?> GetChatRoomIdAsync(string username) {
-        try {
-            string jsonStr = string.Empty;
-            AccountInfoResponse account;
-            StreamInfoResponse stream;
-
-            using HttpClient client = new();
-            using (HttpRequestMessage request = new(HttpMethod.Get, string.Format(_accountUri, username))) {
-                foreach (var header in _headers) {
-                    request.Headers.Add(header.Key, header.Value);
-                }
-
-                var response = await client.SendAsync(request);
-                jsonStr = await response.Content.ReadAsStringAsync();
-                account = JsonSerializer.Deserialize<AccountInfoResponse>(jsonStr) ?? new();
-            }
-
-            if (!(account.Success && account.Response != null && account.Response.Length > 0)) {
-                _logger.Error("[{TAG}] Invalid API response", "Fansly");
-                return null;
-            }
-
-            using (HttpRequestMessage request = new(HttpMethod.Get, string.Format(_streamUri, account.Response[0].Id))) {
-                foreach (var header in _headers) {
-                    request.Headers.Add(header.Key, header.Value);
-                }
-
-                var response = await client.SendAsync(request);
-                jsonStr = await response.Content.ReadAsStringAsync();
-                stream = JsonSerializer.Deserialize<StreamInfoResponse>(jsonStr) ?? new();
-            }
-
-            if (!(stream.Success && stream.Response != null)) {
-                _logger.Error("[{TAG}] Stream offline", "Fansly");
-                return null;
-            }
-
-            return new(stream.Response.ChatRoomId);
-        } catch (Exception ex) {
-            _logger.Error("[{TAG}] Error while retrieving the chatroom ID:\r\n{ERR}", "Fansly", ex);
-            return null;
-        }
-    }
-
     public async Task DisconnectAsync() {
         _socketPingTimer.Stop();
-        await _socket.CloseAsync();
+
+        if (_socket.State != WebSocketState.Closed)
+            await _socket.CloseAsync();
     }
 }

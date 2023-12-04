@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace xyz.yewnyx.SubLink.Fansly;
+namespace xyz.yewnyx.SubLink.Fansly.SocketDataTypes;
 
 internal enum SocketMessageType : uint {
-    Unknown  =     0,
-    Auth     =     1,
-    Service  = 10000,
+    Unknown = 0,
+    Auth = 1,
+    Service = 10000,
     ChatRoom = 46001
 }
 
