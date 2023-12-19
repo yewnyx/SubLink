@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.Threading;
 using System.Threading.Channels;
 
 var notifier = new XSNotifier();
@@ -112,6 +113,56 @@ twitch.ReactToStreamOffline(async streamOffline => {
 twitch.ReactToStreamOnline(async streamOnline => {
     logger.Information("Streamer {UserName} started a {Type} stream at {StartedAt}", streamOnline.BroadcasterUserName, streamOnline.Type, streamOnline.StartedAt.ToString("F"));
 });
+
+/*
+Thread.Sleep(1000);
+OscParameter.SendAvatarParameter("TwitchSubscription", 1);
+logger.Information("Sent TwitchSubscription=1");
+
+Thread.Sleep(30);
+OscParameter.SendAvatarParameter("TwitchSubscription", 2);
+logger.Information("Sent TwitchSubscription=2");
+
+Thread.Sleep(30);
+OscParameter.SendAvatarParameter("TwitchCommunityGift", 1);
+logger.Information("Sent TwitchCommunityGift=1");
+
+Thread.Sleep(30);
+OscParameter.SendAvatarParameter("TwitchCommunityGift", 5);
+logger.Information("Sent TwitchCommunityGift=5");
+*/
+
+Thread.Sleep(35);
+OscParameter.SendAvatarParameter("TwitchCheer", 500);
+logger.Information("Sent TwitchCheer=500");
+
+Thread.Sleep(35);
+OscParameter.SendAvatarParameter("TwitchCheer", 1000);
+logger.Information("Sent TwitchCheer=1000");
+
+Thread.Sleep(35);
+OscParameter.SendAvatarParameter("TwitchCheer", 500);
+logger.Information("Sent TwitchCheer=500");
+
+Thread.Sleep(35);
+OscParameter.SendAvatarParameter("TwitchCheer", 1000);
+logger.Information("Sent TwitchCheer=1000");
+
+Thread.Sleep(35);
+OscParameter.SendAvatarParameter("TwitchCheer", 500);
+logger.Information("Sent TwitchCheer=500");
+
+Thread.Sleep(35);
+OscParameter.SendAvatarParameter("TwitchCheer", 1000);
+logger.Information("Sent TwitchCheer=1000");
+
+Thread.Sleep(35);
+OscParameter.SendAvatarParameter("TwitchCheer", 500);
+logger.Information("Sent TwitchCheer=500");
+
+Thread.Sleep(35);
+OscParameter.SendAvatarParameter("TwitchCheer", 1000);
+logger.Information("Sent TwitchCheer=1000");
 
 #endif
 #if SUBLINK_KICK
