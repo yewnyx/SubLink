@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.Threading;
 using System.Threading.Channels;
 
 var notifier = new XSNotifier();
@@ -40,6 +41,7 @@ twitch.ReactToCheer(async channelCheer => {
     logger.Information(
         "{UserName} cheered {Bits} bits to {BroadcasterUserName} with {Message}",
         channelCheer.UserName, channelCheer.Bits, channelCheer.BroadcasterUserName, channelCheer.Message);
+    OscParameter.SendAvatarParameter("TwitchCheer", channelCheer.Bits);
 });
 
 twitch.ReactToFollow(async follow => {
@@ -80,18 +82,24 @@ twitch.ReactToRaid(async channelRaid => {
 twitch.ReactToSubscribe(async channelSubscribe => {
     logger.Information("New subscription: User {UserName} ({Login}) {WasGift} at tier \"{Tier}\" ",
         channelSubscribe.UserName, channelSubscribe.UserLogin, channelSubscribe.IsGift ? "was gifted a sub" : "subscribed", channelSubscribe.Tier);
+
+    if (!channelSubscribe.IsGift) {
+        OscParameter.SendAvatarParameter("TwitchSubscription", 1);
+    }
 });
 
 twitch.ReactToSubscriptionGift(async channelSubscriptionGift => {
     logger.Information(
         "User {UserName} ({Login}) gifted {Total} \"{Tier}\" subs - they have gifted {CumulativeTotal} subs total",
         channelSubscriptionGift.UserName, channelSubscriptionGift.UserId, channelSubscriptionGift.Total, channelSubscriptionGift.Tier, channelSubscriptionGift.CumulativeTotal);
+    OscParameter.SendAvatarParameter("TwitchCommunityGift", channelSubscriptionGift.Total);
 });
 
 twitch.ReactToSubscriptionMessage(async channelSubscriptionMessage => {
     logger.Information(
         "User {UserName} ({Login}) resubscribed at tier \"{Tier}\" for {Months} months (streak: {Streak}) with message: \"{Message}\"",
         channelSubscriptionMessage.UserName, channelSubscriptionMessage.UserLogin, channelSubscriptionMessage.Tier, channelSubscriptionMessage.DurationMonths, channelSubscriptionMessage.StreakMonths, channelSubscriptionMessage.Message);
+    OscParameter.SendAvatarParameter("TwitchSubscription", channelSubscriptionMessage.DurationMonths);
 });
 
 twitch.ReactToChannelUpdate(async channelUpdate => {
@@ -132,8 +140,14 @@ kick.ReactToChatMessage(async chatMessage => {
         chatMessage.Sender.Username, chatMessage.Sender.Slug, chatMessage.CreatedAt, chatMessage.Content);
 });
 
+kick.ReactToSubscription(async sub => {
+    logger.Information("Subscription {Username} subscribed for {Months} months", sub.Username, sub.Months);
+    OscParameter.SendAvatarParameter("KickSubscription", sub.Months);
+});
+
 kick.ReactToGiftedSubscriptions(async giftedSubs => {
     logger.Information("Gifter {Gifter} gifted {GiftCount} subs", giftedSubs.Gifter, giftedSubs.GetGiftCount());
+    OscParameter.SendAvatarParameter("KickCommunityGift", giftedSubs.GetGiftCount());
 
     switch(giftedSubs.GetGiftCount()) {
         case 2: {
@@ -154,10 +168,6 @@ kick.ReactToGiftedSubscriptions(async giftedSubs => {
         }
         default: break;
     }
-});
-
-kick.ReactToSubscription(async sub => {
-    logger.Information("Subscription {Username} subscribed for {Months} months", sub.Username, sub.Months);
 });
 
 kick.ReactToStreamHost(async streamHost => {
@@ -238,6 +248,8 @@ streamElements.ReactToTipEvent(async tipInfo => {
         return;
     }
 
+    OscParameter.SendAvatarParameter("StreamElementsTip", tipInfo.CentAmount);
+
     switch (tipInfo.CentAmount) {
         // To compare against tipInfo.Amount instead you have to use "floats", which MUST end in an `f` like: 1.23f
         // tipInfo.CentAmount is an integer, which doesn't support decimals.
@@ -258,6 +270,64 @@ streamElements.ReactToTipEvent(async tipInfo => {
             break;
         }
         default: break;
+    }
+});
+
+#endif
+#if SUBLINK_FANSLY
+
+logger.Information("Fansly integration enabled");
+
+fansly.ReactToChatMessage(async chatMessage => {
+    if ("yewnyx".Equals(chatMessage.Username, StringComparison.InvariantCultureIgnoreCase)) {
+        OscParameter.SendAvatarParameter("JacketToggle", false);
+        OscParameter.SendAvatarParameter("Sus", true);
+    }
+
+    DateTime timestamp = DateTimeOffset.FromUnixTimeMilliseconds(chatMessage.CreatedAt).DateTime;
+    logger.Information(
+        "Fansly message received > Username: {UserName}, Displayname: {Displayname}, Created At: {CreatedAt}, Content: {Content}",
+        chatMessage.Username, chatMessage.Displayname, timestamp, chatMessage.Content);
+});
+
+fansly.ReactToTip(async tipInfo => {
+    logger.Information("Fansly tip recieved : ${Amount} from {Displayname} with the following message: {Content}",
+        tipInfo.Amount, tipInfo.Displayname, tipInfo.Content);
+
+    OscParameter.SendAvatarParameter("FanslyTip", tipInfo.CentAmount);
+
+    switch (tipInfo.CentAmount) {
+        // To compare against tipInfo.Amount instead you have to use "floats", which MUST end in an `f` like: 1.23f
+        // tipInfo.CentAmount is an integer, which doesn't support decimals.
+        case 1000: {
+            OscParameter.SendAvatarParameter("Ragdoll", true);
+            break;
+        }
+        case 1500: {
+            OscParameter.SendAvatarParameter("Yeet", true);
+            break;
+        }
+        case 2500: {
+            OscParameter.SendAvatarParameter("PopConfettiType", 1);
+            break;
+        }
+        case 3000: {
+            OscParameter.SendAvatarParameter("PopConfettiType", 2);
+            break;
+        }
+        default: break;
+    }
+});
+
+fansly.ReactToGoalUpdated(async goalInfo => {
+    logger.Information("Fansly goal updated : `{Label}` is now at {CurrentAmount} of {GoalAmount} (in $-cents)",
+        goalInfo.Label, goalInfo.CurrentAmount, goalInfo.GoalAmount);
+
+    if (
+        "Hocking Time".Equals(goalInfo.Label, StringComparison.InvariantCultureIgnoreCase) &&
+        goalInfo.CurrentAmount >= goalInfo.GoalAmount
+    ) {
+        OscParameter.SendAvatarParameter("Honk", true);
     }
 });
 

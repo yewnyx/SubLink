@@ -15,10 +15,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="SubLink.cs" />
-        <None Include="SubLink.cs">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+      <Compile Remove="SubLink.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="SubLink.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

@@ -11,7 +11,7 @@ using Serilog;
 using Serilog.Context;
 using Serilog.Events;
 using Serilog.Sinks.Discord;
-using TwitchLib.EventSub.Websockets.Extensions;
+using xyz.yewnyx.SubLink.Fansly;
 
 namespace xyz.yewnyx.SubLink;
 
@@ -19,7 +19,7 @@ internal partial class Program {
     public static async Task Main(string[] args) {
         if (!File.Exists("settings.json")) {
             var discriminator = new Random().Next(1, 9999);
-            
+
             var settingsTemplate = """
 {
   "Twitch": {
@@ -67,11 +67,11 @@ internal partial class Program {
             settingsTemplate = settingsTemplate.Replace("{discriminator}", $"{discriminator}");
             File.WriteAllText("settings.json", settingsTemplate);
         }
-        
+
         var program = new Program();
         await program.Run(args);
     }
-    
+
     IHostBuilder CreateHostBuilder(string[] args) {
         return Host.CreateDefaultBuilder(args)
             .UseConsoleLifetime()
@@ -81,15 +81,15 @@ internal partial class Program {
             .ConfigureServices((context, services) => {
                 services
                     .Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true)
-                    .Configure<TwitchSettings>(context.Configuration.GetSection("Twitch"))
+                    .Configure<FanslySettings>(context.Configuration.GetSection("Fansly"))
                     .Configure<DiscordSettings>(context.Configuration.GetSection("Discord"))
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
-                    .AddTwitchLibEventSubWebsockets()
-                    .AddSingleton<TwitchGlobals>()
-                    .AddHostedService<SubLinkService<TwitchGlobals, CompilerService, TwitchService>>()
-                    .AddScoped<OSCSupportService<TwitchGlobals>>()
-                    .AddScoped<ITwitchRules, TwitchRules>()
-                    .AddScoped<TwitchService>()
+                    .AddSingleton<FanslyGlobals>()
+                    .AddSingleton<FanslyClient>()
+                    .AddHostedService<SubLinkService<FanslyGlobals, CompilerService, FanslyService>>()
+                    .AddScoped<OSCSupportService<FanslyGlobals>>()
+                    .AddScoped<IFanslyRules, FanslyRules>()
+                    .AddScoped<FanslyService>()
                     .AddScoped<CompilerService>();
             })
             .UseSerilog((context, configuration) => {
@@ -114,7 +114,7 @@ internal partial class Program {
                 configuration
                     .Enrich.FromLogContext()
                     .Enrich.FromGlobalLogContext();
-                
+
                 var subLinkSettings = context.Configuration.GetSection("SubLink").Get<SubLinkSettings>();
                 using (GlobalLogContext.Lock()) {
                     GlobalLogContext.PushProperty("Discriminator", subLinkSettings?.Discriminator);
@@ -123,10 +123,8 @@ internal partial class Program {
     }
 
     public async Task Run(string[] args) {
-        var programName = FiggleFonts.Slant.Render("SubLink");
-        programName = ProgramNameRegex().Replace(programName, string.Empty);
-        Console.Write(programName);
-        Console.WriteLine(@"by
+        Console.WriteLine(@"
+----------------------------Credits-----------------------------
 __  __
 \ \/ /__ _      ______  __  ___  __
  \  / _ \ | /| / / __ \/ / / / |/_/
@@ -137,15 +135,25 @@ and                  /____/
   / ____/___ _/ /_   / ____(_)____/ /  / ____/___/ /___/ (_)__
  / /   / __ `/ __/  / / __/ / ___/ /  / __/ / __  / __  / / _ \
 / /___/ /_/ / /_   / /_/ / / /  / /  / /___/ /_/ / /_/ / /  __/
-\____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/");
-        
+\____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/
+and __                           ____              _
+   / /   ____ ___  ___________ _/ __ \____  ____  (_)__  _____
+  / /   / __ `/ / / / ___/ __ `/ /_/ / __ \/_  / / / _ \/ ___/
+ / /___/ /_/ / /_/ / /  / /_/ / _, _/ /_/ / / /_/ /  __/ /
+/_____/\__,_/\__,_/_/   \__,_/_/ |_|\____/ /___/_/\___/_/
+----------------------------Starting----------------------------");
+        var programName = FiggleFonts.Slant.Render("SubLinkFansly");
+        programName = ProgramNameRegex().Replace(programName, string.Empty);
+        Console.Write(programName);
+        Console.WriteLine("----------------------------------------------------------------");
         using (var host = CreateHostBuilder(args).Build()) {
-            var ts = host.Services.GetService<IOptions<TwitchSettings>>();
-            if (string.IsNullOrWhiteSpace(ts!.Value.ClientId) || string.IsNullOrWhiteSpace(ts.Value.ClientSecret)) {
-                Console.WriteLine("Your Twitch Client ID and secret are set up incorrectly.");
+            var ks = host.Services.GetService<IOptions<FanslySettings>>();
+
+            if (string.IsNullOrWhiteSpace(ks!.Value.Token) || string.IsNullOrWhiteSpace(ks!.Value.Username)) {
+                Console.WriteLine("Your Fansly settings are set up incorrectly.");
                 return;
             }
-            
+
             await host.StartAsync();
             await host.WaitForShutdownAsync();
         }

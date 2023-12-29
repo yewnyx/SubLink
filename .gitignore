@@ -7,3 +7,5 @@ riderModule.iml
 **/settings.ini
 settings.json
 builds/
+.vs/
+*.csproj.user

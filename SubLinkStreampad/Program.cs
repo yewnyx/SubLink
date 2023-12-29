@@ -51,6 +51,10 @@ internal partial class Program {
   "StreamElements": {
     "JWTToken": ""
   },
+  "Fansly": {
+    "Token": "",
+    "Username": ""
+  },
   "Discord": {
     "Webhook": ""
   },

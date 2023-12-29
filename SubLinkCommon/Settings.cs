@@ -16,6 +16,9 @@ public sealed class Settings {
     [JsonPropertyName("StreamElements"), ConfigurationKeyName("StreamElements")]
     public StreamElementsSettings streamElements { get; init; }
 
+    [JsonPropertyName("Fansly"), ConfigurationKeyName("Fansly")]
+    public FanslySettings fansly { get; init; }
+
     [JsonPropertyName("Discord"), ConfigurationKeyName("Discord")]
     public DiscordSettings discord { get; init; }
 
@@ -28,15 +31,18 @@ public sealed class Settings {
         kick = new();
         streampad = new();
         streamElements = new();
+        fansly = new();
         discord = new();
         sublink = new();
     }
     public Settings(TwitchSettings twitch, KickSettings kick, StreamPadSettings streampad,
-        StreamElementsSettings streamElements, DiscordSettings discord, SubLinkSettings sublink) {
+        StreamElementsSettings streamElements, FanslySettings fansly,
+        DiscordSettings discord, SubLinkSettings sublink) {
         this.twitch = twitch;
         this.kick = kick;
         this.streampad = streampad;
         this.streamElements = streamElements;
+        this.fansly = fansly;
         this.discord = discord;
         this.sublink = sublink;
     }
@@ -107,6 +113,21 @@ public sealed class StreamElementsSettings {
 
     public StreamElementsSettings(string jwtToken) =>
         JWTToken = jwtToken;
+}
+
+public sealed class FanslySettings {
+    [JsonPropertyName("Token"), ConfigurationKeyName("Token")]
+    public string Token { get; init; }
+
+    [JsonPropertyName("Username"), ConfigurationKeyName("Username")]
+    public string Username { get; init; }
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public FanslySettings() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    public FanslySettings(string token, string username) =>
+        (Token, Username) = (token, username);
 }
 
 public sealed class DiscordSettings {
