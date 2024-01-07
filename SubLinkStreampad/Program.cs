@@ -59,7 +59,10 @@ internal partial class Program {
     "Webhook": ""
   },
   "SubLink": {
-    "Discriminator": {discriminator}
+    "Discriminator": {discriminator},
+    "OscIPAddress": "127.0.0.1",
+    "OscPort": 9000,
+    "ScriptName": "SubLink.cs"
   }
 }
 """;
