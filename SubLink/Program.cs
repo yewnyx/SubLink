@@ -7,11 +7,11 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Context;
 using Serilog.Events;
+using Serilog.Sinks.Discord;
 using xyz.yewnyx.SubLink.Platforms;
 using xyz.yewnyx.SubLink.Services;
 
 namespace xyz.yewnyx.SubLink;
-
 
 internal partial class Program {
     private static string ExeDir = string.Empty;
@@ -37,13 +37,13 @@ internal partial class Program {
             File.WriteAllText("settings.json", settingsTemplate);
         }
 
-        AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromPlatformFolder);
+        AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromPlatformDirectory);
 
         var program = new Program();
-        await Run(args);
+        await program.Run(args);
     }
 
-    private static Assembly? LoadFromPlatformFolder(object? sender, ResolveEventArgs args) {
+    private static Assembly? LoadFromPlatformDirectory(object? sender, ResolveEventArgs args) {
         string folderPath = PlatformDllDir;
         string assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
 
@@ -94,12 +94,9 @@ internal partial class Program {
                     .WriteTo.Console(outputTemplate: outputTemplate,
                         restrictedToMinimumLevel: LogEventLevel.Information);
 
-                /*
-                if (!string.IsNullOrWhiteSpace(webhook.WebhookToken) && webhook.WebhookId != 0) {
-                    configuration.WriteTo.Async(a =>
-                        a.Discord(webhook.WebhookId, webhook.WebhookToken, restrictedToMinimumLevel: LogEventLevel.Information));
-                }
-                */
+                if (!string.IsNullOrWhiteSpace(webhook.WebhookToken) && webhook.WebhookId != 0)
+                    configuration.WriteTo.Async(a => a.Discord(webhook.WebhookId, webhook.WebhookToken,
+                        restrictedToMinimumLevel: LogEventLevel.Information));
 
                 configuration
                     .Enrich.FromLogContext()
@@ -112,7 +109,7 @@ internal partial class Program {
             });
     }
 
-    public static async Task Run(string[] args) {
+    public async Task Run(string[] args) {
         Console.WriteLine(@"
 ----------------------------Credits-----------------------------
 __  __
@@ -177,5 +174,5 @@ and __                           ____              _
     }
 
     [GeneratedRegex(@"^\s+$[\r\n]*", RegexOptions.Multiline)]
-    private static partial Regex ProgramNameRegex();
+    private partial Regex ProgramNameRegex();
 }

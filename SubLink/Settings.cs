@@ -4,11 +4,13 @@ using System.Text.Json.Serialization;
 namespace xyz.yewnyx.SubLink;
 
 internal sealed class Settings {
+#pragma warning disable IDE1006 // Naming Styles
     [JsonPropertyName("Discord"), ConfigurationKeyName("Discord")]
     public DiscordSettings discord { get; init; }
 
     [JsonPropertyName("SubLink"), ConfigurationKeyName("SubLink")]
     public SubLinkSettings sublink { get; init; }
+#pragma warning restore IDE1006 // Naming Styles
 
     public Settings() {
         discord = new();
