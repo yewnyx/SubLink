@@ -14,12 +14,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="SubLink.References">
       <HintPath>..\Dist\SubLink.References.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <Folder Include="FanslyClient\" />
   </ItemGroup>
 </Project>

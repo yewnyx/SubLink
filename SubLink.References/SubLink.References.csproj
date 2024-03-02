@@ -43,22 +43,4 @@
         <PackageReference Include="WebSocket4Net" Version="0.15.2" />
         <PackageReference Include="XSNotifications" Version="0.1.2" />
     </ItemGroup>
-
-    <Target Name="ILPack" AfterTargets="Build">
-      <PropertyGroup>
-        <OutputAssembly>$(OutputPath)\$(AssemblyName).dll</OutputAssembly>
-        <DestinationPath>$(MSBuildThisFileDirectory)\..\Dist</DestinationPath>
-      </PropertyGroup>
-      <ItemGroup>
-        <InputAssemblies Include="$(TargetDir)/*.dll"
-                         Exclude="$(TargetDir)/System.Text.Json.dll" />
-        <InputAssemblies Include="$(TargetDir)/runtimes/win/**/*.dll" />
-      </ItemGroup>
-
-      <Message Text="MERGING $(TargetFramework): @(InputAssemblies->'%(Filename)') into $(OutputAssembly)" Importance="High" />
-      <ILRepack AllowDuplicateResources="false" DebugInfo="true" InputAssemblies="@(InputAssemblies)" OutputFile="$(OutputAssembly)" Parallel="true" TargetKind="Dll" Union="true" Wildcards="true" />
-
-      <Message Text="COPYING $(TargetFramework): $(OutputAssembly) to $(DestinationPath)" Importance="High" />
-      <Copy SourceFiles="$(OutputAssembly)" DestinationFolder="$(DestinationPath)" />
-    </Target>
 </Project>

@@ -106,9 +106,9 @@ internal sealed partial class TwitchService {
         _client.Connect();
 
         if (await _eventSub.ConnectAsync()) {
-            _logger.Information("[{TAG}] Connected to EventSub", "Twitch");
+            _logger.Information("[{TAG}] Connected to EventSub", Platform.PlatformName);
         } else {
-            _logger.Warning("[{TAG}] Failed to connect to EventSub", "Twitch");
+            _logger.Warning("[{TAG}] Failed to connect to EventSub", Platform.PlatformName);
         }
     }
 
@@ -149,11 +149,11 @@ internal sealed partial class TwitchService {
     }
 
     private void OnWebsocketDisconnected(object? sender, EventArgs e) { Task.Run(() => {
-        _logger.Information("[{TAG}] sender: {Sender} event: {@E}", "Twitch", sender, e);
+        _logger.Information("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         return Task.CompletedTask;
     }); }
     private void OnWebsocketReconnected(object? sender, EventArgs e) { Task.Run(() => {
-        _logger.Information("[{TAG}] sender: {Sender} event: {@E}", "Twitch", sender, e);
+        _logger.Information("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         return Task.CompletedTask;
     }); }
 
@@ -227,7 +227,7 @@ internal sealed partial class TwitchService {
         do {
             // No info of any kind: start full OAuth flow
             if (!accessToken.HasAnything() && !refreshToken.HasAnything()) {
-                _logger.Warning("[{TAG}] Twitch access is not configured, requesting Twitch authorization", "Twitch");
+                _logger.Warning("[{TAG}] Twitch access is not configured, requesting Twitch authorization", Platform.PlatformName);
 
                 var authCodeResponse = await LaunchOAuthFlowAsync();
                 accessToken = authCodeResponse.AccessToken;
@@ -238,8 +238,8 @@ internal sealed partial class TwitchService {
 
             // Has a refresh token only, inexplicably, but whatever, try and refresh it
             if (!accessToken.HasAnything() && refreshToken.HasAnything()) {
-                _logger.Warning("[{TAG}] Twitch access token is not configured, but refresh token is available", "Twitch");
-                _logger.Information("[{TAG}] Attempting Twitch access token refresh", "Twitch");
+                _logger.Warning("[{TAG}] Twitch access token is not configured, but refresh token is available", Platform.PlatformName);
+                _logger.Information("[{TAG}] Attempting Twitch access token refresh", Platform.PlatformName);
                 
                 if (await _api.Auth.RefreshAuthTokenAsync(_settings.RefreshToken, _settings.ClientSecret, _settings.ClientId) is
                     { } refreshResponse) {
@@ -251,7 +251,7 @@ internal sealed partial class TwitchService {
                     if (validation != null)
                         break;
                 } else {
-                    _logger.Information("[{TAG}] Twitch access token refresh failed", "Twitch");
+                    _logger.Information("[{TAG}] Twitch access token refresh failed", Platform.PlatformName);
                     refreshToken = null;
                 }
             }
@@ -262,10 +262,10 @@ internal sealed partial class TwitchService {
             if (validation != null)
                 break;
 
-            _logger.Warning("[{TAG}] Your auth token may have expired. Trying to refresh it", "Twitch");
+            _logger.Warning("[{TAG}] Your auth token may have expired. Trying to refresh it", Platform.PlatformName);
 
             if (await _api.Auth.RefreshAuthTokenAsync(_settings.RefreshToken, _settings.ClientSecret, _settings.ClientId) is { } refresh2) {
-                _logger.Verbose("[{TAG}] Access token refresh succeeded", "Twitch");
+                _logger.Verbose("[{TAG}] Access token refresh succeeded", Platform.PlatformName);
                 accessToken = refresh2.AccessToken;
                 refreshToken = refresh2.RefreshToken;
                 validation = await _api.Auth.ValidateAccessTokenAsync(accessToken);
@@ -274,19 +274,19 @@ internal sealed partial class TwitchService {
                     break;
             }
             
-            _logger.Warning("[{TAG}] Your access tokens seem to be invalid. Trying a last-ditch full re-auth", "Twitch");
+            _logger.Warning("[{TAG}] Your access tokens seem to be invalid. Trying a last-ditch full re-auth", Platform.PlatformName);
             var acr2 = await LaunchOAuthFlowAsync();
             accessToken = acr2.AccessToken;
             refreshToken = acr2.RefreshToken;
             validation = await _api.Auth.ValidateAccessTokenAsync(accessToken);
 
             if (validation != null) {
-                _logger.Information("[{TAG}] Your new OAuth token is ready. Please relaunch SubLink!", "Twitch");
+                _logger.Information("[{TAG}] Your new OAuth token is ready. Please relaunch SubLink!", Platform.PlatformName);
                 Console.ReadLine();
                 _applicationLifetime.StopApplication();
                 return;
             } else {
-                _logger.Warning("[{TAG}] Something went wrong. Please send logs to the SubLink developers!", "Twitch");
+                _logger.Warning("[{TAG}] Something went wrong. Please send logs to the SubLink developers!", Platform.PlatformName);
                 Console.ReadLine();
                 _applicationLifetime.StopApplication();
                 return;
@@ -301,18 +301,18 @@ internal sealed partial class TwitchService {
         }
         
         _logger.Information("[{TAG}] Validated token for {ChannelName} ({ChannelId}) with scopes: {Scopes}",
-            "Twitch", ChannelName, ChannelId, string.Join(", ", validation.Scopes));
+            Platform.PlatformName, ChannelName, ChannelId, string.Join(", ", validation.Scopes));
 
         var json = await File.ReadAllTextAsync(Platform.PlatformConfigFile);
         var j = JsonNode.Parse(json, documentOptions: new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip });
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        j["Twitch"]["AccessToken"] = accessToken;
-        j["Twitch"]["RefreshToken"] = refreshToken;
+        j[Platform.PlatformName]["AccessToken"] = accessToken;
+        j[Platform.PlatformName]["RefreshToken"] = refreshToken;
 
         var scopes = new JsonArray();
         validation.Scopes.ForEach(scope => scopes.Add(scope));
-        j["Twitch"]["Scopes"] = scopes;
+        j[Platform.PlatformName]["Scopes"] = scopes;
         await File.WriteAllTextAsync(Platform.PlatformConfigFile, j.ToJsonString(new JsonSerializerOptions {
             WriteIndented = true,
             TypeInfoResolver = new DefaultJsonTypeInfoResolver()

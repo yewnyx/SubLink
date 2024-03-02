@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using xyz.yewnyx.SubLink.Platforms;
+using xyz.yewnyx.SubLink.StreamElements.SEClient;
 using xyz.yewnyx.SubLink.StreamElements.Services;
 
 namespace xyz.yewnyx.SubLink.StreamElements;
@@ -15,15 +16,21 @@ public class Platform : IPlatform {
     internal const string PlatformName = "StreamElements";
     internal const string PlatformConfigFile = "settings.StreamElements.json";
 
-    private ILogger _logger { get; set; }
-    private IServiceProvider _serviceProvider { get; set; }
-
-    private StreamElementsService? service { get; set; }
+#pragma warning disable IDE0052 // Remove unread private members
+#pragma warning disable IDE1006 // Naming Styles
+    private ILogger? _logger { get; set; }
+    private IServiceProvider? _serviceProvider { get; set; }
+    private StreamElementsService? _service { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE0052 // Remove unread private members
 
     // Useful for enumerating the loaded platforms
     public string GetPlatformName() => PlatformName;
     public string GetServiceSymbol() => "SUBLINK_STREAMELEMENTS";
-    public string[] GetAdditionalUsings() => Array.Empty<string>();
+    public string[] GetAdditionalUsings() => new[]{
+        "xyz.yewnyx.SubLink.StreamElements.Services",
+        "xyz.yewnyx.SubLink.StreamElements.SEClient",
+    };
     public string[] GetAdditionalAssemblies() => Array.Empty<string>();
 
     public bool EnsureConfigExists() {
@@ -47,12 +54,13 @@ public class Platform : IPlatform {
     public void ConfigureServices(HostBuilderContext context, IServiceCollection services) {
         services
             .Configure<StreamElementsSettings>(context.Configuration.GetSection("StreamElements"))
+            .AddSingleton<StreamElementsClient>()
             .AddScoped<StreamElementsRules>()
             .AddScoped<StreamElementsService>();
     }
 
     public void AppendRules(Dictionary<string, IPlatformRules> rules) {
-        var rulesSvc = _serviceProvider.GetService<StreamElementsRules>();
+        var rulesSvc = _serviceProvider?.GetService<StreamElementsRules>();
 
         if (rulesSvc != null)
             rules.Add(PlatformName, rulesSvc);
@@ -68,19 +76,19 @@ public class Platform : IPlatform {
 
     // Let the interface handle this, no reflection overhead
     public async Task StartServiceAsync() {
-        if (service != null)
-            await service.StopAsync();
+        if (_service != null)
+            await _service.StopAsync();
 
-        service = _serviceProvider.GetService<StreamElementsService>();
+        _service = _serviceProvider?.GetService<StreamElementsService>();
 
-        if (service != null)
-            await service.StartAsync();
+        if (_service != null)
+            await _service.StartAsync();
     }
     public async Task StopServiceAsync() {
-        if (service == null)
+        if (_service == null)
             return;
 
-        await service.StopAsync();
-        service = null;
+        await _service.StopAsync();
+        _service = null;
     }
 }

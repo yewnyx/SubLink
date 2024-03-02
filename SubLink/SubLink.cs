@@ -21,7 +21,7 @@ oscServer.TryAddMethod("/tracking/vrsystem/head/pose", message => {
 
 #if SUBLINK_TWITCH
 
-logger.Information("Twitch integration enabled");
+logger.Information("[{TAG}] Twitch integration enabled", "Script");
 var twitch = (TwitchRules)rules["Twitch"];
 
 twitch.ReactToJoinedChannel(async (channel, botUsername) => {
@@ -118,7 +118,7 @@ twitch.ReactToStreamOnline(async streamOnline => {
 #endif
 #if SUBLINK_KICK
 
-logger.Information("Kick integration enabled");
+logger.Information("[{TAG}] Kick integration enabled", "Script");
 var kick = (KickRules)rules["Kick"];
 
 kick.ReactToChatMessage(async chatMessage => {
@@ -223,7 +223,7 @@ kick.ReactToPinnedMessageDeleted(async pinnedMessage => {
 #endif
 #if SUBLINK_STREAMPAD
 
-logger.Information("StreamPad integration enabled");
+logger.Information("[{TAG}] StreamPad integration enabled", "Script");
 var streamPad = (StreamPadRules)rules["StreamPad"];
 
 streamPad.ReactToControllerValue(async (name, value) => {
@@ -242,7 +242,7 @@ streamPad.ReactToControllerValue(async (name, value) => {
 #endif
 #if SUBLINK_STREAMELEMENTS
 
-logger.Information("StreamElements integration enabled");
+logger.Information("[{TAG}] StreamElements integration enabled", "Script");
 var streamElements = (StreamElementsRules)rules["StreamElements"];
 
 streamElements.ReactToTipEvent(async tipInfo => {
@@ -282,7 +282,7 @@ streamElements.ReactToTipEvent(async tipInfo => {
 #endif
 #if SUBLINK_FANSLY
 
-logger.Information("Fansly integration enabled");
+logger.Information("[{TAG}] Fansly integration enabled", "Script");
 var fansly = (FanslyRules)rules["Fansly"];
 
 fansly.ReactToChatMessage(async chatMessage => {

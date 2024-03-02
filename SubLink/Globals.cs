@@ -18,9 +18,11 @@ internal static class HostGlobals {
 
 [PublicAPI]
 public class ScriptGlobals {
+#pragma warning disable IDE1006 // Naming Styles
     [UsedImplicitly] public ILogger logger { get; set; } = null!;
     [UsedImplicitly] public IServiceProvider serviceProvider { get; set; } = null!;
     [UsedImplicitly] public OSCQueryService oscQuery { get; set; } = null!;
     [UsedImplicitly] public OscServer oscServer { get; set; } = null!;
     [UsedImplicitly] public Dictionary<string, IPlatformRules> rules { get; set; } = new();
+#pragma warning restore IDE1006 // Naming Styles
 }

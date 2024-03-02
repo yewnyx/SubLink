@@ -15,10 +15,13 @@ public class Platform : IPlatform {
     internal const string PlatformName = "StreamPad";
     internal const string PlatformConfigFile = "settings.StreamPad.json";
 
-    private ILogger _logger { get; set; }
-    private IServiceProvider _serviceProvider { get; set; }
-
-    private StreamPadService? service { get; set; }
+#pragma warning disable IDE0052 // Remove unread private members
+#pragma warning disable IDE1006 // Naming Styles
+    private ILogger? _logger { get; set; }
+    private IServiceProvider? _serviceProvider { get; set; }
+    private StreamPadService? _service { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE0052 // Remove unread private members
 
     // Useful for enumerating the loaded platforms
     public string GetPlatformName() => PlatformName;
@@ -49,13 +52,13 @@ public class Platform : IPlatform {
 
     public void ConfigureServices(HostBuilderContext context, IServiceCollection services) {
         services
-            .Configure<StreamPadSettings>(context.Configuration.GetSection("StreamPad"))
+            .Configure<StreamPadSettings>(context.Configuration.GetSection(PlatformName))
             .AddScoped<StreamPadRules>()
             .AddScoped<StreamPadService>();
     }
 
     public void AppendRules(Dictionary<string, IPlatformRules> rules) {
-        var rulesSvc = _serviceProvider.GetService<StreamPadRules>();
+        var rulesSvc = _serviceProvider?.GetService<StreamPadRules>();
 
         if (rulesSvc != null)
             rules.Add(PlatformName, rulesSvc);
@@ -71,19 +74,19 @@ public class Platform : IPlatform {
 
     // Let the interface handle this, no reflection overhead
     public async Task StartServiceAsync() {
-        if (service != null)
-            await service.StopAsync();
+        if (_service != null)
+            await _service.StopAsync();
 
-        service = _serviceProvider.GetService<StreamPadService>();
+        _service = _serviceProvider?.GetService<StreamPadService>();
 
-        if (service != null)
-            await service.StartAsync();
+        if (_service != null)
+            await _service.StartAsync();
     }
     public async Task StopServiceAsync() {
-        if (service == null)
+        if (_service == null)
             return;
 
-        await service.StopAsync();
-        service = null;
+        await _service.StopAsync();
+        _service = null;
     }
 }

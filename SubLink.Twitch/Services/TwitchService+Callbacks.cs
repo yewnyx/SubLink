@@ -98,7 +98,7 @@ internal sealed partial class TwitchService {
             if (_rules is TwitchRules {OnPointsCustomRewardRedemptionUpdate: { } callback})
                 await callback(e.Notification.Payload.Event);
 
-            _logger.Debug("sender: {Sender} event: {@E}", sender, e);
+            _logger.Debug("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         });
     }
 
@@ -107,7 +107,7 @@ internal sealed partial class TwitchService {
             if (_rules is TwitchRules {OnPollBegin: { } callback})
                 await callback(e.Notification.Payload.Event);
 
-            _logger.Debug("sender: {Sender} event: {@E}", sender, e);
+            _logger.Debug("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         });
     }
 
@@ -116,7 +116,7 @@ internal sealed partial class TwitchService {
             if (_rules is TwitchRules {OnPollEnd: { } callback})
                 await callback(e.Notification.Payload.Event);
 
-            _logger.Debug("sender: {Sender} event: {@E}", sender, e);
+            _logger.Debug("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         });
     }
 
@@ -125,7 +125,7 @@ internal sealed partial class TwitchService {
             if (_rules is TwitchRules {OnPollProgress: { } callback})
                 await callback(e.Notification.Payload.Event);
 
-            _logger.Debug("sender: {Sender} event: {@E}", sender, e);
+            _logger.Debug("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         });
     }
 
@@ -134,7 +134,7 @@ internal sealed partial class TwitchService {
             if (_rules is TwitchRules {OnPredictionBegin: { } callback})
                 await callback(e.Notification.Payload.Event);
 
-            _logger.Debug("sender: {Sender} event: {@E}", sender, e);
+            _logger.Debug("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         });
     }
 
@@ -143,7 +143,7 @@ internal sealed partial class TwitchService {
             if (_rules is TwitchRules {OnPredictionEnd: { } callback})
                 await callback(e.Notification.Payload.Event);
 
-            _logger.Debug("sender: {Sender} event: {@E}", sender, e);
+            _logger.Debug("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         });
     }
 
@@ -152,7 +152,7 @@ internal sealed partial class TwitchService {
             if (_rules is TwitchRules {OnPredictionLock: { } callback})
                 await callback(e.Notification.Payload.Event);
 
-            _logger.Debug("sender: {Sender} event: {@E}", sender, e);
+            _logger.Debug("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         });
     }
 
@@ -161,7 +161,7 @@ internal sealed partial class TwitchService {
             if (_rules is TwitchRules {OnPredictionProgress: { } callback})
                 await callback(e.Notification.Payload.Event);
 
-            _logger.Debug("sender: {Sender} event: {@E}", sender, e);
+            _logger.Debug("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         });
     }
 
@@ -184,7 +184,7 @@ internal sealed partial class TwitchService {
             if (_rules is TwitchRules {OnSubscriptionEnd: { } callback})
                 await callback(e.Notification.Payload.Event);
 
-            _logger.Debug("sender: {Sender} event: {@E}", sender, e);
+            _logger.Debug("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
         });
     }
 
@@ -210,7 +210,8 @@ internal sealed partial class TwitchService {
     }
 
     private void OnErrorOccurred(object? sender, ErrorOccuredArgs e) {
-        _logger.Error(e.Exception, "Websocket {EventSubSessionId}: {EMessage}", _eventSub.SessionId, e.Message);
+        _logger.Error(e.Exception, "[{TAG}] Websocket {EventSubSessionId}: {EMessage}",
+            Platform.PlatformName, _eventSub.SessionId, e.Message);
     }
 
     private void OnStreamOffline(object? sender, StreamOfflineArgs e) {

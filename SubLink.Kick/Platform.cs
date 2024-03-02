@@ -15,15 +15,21 @@ public class Platform : IPlatform {
     internal const string PlatformName = "Kick";
     internal const string PlatformConfigFile = "settings.Kick.json";
 
-    private ILogger _logger { get; set; }
-    private IServiceProvider _serviceProvider { get; set; }
-
-    private KickService? service { get; set; }
+#pragma warning disable IDE0052 // Remove unread private members
+#pragma warning disable IDE1006 // Naming Styles
+    private ILogger? _logger { get; set; }
+    private IServiceProvider? _serviceProvider { get; set; }
+    private KickService? _service { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE0052 // Remove unread private members
 
     // Useful for enumerating the loaded platforms
     public string GetPlatformName() => PlatformName;
     public string GetServiceSymbol() => "SUBLINK_KICK";
-    public string[] GetAdditionalUsings() => Array.Empty<string>();
+    public string[] GetAdditionalUsings() => new[]{
+        "xyz.yewnyx.SubLink.Kick.Services",
+        "xyz.yewnyx.SubLink.Kick.KickClient",
+    };
     public string[] GetAdditionalAssemblies() => Array.Empty<string>();
 
     public bool EnsureConfigExists() {
@@ -54,7 +60,7 @@ public class Platform : IPlatform {
     }
 
     public void AppendRules(Dictionary<string, IPlatformRules> rules) {
-        var rulesSvc = _serviceProvider.GetService<KickRules>();
+        var rulesSvc = _serviceProvider?.GetService<KickRules>();
 
         if (rulesSvc != null)
             rules.Add(PlatformName, rulesSvc);
@@ -70,19 +76,19 @@ public class Platform : IPlatform {
 
     // Let the interface handle this, no reflection overhead
     public async Task StartServiceAsync() {
-        if (service != null)
-            await service.StopAsync();
+        if (_service != null)
+            await _service.StopAsync();
 
-        service = _serviceProvider.GetService<KickService>();
+        _service = _serviceProvider?.GetService<KickService>();
 
-        if (service != null)
-            await service.StartAsync();
+        if (_service != null)
+            await _service.StartAsync();
     }
     public async Task StopServiceAsync() {
-        if (service == null)
+        if (_service == null)
             return;
 
-        await service.StopAsync();
-        service = null;
+        await _service.StopAsync();
+        _service = null;
     }
 }

@@ -37,7 +37,7 @@ internal partial class Program {
         AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromPlatformFolder);
 
         var program = new Program();
-        await program.Run(args);
+        await Run(args);
     }
 
     private static Assembly? LoadFromPlatformFolder(object? sender, ResolveEventArgs args) {
@@ -51,7 +51,7 @@ internal partial class Program {
         return assembly;
     }
 
-    IHostBuilder CreateHostBuilder(string[] args) {
+    static IHostBuilder CreateHostBuilder(string[] args) {
         return Host.CreateDefaultBuilder(args)
             .UseConsoleLifetime()
             .ConfigureAppConfiguration((context, builder) => {
@@ -109,7 +109,7 @@ internal partial class Program {
             });
     }
 
-    public async Task Run(string[] args) {
+    public static async Task Run(string[] args) {
         Console.WriteLine(@"
 ----------------------------Credits-----------------------------
 __  __
