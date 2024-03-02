@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>SubLink.References</AssemblyName>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+        <ApplicationIcon>..\Icon\SubLink.ico</ApplicationIcon>
+        <RootNamespace>xyz.yewnyx.SubLink</RootNamespace>
+        <Authors>yewnyx</Authors>
+        <Product>SubLink.References</Product>
+        <Description>Reference assemblies for SubLink platforms</Description>
+        <Copyright>©2022-present Yewnyx</Copyright>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ILRepack" Version="2.0.18" />
+        <PackageReference Include="TwitchLib" Version="3.5.3" />
+        <PackageReference Include="TwitchLib.EventSub.Websockets" Version="0.4.0" />
+    </ItemGroup>
+
+    <Target Name="ILPack" Condition="$(TargetFramework) != ''" AfterTargets="Build">
+        <PropertyGroup>
+            <ILRepack>$(NuGetPackageRoot)ILRepack\2.0.18\tools\ILRepack.exe</ILRepack>
+            <ILRepackOutPath>bin\$(Configuration)\$(TargetFramework)\</ILRepackOutPath>
+            <ILRepackLog>$(ILRepackOutPath)repack.log</ILRepackLog>
+            <ILRepackLib>$(ILRepackOutPath)</ILRepackLib>
+            <ILRepackTarget>$(ILRepackOutPath)SubLink.References.dll</ILRepackTarget>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <RepackItems Include="$(ILRepackOutPath)TwitchLib.dll" />
+            <RepackItems Include="$(ILRepackOutPath)TwitchLib.Api.dll" />
+            <RepackItems Include="$(ILRepackOutPath)TwitchLib.Client.dll" />
+            <RepackItems Include="$(ILRepackOutPath)TwitchLib.Pubsub.dll" />
+            <RepackItems Include="$(ILRepackOutPath)Microsoft.Extensions.Logging.dll" />
+            <RepackItems Include="$(ILRepackOutPath)System.Text.Json.dll" />
+            <RepackItems Include="$(ILRepackOutPath)TwitchLib.EventSub.Core.dll" />
+            <RepackItems Include="$(ILRepackOutPath)TwitchLib.EventSub.Websockets.dll" />
+        </ItemGroup>
+    </Target>
+</Project>
