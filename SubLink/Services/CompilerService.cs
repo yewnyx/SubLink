@@ -53,6 +53,8 @@ internal partial class CompilerService {
 
     public async Task<Func<Task<object?>>> CompileSource(IFileInfo fileInfo, IServiceProvider serviceProvider,
         CancellationToken stoppingToken) {
+        _globals.serviceProvider = serviceProvider;
+
         if (_assemblyLoadContext != null) {
             _assemblyLoadContext.Unload();
             _assemblyLoadContext = null;

@@ -50,7 +50,6 @@ internal sealed partial class TwitchService {
 
     public TwitchService(
         ILogger logger,
-        IServiceProvider serviceProvider,
         IHostApplicationLifetime applicationLifetime,
         IServiceScopeFactory serviceScopeFactory,
         IOptionsMonitor<TwitchSettings> settingsMonitor,

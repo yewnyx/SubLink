@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using TwitchLib.EventSub.Websockets.Extensions;
 using xyz.yewnyx.SubLink.Platforms;
 using xyz.yewnyx.SubLink.Streampad.Services;
 
@@ -24,7 +23,9 @@ public class Platform : IPlatform {
     // Useful for enumerating the loaded platforms
     public string GetPlatformName() => PlatformName;
     public string GetServiceSymbol() => "SUBLINK_STREAMPAD";
-    public string[] GetAdditionalUsings() => Array.Empty<string>();
+    public string[] GetAdditionalUsings() => new[]{
+        "xyz.yewnyx.SubLink.Streampad.Services",
+    };
     public string[] GetAdditionalAssemblies() => Array.Empty<string>();
 
     public bool EnsureConfigExists() {
