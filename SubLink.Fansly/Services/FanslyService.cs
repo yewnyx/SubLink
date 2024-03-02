@@ -1,17 +1,64 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Serilog;
+using xyz.yewnyx.SubLink.Fansly.FanslyClient;
 
 namespace xyz.yewnyx.SubLink.Fansly.Services;
 
-internal class FanslyService {
-    public async Task StartAsync() {
-        await Task.CompletedTask;
+[UsedImplicitly]
+internal sealed partial class FanslyService {
+    private readonly ILogger _logger;
+    private readonly IHostApplicationLifetime _applicationLifetime;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+
+    // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+    private readonly IOptionsMonitor<FanslySettings> _settingsMonitor;
+    private FanslySettings _settings;
+
+    private readonly FanslyWSClient _fansly;
+
+    private readonly FanslyRules _rules;
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Shhh")]
+    private IServiceScope? _fanslyLoggedInScope;
+
+    public FanslyService(
+        ILogger logger,
+        IHostApplicationLifetime applicationLifetime,
+        IServiceScopeFactory serviceScopeFactory,
+        IOptionsMonitor<FanslySettings> settingsMonitor,
+        FanslyWSClient fanslyClient,
+        FanslyRules rules) {
+        _logger = logger;
+        _applicationLifetime = applicationLifetime;
+        _serviceScopeFactory = serviceScopeFactory;
+        _settingsMonitor = settingsMonitor;
+        _settingsMonitor.OnChange(UpdateFanslySettings);
+        _settings = _settingsMonitor.CurrentValue;
+
+        _fansly = fanslyClient ?? throw new ArgumentNullException(nameof(fanslyClient));
+
+        _rules = rules;
+
+        WireCallbacks();
     }
 
-    public async Task StopAsync() {
-        await Task.CompletedTask;
+    private void UpdateFanslySettings(FanslySettings settings) => _settings = settings;
+
+    public async Task StartAsync() {
+        if (await _fansly.ConnectAsync(_settings.Token, _settings.Username)) {
+            _logger.Information("[{TAG}] Connected to socket", "Fansly");
+            _fanslyLoggedInScope = _serviceScopeFactory.CreateScope();
+        } else {
+            _logger.Warning("[{TAG}] Failed to connect to socket", "Fansly");
+            _applicationLifetime.StopApplication();
+        }
     }
+
+    public async Task StopAsync() =>
+        await _fansly.DisconnectAsync();
 }

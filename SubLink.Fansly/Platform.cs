@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using xyz.yewnyx.SubLink.Fansly.FanslyClient;
 using xyz.yewnyx.SubLink.Fansly.Services;
 using xyz.yewnyx.SubLink.Platforms;
 
@@ -54,6 +55,7 @@ public class Platform : IPlatform {
     public void ConfigureServices(HostBuilderContext context, IServiceCollection services) {
         services
             .Configure<FanslySettings>(context.Configuration.GetSection("Fansly"))
+            .AddSingleton<FanslyWSClient>()
             .AddScoped<FanslyRules>()
             .AddScoped<FanslyService>();
     }

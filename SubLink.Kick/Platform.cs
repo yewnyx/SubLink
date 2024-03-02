@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using xyz.yewnyx.SubLink.Kick.KickClient;
 using xyz.yewnyx.SubLink.Kick.Services;
 using xyz.yewnyx.SubLink.Platforms;
 
@@ -55,6 +56,7 @@ public class Platform : IPlatform {
     public void ConfigureServices(HostBuilderContext context, IServiceCollection services) {
         services
             .Configure<KickSettings>(context.Configuration.GetSection("Kick"))
+            .AddSingleton<KickPusherClient>()
             .AddScoped<KickRules>()
             .AddScoped<KickService>();
     }
