@@ -15,6 +15,7 @@ New-Item build-$version -ItemType directory;
 Copy-Item -Path "SubLink\bin\Release\net7.0\win10-x64\publish\SubLink.exe" -Destination build-$version;
 Copy-Item -Path "SubLink\SubLink.cs" -Destination "build-$($version)";
 Copy-Item -Path "SubLink\Platforms\" -Destination "build-$($version)" -Recurse;
+Copy-Item -Path "SubLink\Settings\" -Destination "build-$($version)" -Recurse;
 Copy-Item -Path "SubLink.Twitch\bin\Release\net7.0\win10-x64\publish\SubLink.Twitch.dll" -Destination "build-$($version)\Platforms";
 Copy-Item -Path "SubLink.Kick\bin\Release\net7.0\win10-x64\publish\SubLink.Kick.dll" -Destination "build-$($version)\Platforms";
 Copy-Item -Path "SubLink.Streampad\bin\Release\net7.0\win10-x64\publish\SubLink.Streampad.dll" -Destination "build-$($version)\Platforms";

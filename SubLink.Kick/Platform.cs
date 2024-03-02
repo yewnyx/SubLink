@@ -14,7 +14,7 @@ namespace xyz.yewnyx.SubLink.Kick;
 
 public class Platform : IPlatform {
     internal const string PlatformName = "Kick";
-    internal const string PlatformConfigFile = "settings.Kick.json";
+    internal static string PlatformConfigFile = Path.Combine("settings", $"{PlatformName}.json");
 
 #pragma warning disable IDE0052 // Remove unread private members
 #pragma warning disable IDE1006 // Naming Styles

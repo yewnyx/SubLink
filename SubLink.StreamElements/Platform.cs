@@ -14,7 +14,7 @@ namespace xyz.yewnyx.SubLink.StreamElements;
 
 public class Platform : IPlatform {
     internal const string PlatformName = "StreamElements";
-    internal const string PlatformConfigFile = "settings.StreamElements.json";
+    internal static string PlatformConfigFile = Path.Combine("settings", $"{PlatformName}.json");
 
 #pragma warning disable IDE0052 // Remove unread private members
 #pragma warning disable IDE1006 // Naming Styles

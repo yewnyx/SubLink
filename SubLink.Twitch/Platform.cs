@@ -14,7 +14,7 @@ namespace xyz.yewnyx.SubLink.Twitch;
 
 public class Platform : IPlatform {
     internal const string PlatformName = "Twitch";
-    internal const string PlatformConfigFile = "settings.Twitch.json";
+    internal static string PlatformConfigFile = Path.Combine("settings", $"{PlatformName}.json");
 
 #pragma warning disable IDE0052 // Remove unread private members
 #pragma warning disable IDE1006 // Naming Styles
