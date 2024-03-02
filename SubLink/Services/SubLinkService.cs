@@ -17,13 +17,14 @@ internal class SubLinkService : BackgroundService {
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
         using var sublinkScope = _serviceScopeFactory.CreateScope();
+        var scopedSvcProvider = sublinkScope.ServiceProvider;
 
-        var compiler = sublinkScope.ServiceProvider.GetService<CompilerService>()!;
+        var compiler = scopedSvcProvider.GetService<CompilerService>()!;
         var provider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
         var script = provider.GetFileInfo("SubLink.cs");
-        var scriptFunc = await compiler.CompileSource(script, stoppingToken);
+        var scriptFunc = await compiler.CompileSource(script, scopedSvcProvider, stoppingToken);
         
-        var oscSupportService = sublinkScope.ServiceProvider.GetService<OSCSupportService>()!;
+        var oscSupportService = scopedSvcProvider.GetService<OSCSupportService>()!;
 
         try {
             oscSupportService.Start();

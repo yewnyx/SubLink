@@ -14,6 +14,9 @@ namespace xyz.yewnyx.SubLink;
 
 
 internal partial class Program {
+    private static string ExeDir = string.Empty;
+    private static string PlatformDllDir { get => Path.Combine(ExeDir, "Platforms"); }
+
     public static async Task Main(string[] args) {
         if (!File.Exists("settings.json")) {
             var discriminator = new Random().Next(1, 9999);
@@ -31,11 +34,22 @@ internal partial class Program {
             File.WriteAllText("settings.json", settingsTemplate);
         }
 
+        AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromPlatformFolder);
+
         var program = new Program();
         await program.Run(args);
     }
 
-    private string _exeDirectory = string.Empty;
+    private static Assembly? LoadFromPlatformFolder(object? sender, ResolveEventArgs args) {
+        string folderPath = PlatformDllDir;
+        string assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
+
+        if (!File.Exists(assemblyPath))
+            return null;
+
+        Assembly assembly = Assembly.LoadFrom(assemblyPath);
+        return assembly;
+    }
 
     IHostBuilder CreateHostBuilder(string[] args) {
         return Host.CreateDefaultBuilder(args)
@@ -120,13 +134,15 @@ and __                           ____              _
         Console.Write(programName);
         Console.WriteLine("----------------------------------------------------------------");
 
-        _exeDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? AppDomain.CurrentDomain.BaseDirectory;
+        ExeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? AppDomain.CurrentDomain.BaseDirectory;
         var platformIfaceType = typeof(IPlatform);
+        bool configsOk = true;
 
-        foreach (var platformLib in Directory.GetFiles(Path.Combine(_exeDirectory, "Platforms"), "*.dll")) {
-            var libAsm = Assembly.LoadFile(platformLib);
-            var platformEntryType = libAsm.GetExportedTypes()
-                .FirstOrDefault(t => platformIfaceType.IsAssignableFrom(t));
+        foreach (var platformLib in Directory.GetFiles(PlatformDllDir, "*.dll")) {
+            var libName = AssemblyName.GetAssemblyName(platformLib);
+            var libAsm = Assembly.Load(libName);
+
+            var platformEntryType = libAsm.GetTypes().FirstOrDefault(t => platformIfaceType.IsAssignableFrom(t));
 
             if (platformEntryType == null || platformEntryType == default)
                 continue;
@@ -140,6 +156,16 @@ and __                           ____              _
                 Assembly = libAsm,
                 Entry = platformEntry
             });
+
+            if (!platformEntry.EnsureConfigExists()) {
+                configsOk = false;
+                Console.WriteLine($"Settings file for '{platformEntry.GetPlatformName()}' not found, created a template one.");
+            }
+        }
+
+        if (!configsOk) {
+            Console.WriteLine("Please update the configs with the required info and start SubLink again.");
+            return;
         }
 
         using var host = CreateHostBuilder(args).Build();

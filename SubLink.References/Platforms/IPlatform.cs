@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,12 +17,15 @@ public interface IPlatform {
     string[] GetAdditionalUsings();
     string[] GetAdditionalAssemblies();
 
+    bool EnsureConfigExists();
+
     void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder);
     void ConfigureServices(HostBuilderContext context, IServiceCollection services);
 
     void AppendRules(Dictionary<string, IPlatformRules> rules);
 
     void SetLogger(ILogger logger);
+    void SetServiceProvider(IServiceProvider serviceProvider);
 
     // Let the interface handle this, no reflection overhead
     Task StartServiceAsync();

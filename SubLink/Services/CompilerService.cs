@@ -2,6 +2,7 @@
 using System.Reflection.Metadata;
 using System.Runtime.Loader;
 using System.Text;
+using System.Text.RegularExpressions;
 using Basic.Reference.Assemblies;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,7 +13,7 @@ using Serilog;
 
 namespace xyz.yewnyx.SubLink.Services;
 
-internal class CompilerService {
+internal partial class CompilerService {
     private AssemblyLoadContext? _assemblyLoadContext;
 
     private static readonly string[] _baseUsings = {
@@ -50,7 +51,8 @@ internal class CompilerService {
         GlobalsType = typeof(ScriptGlobals);
     }
 
-    public async Task<Func<Task<object?>>> CompileSource(IFileInfo fileInfo, CancellationToken stoppingToken) {
+    public async Task<Func<Task<object?>>> CompileSource(IFileInfo fileInfo, IServiceProvider serviceProvider,
+        CancellationToken stoppingToken) {
         if (_assemblyLoadContext != null) {
             _assemblyLoadContext.Unload();
             _assemblyLoadContext = null;
@@ -71,6 +73,7 @@ internal class CompilerService {
 
         foreach (var platform in HostGlobals.Platforms.Values) {
             platform.Entry.SetLogger(_logger);
+            platform.Entry.SetServiceProvider(serviceProvider);
 
             serviceSymbols.Add(platform.Entry.GetServiceSymbol());
 
@@ -91,8 +94,11 @@ internal class CompilerService {
         // Parse source file
         SyntaxTree syntaxTree;
         await using (var scriptStream = fileInfo.CreateReadStream()) {
+            SourceText srcText = SourceText.From(scriptStream, Encoding.UTF8);
+            PatchLegacyScript(ref srcText);
+
             syntaxTree = CSharpSyntaxTree.ParseText(
-                SourceText.From(scriptStream, Encoding.UTF8),
+                srcText,
                 CSharpParseOptions.Default
                     .WithLanguageVersion(LanguageVersion.Latest)
                     .WithKind(SourceCodeKind.Script)
@@ -163,4 +169,92 @@ internal class CompilerService {
         var submission = (Func<object[], Task>)entryPointMethod.CreateDelegate(typeof(Func<object[], Task>));
         return () => (Task<object?>)submission(new object[] { _globals, null! });
     }
+
+    private static void PatchLegacyScript(ref SourceText srcText) {
+        bool patched = false;
+        var srcStr = srcText.ToString();
+
+        if (TwitchLegacyRegex().IsMatch(srcStr) && !TwitchModernRegex().IsMatch(srcStr)) {
+            patched = true;
+            var idx = TwitchLegacyRegex().Match(srcStr).Index;
+
+            var sb = new StringBuilder(srcStr[..idx]);
+            sb.AppendLine("var twitch = (TwitchRules)rules[\"Twitch\"];");
+            sb.Append(srcStr.AsSpan(idx));
+
+            srcStr = sb.ToString();
+        }
+
+        if (KickLegacyRegex().IsMatch(srcStr) && !KickModernRegex().IsMatch(srcStr)) {
+            patched = true;
+            var idx = KickLegacyRegex().Match(srcStr).Index;
+
+            var sb = new StringBuilder(srcStr[..idx]);
+            sb.AppendLine("var kick = (KickRules)rules[\"Kick\"];");
+            sb.Append(srcStr.AsSpan(idx));
+
+            srcStr = sb.ToString();
+        }
+
+        if (StreamPadLegacyRegex().IsMatch(srcStr) && !StreamPadModernRegex().IsMatch(srcStr)) {
+            patched = true;
+            var idx = StreamPadLegacyRegex().Match(srcStr).Index;
+
+            var sb = new StringBuilder(srcStr[..idx]);
+            sb.AppendLine("var streamPad = (StreamPadRules)rules[\"StreamPad\"];");
+            sb.Append(srcStr.AsSpan(idx));
+
+            srcStr = sb.ToString();
+        }
+
+        if (StreamElementsLegacyRegex().IsMatch(srcStr) && !StreamElementsModernRegex().IsMatch(srcStr)) {
+            patched = true;
+            var idx = StreamElementsLegacyRegex().Match(srcStr).Index;
+
+            var sb = new StringBuilder(srcStr[..idx]);
+            sb.AppendLine("var streamElements = (StreamElementsRules)rules[\"StreamElements\"];");
+            sb.Append(srcStr.AsSpan(idx));
+
+            srcStr = sb.ToString();
+        }
+
+        if (FanslyLegacyRegex().IsMatch(srcStr) && !FanslyModernRegex().IsMatch(srcStr)) {
+            patched = true;
+            var idx = FanslyLegacyRegex().Match(srcStr).Index;
+
+            var sb = new StringBuilder(srcStr[..idx]);
+            sb.AppendLine("var fansly = (FanslyRules)rules[\"Fansly\"];");
+            sb.Append(srcStr.AsSpan(idx));
+
+            srcStr = sb.ToString();
+        }
+
+        if (patched)
+            srcText = SourceText.From(srcStr, Encoding.UTF8);
+    }
+
+    [GeneratedRegex(@".*twitch\.\w*\(")]
+    private static partial Regex TwitchLegacyRegex();
+    [GeneratedRegex(@"\bvar\s+twitch\s+=\s+\(TwitchRules\)rules\[""Twitch""\];")]
+    private static partial Regex TwitchModernRegex();
+
+    [GeneratedRegex(@".*kick\.\w*\(")]
+    private static partial Regex KickLegacyRegex();
+    [GeneratedRegex(@"\bvar\s+kick\s+=\s+\(KickRules\)rules\[""Kick""\];")]
+    private static partial Regex KickModernRegex();
+
+    [GeneratedRegex(@".*streamPad\.\w*\(")]
+    private static partial Regex StreamPadLegacyRegex();
+    [GeneratedRegex(@"\bvar\s+streamPad\s+=\s+\(StreamPadRules\)rules\[""StreamPad""\];")]
+    private static partial Regex StreamPadModernRegex();
+
+    [GeneratedRegex(@".*streamElements\.\w*\(")]
+    private static partial Regex StreamElementsLegacyRegex();
+    [GeneratedRegex(@"\bvar\s+streamElements\s+=\s+\(StreamElementsRules\)rules\[""StreamElements""\];")]
+    private static partial Regex StreamElementsModernRegex();
+
+    [GeneratedRegex(@".*fansly\.\w*\(")]
+    private static partial Regex FanslyLegacyRegex();
+    [GeneratedRegex(@"\bvar\s+fansly\s+=\s+\(FanslyRules\)rules\[""Fansly""\];")]
+    private static partial Regex FanslyModernRegex();
 }

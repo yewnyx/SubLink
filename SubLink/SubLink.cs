@@ -22,6 +22,7 @@ oscServer.TryAddMethod("/tracking/vrsystem/head/pose", message => {
 #if SUBLINK_TWITCH
 
 logger.Information("Twitch integration enabled");
+var twitch = (TwitchRules)rules["Twitch"];
 
 twitch.ReactToJoinedChannel(async (channel, botUsername) => {
     logger.Information("User {BotUsername} joined channel {ChannelName}", botUsername, channel);
@@ -118,6 +119,7 @@ twitch.ReactToStreamOnline(async streamOnline => {
 #if SUBLINK_KICK
 
 logger.Information("Kick integration enabled");
+var kick = (KickRules)rules["Kick"];
 
 kick.ReactToChatMessage(async chatMessage => {
     if ("yewnyx".Equals(chatMessage.Sender.Slug, StringComparison.InvariantCultureIgnoreCase)) {
@@ -221,6 +223,9 @@ kick.ReactToPinnedMessageDeleted(async pinnedMessage => {
 #endif
 #if SUBLINK_STREAMPAD
 
+logger.Information("StreamPad integration enabled");
+var streamPad = (StreamPadRules)rules["StreamPad"];
+
 streamPad.ReactToControllerValue(async (name, value) => {
     logger.Information($"StreamPad | in rule: {name}:{value}");
     if (name == "PRESETS")
@@ -238,6 +243,7 @@ streamPad.ReactToControllerValue(async (name, value) => {
 #if SUBLINK_STREAMELEMENTS
 
 logger.Information("StreamElements integration enabled");
+var streamElements = (StreamElementsRules)rules["StreamElements"];
 
 streamElements.ReactToTipEvent(async tipInfo => {
     logger.Information("Stream Elements tip recieved : {Amount} {UserCurrency} from {Name} with the following message: {Message}",
@@ -277,6 +283,7 @@ streamElements.ReactToTipEvent(async tipInfo => {
 #if SUBLINK_FANSLY
 
 logger.Information("Fansly integration enabled");
+var fansly = (FanslyRules)rules["Fansly"];
 
 fansly.ReactToChatMessage(async chatMessage => {
     if ("yewnyx".Equals(chatMessage.Username, StringComparison.InvariantCultureIgnoreCase)) {
