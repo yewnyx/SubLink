@@ -1,0 +1,46 @@
+# SubLink DataTypes Kick
+
+[Back To Readme](../../../README.md)
+
+## Kick Events
+
+- [ReactToChatMessage](Events.md#ReactToChatMessage)
+- [ReactToGiftedSubscriptions](Events.md#ReactToGiftedSubscriptions)
+- [ReactToSubscription](Events.md#ReactToSubscription)
+- [ReactToStreamHost](Events.md#ReactToStreamHost)
+- [ReactToUserBanned](Events.md#ReactToUserBanned)
+- [ReactToUserUnbanned](Events.md#ReactToUserUnbanned)
+- [ReactToMessageDeleted](Events.md#ReactToMessageDeleted)
+- [ReactToChatroomClear](Events.md#ReactToChatroomClear)
+- [ReactToChatroomUpdated](Events.md#ReactToChatroomUpdated)
+- [ReactToPollUpdate](Events.md#ReactToPollUpdate)
+- [ReactToPollDelete](Events.md#ReactToPollDelete)
+- [ReactToPinnedMessageCreated](Events.md#ReactToPinnedMessageCreated)
+- [ReactToPinnedMessageDeleted](Events.md#ReactToPinnedMessageDeleted)
+
+## Kick Types
+
+- [KickBadge](Types.md#KickBadge)
+- [KickIdentity](Types.md#KickIdentity)
+- [KickUser](Types.md#KickUser)
+- [KickUserShort](Types.md#KickUserShort)
+- [MessageInfo](Types.md#MessageInfo)
+- [SlowModeInfo](Types.md#SlowModeInfo)
+- [SubsOnlyModeInfo](Types.md#SubsOnlyModeInfo)
+- [FollowOnlyModeInfo](Types.md#FollowOnlyModeInfo)
+- [EmoteModeInfo](Types.md#EmoteModeInfo)
+- [AdvBotProtectModeInfo](Types.md#AdvBotProtectModeInfo)
+- [PollOptionInfo](Types.md#PollOptionInfo)
+- [PollInfo](Types.md#PollInfo)
+- [PinnedMessageInfo](Types.md#PinnedMessageInfo)
+- [ChatMessageEvent](Types.md#ChatMessageEvent)
+- [GiftedSubscriptionsEvent](Types.md#GiftedSubscriptionsEvent)
+- [SubscriptionEvent](Types.md#SubscriptionEvent)
+- [StreamHostEvent](Types.md#StreamHostEvent)
+- [UserBannedEvent](Types.md#UserBannedEvent)
+- [UserUnbannedEvent](Types.md#UserUnbannedEvent)
+- [MessageDeletedEvent](Types.md#MessageDeletedEvent)
+- [ChatroomClearEvent](Types.md#ChatroomClearEvent)
+- [ChatroomUpdatedEvent](Types.md#ChatroomUpdatedEvent)
+- [PollUpdateEvent](Types.md#PollUpdateEvent)
+- [PinnedMessageCreatedEvent](Types.md#PinnedMessageCreatedEvent)
