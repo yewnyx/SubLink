@@ -4,4 +4,8 @@
 
 ## StreamElements Events
 
+- [ReactToTipEvent](Events.md#ReactToTipEvent)
+
 ## StreamElements Types
+
+- [TipEventArgs](Types.md#TipEventArgs)
