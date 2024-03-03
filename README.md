@@ -42,6 +42,16 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 - [StreamElements Data Types](Docs/DataTypes/StreamElements/Index.md)
 - [StreamPad Data Types](Docs/DataTypes/StreamPad/Index.md)
 
+## Adding Support to Avatars
+
+To add support for SubLink integrations to your VRChat avatars, I recommend using VRChat's avatar parameter drivers to increment an avatar parameter. For instance, when gift subs or bits come in, OSC will set an avatar parameter such as `TwitchCommunityGift` or `TwitchCheer` to the number gifted or cheered.
+
+You can then create an animator layer with a resting state that transitions to a state with a parameter driver using the respective avatar parameter (e.g., `ExplosionQueue`). This animator layer will increment an internal parameter accordingly and reset the (OSC-set) avatar parameter to zero, allowing for manual radial menu fallback triggers.
+
+From there, you can enqueue animations as needed based on the secondary parameters incremented by the parameter driver.
+
+Default parameters can be found here: [Default_Params.md](https://github.com/yewnyx/SubLink/blob/master/Docs/Default_Params.md)
+
 ## Support
 
 If you encounter any issues or need assistance, please open an issue in the project repository.

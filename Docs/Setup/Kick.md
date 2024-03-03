@@ -1,6 +1,6 @@
 # SubLink Setup Kick
 
-[Back To Readme](https://github.com/yewnyx/SubLink/blob/master/README.md)
+[Back To Readme](../../README.md)
 
 ## Setup
 

@@ -1,6 +1,6 @@
 # SubLink Setup Twitch
 
-[Back To Readme](https://github.com/yewnyx/SubLink/blob/master/README.md)
+[Back To Readme](../../README.md)
 
 ## Setup
 
@@ -8,6 +8,7 @@
 2. Add your `clientid` and `clientsecret` obtained from your Twitch Developer account (or provided to you by CatGirlEddie to the `Settings/Twitch.json` file).  
 If you prefer setting this up yourself, see the [Twitch Auth](#twitch-auth) section
 3. On the second run, the application will automatically authorize through Twitch and save an access token and refresh token to `Settings/Twitch.json`.
+
 
 ## Config Template
 
@@ -33,3 +34,17 @@ If you prefer setting this up yourself, see the [Twitch Auth](#twitch-auth) sect
   }
 }
 ```
+
+## Authentication
+
+If you prefer setting Twitch up yourself without our assistance, please follow the following steps:
+
+1. Using your browser, navigate to the [Twitch Developer Console](https://dev.twitch.tv/console)
+2. Register a new `Application`
+3. Give it a fitting `Name` like `My SubLink App`, add `http://localhost:50666/authorize/` as `OAuth Redirect URL` and set the `Category` to `Application Integration`  
+![Twitch Auth 1](https://raw.githubusercontent.com/yewnyx/SubLink/master/Docs/twitch-auth-1.png "Twitch Auth 1")
+4. Click `Manage` behind the newly generated application  
+![Twitch Auth 2](https://raw.githubusercontent.com/yewnyx/SubLink/master/Docs/twitch-auth-2.png "Twitch Auth 2")
+5. Copy the `Client ID` (1) into your `Settings/Twitch.json`
+6. Click `New Secret`, confirm the pop-up and copy the generated value (2) into your `Settings/Twitch.json`  
+![Twitch Auth 3](https://raw.githubusercontent.com/yewnyx/SubLink/master/Docs/twitch-auth-3.png "Twitch Auth 3")
