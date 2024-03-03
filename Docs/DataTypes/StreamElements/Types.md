@@ -5,8 +5,8 @@
 
 ## TipEventArgs
 
-- `string` Name         - Required - Badge type
-- `string` Amount       - Required - Badge name
-- `int`    CentAmount   - Optional - The number of months
-- `string` Message      - Optional - The number of months
-- `string` UserCurrency - Optional - The number of months
+- `string` Name         - Required - The tipping user's name
+- `float`  Amount       - Required - The tip amount
+- `int`    CentAmount   - Required - The tip amount in cents
+- `string` Message      - Optional - The tip's message
+- `string` UserCurrency - Required - The currency the user tipped with
