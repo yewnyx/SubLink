@@ -50,7 +50,18 @@ You can then create an animator layer with a resting state that transitions to a
 
 From there, you can enqueue animations as needed based on the secondary parameters incremented by the parameter driver.
 
-Default parameters can be found here: [Default_Params.md](https://github.com/yewnyx/SubLink/blob/master/Docs/Default_Params.md)
+Default parameters can be found here: [Default_Params.md](Docs/Default_Params.md)
+
+## Bi-Directional Interaction With OSC
+
+To receive events from the game you will have to set up some parameters which OSC can connect to. Information on how to set this up can be found in the [oscQuery and oscServer](Docs/oscQuery_and_oscServer.md) guide.
+
+## Script Upgrade Guides
+
+Below are config and script upgrade guides, made to help you modernize your setup to be compatible with the current release of SubLink.
+
+- Early releases to v2.1.6 - Follow [this guide](Docs/Update_v2.1.3_To_v2.1.6.md)
+- v2.1.6+ to v3.0.x - Follow [this guide](Docs/Update_v2.1.6_To_v3.0.x.md)
 
 ## Support
 

@@ -87,4 +87,4 @@ logger.Information("Kick integration enabled");
 #endif
 ```
 
-You can always look at the [SubLink.cs](https://github.com/yewnyx/SubLink/blob/master/SubLinkCommon/SubLink.cs#L96) file in this repository to get an idea of how to react to Kick events.
+You can always look at the [SubLink.cs](https://github.com/yewnyx/SubLink/blob/858ecd1dad79167f7cbcdbf3c3b954304366b33b/SubLinkCommon/SubLink.cs#L118) file in this repository to get an idea of how to react to Kick events.
