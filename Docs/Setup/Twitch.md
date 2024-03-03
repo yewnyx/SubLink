@@ -6,7 +6,7 @@
 
 1. On the first run, the application will create a `Settings/Twitch.json` file.
 2. Add your `clientid` and `clientsecret` obtained from your Twitch Developer account (or provided to you by CatGirlEddie to the `Settings/Twitch.json` file).  
-If you prefer setting this up yourself, see the [Twitch Auth](#twitch-auth) section
+If you prefer setting this up yourself, see the [Authentication](#authentication) section
 3. On the second run, the application will automatically authorize through Twitch and save an access token and refresh token to `Settings/Twitch.json`.
 
 
