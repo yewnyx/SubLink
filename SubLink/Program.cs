@@ -134,7 +134,17 @@ and __                           ____              _
         Console.Write(programName);
         Console.WriteLine("----------------------------------------------------------------");
 
-        ExeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? AppDomain.CurrentDomain.BaseDirectory;
+        /*
+         * The following is a classic, but invalid for "single-file app" builds:
+         *
+         * Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ??
+         *     AppDomain.CurrentDomain.BaseDirectory;
+         *
+         * warning IL3000:
+         *   'System.Reflection.Assembly.Location' always returns an empty string for assemblies embedded in a single-file app.
+         *   If the path to the app directory is needed, consider calling 'System.AppContext.BaseDirectory'
+         */
+        ExeDir = AppContext.BaseDirectory;
         var platformIfaceType = typeof(IPlatform);
         bool configsOk = true;
 
