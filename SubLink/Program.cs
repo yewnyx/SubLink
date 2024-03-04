@@ -1,96 +1,84 @@
-﻿using System;
-using System.IO;
+﻿using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Figgle;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Context;
 using Serilog.Events;
 using Serilog.Sinks.Discord;
-using TwitchLib.EventSub.Websockets.Extensions;
+using xyz.yewnyx.SubLink.Platforms;
+using xyz.yewnyx.SubLink.Services;
 
 namespace xyz.yewnyx.SubLink;
 
 internal partial class Program {
+    private static string ExeDir = string.Empty;
+    private static string PlatformDllDir { get => Path.Combine(ExeDir, "Platforms"); }
+
     public static async Task Main(string[] args) {
         if (!File.Exists("settings.json")) {
             var discriminator = new Random().Next(1, 9999);
-            
             var settingsTemplate = """
 {
-  "Twitch": {
-    "ClientId": "",
-    "ClientSecret": "",
-    "AccessToken": "",
-    "RefreshToken": "",
-    "Scopes": [
-      "bits:read",
-      "channel:manage:polls",
-      "channel:manage:redemptions",
-      "channel:read:hype_train",
-      "channel:read:polls",
-      "channel:read:redemptions",
-      "channel:read:subscriptions",
-      "channel:read:vips",
-      "chat:edit",
-      "chat:read"
-    ]
-  },
-  "Kick": {
-    "PusherKey": "",
-    "PusherCluster": "",
-    "ChatroomId": ""
-  },
-  "StreamPad": {
-    "WebSocketUrl": "",
-    "ChannelId": ""
-  },
-  "StreamElements": {
-    "JWTToken": ""
-  },
-  "Fansly": {
-    "Token": "",
-    "Username": ""
-  },
   "Discord": {
     "Webhook": ""
   },
   "SubLink": {
-    "Discriminator": {discriminator}
+    "Discriminator": {discriminator},
+    "OscIPAddress": "127.0.0.1",
+    "OscPort": 9000,
+    "ScriptName": "SubLink.cs"
   }
 }
 """;
             settingsTemplate = settingsTemplate.Replace("{discriminator}", $"{discriminator}");
             File.WriteAllText("settings.json", settingsTemplate);
         }
-        
+
+        AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromPlatformDirectory);
+
         var program = new Program();
         await program.Run(args);
     }
-    
-    IHostBuilder CreateHostBuilder(string[] args) {
+
+    private static Assembly? LoadFromPlatformDirectory(object? sender, ResolveEventArgs args) {
+        string folderPath = PlatformDllDir;
+        string assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
+
+        if (!File.Exists(assemblyPath))
+            return null;
+
+        Assembly assembly = Assembly.LoadFrom(assemblyPath);
+        return assembly;
+    }
+
+    static IHostBuilder CreateHostBuilder(string[] args) {
         return Host.CreateDefaultBuilder(args)
             .UseConsoleLifetime()
             .ConfigureAppConfiguration((context, builder) => {
                 builder.AddJsonFile("settings.json", false, true);
+
+                // Run IPlatform.ConfigureAppConfiguration(context, services); for every platform
+                foreach (var platform in HostGlobals.Platforms.Values) {
+                    platform.Entry.ConfigureAppConfiguration(context, builder);
+                }
             })
             .ConfigureServices((context, services) => {
                 services
                     .Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true)
-                    .Configure<TwitchSettings>(context.Configuration.GetSection("Twitch"))
                     .Configure<DiscordSettings>(context.Configuration.GetSection("Discord"))
                     .Configure<SubLinkSettings>(context.Configuration.GetSection("SubLink"))
-                    .AddTwitchLibEventSubWebsockets()
-                    .AddSingleton<TwitchGlobals>()
-                    .AddHostedService<SubLinkService<TwitchGlobals, CompilerService, TwitchService>>()
-                    .AddScoped<OSCSupportService<TwitchGlobals>>()
-                    .AddScoped<ITwitchRules, TwitchRules>()
-                    .AddScoped<TwitchService>()
+                    .AddSingleton<ScriptGlobals>()
+                    .AddHostedService<SubLinkService>()
+                    .AddScoped<OSCSupportService>()
                     .AddScoped<CompilerService>();
+
+                // Run IPlatform.ConfigureServices(context, services); for every platform
+                foreach (var platform in HostGlobals.Platforms.Values) {
+                    platform.Entry.ConfigureServices(context, services);
+                }
             })
             .UseSerilog((context, configuration) => {
                 var webhook = context.Configuration.GetSection("Discord").Get<DiscordSettings>();
@@ -106,15 +94,14 @@ internal partial class Program {
                     .WriteTo.Console(outputTemplate: outputTemplate,
                         restrictedToMinimumLevel: LogEventLevel.Information);
 
-                if (!string.IsNullOrWhiteSpace(webhook.WebhookToken) && webhook.WebhookId != 0) {
-                    configuration.WriteTo.Async(a =>
-                        a.Discord(webhook.WebhookId, webhook.WebhookToken, restrictedToMinimumLevel: LogEventLevel.Information));
-                }
+                if (!string.IsNullOrWhiteSpace(webhook.WebhookToken) && webhook.WebhookId != 0)
+                    configuration.WriteTo.Async(a => a.Discord(webhook.WebhookId, webhook.WebhookToken,
+                        restrictedToMinimumLevel: LogEventLevel.Information));
 
                 configuration
                     .Enrich.FromLogContext()
                     .Enrich.FromGlobalLogContext();
-                
+
                 var subLinkSettings = context.Configuration.GetSection("SubLink").Get<SubLinkSettings>();
                 using (GlobalLogContext.Lock()) {
                     GlobalLogContext.PushProperty("Discriminator", subLinkSettings?.Discriminator);
@@ -123,10 +110,8 @@ internal partial class Program {
     }
 
     public async Task Run(string[] args) {
-        var programName = FiggleFonts.Slant.Render("SubLink");
-        programName = ProgramNameRegex().Replace(programName, string.Empty);
-        Console.Write(programName);
-        Console.WriteLine(@"by
+        Console.WriteLine(@"
+----------------------------Credits-----------------------------
 __  __
 \ \/ /__ _      ______  __  ___  __
  \  / _ \ | /| / / __ \/ / / / |/_/
@@ -137,20 +122,57 @@ and                  /____/
   / ____/___ _/ /_   / ____(_)____/ /  / ____/___/ /___/ (_)__
  / /   / __ `/ __/  / / __/ / ___/ /  / __/ / __  / __  / / _ \
 / /___/ /_/ / /_   / /_/ / / /  / /  / /___/ /_/ / /_/ / /  __/
-\____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/");
-        
-        using (var host = CreateHostBuilder(args).Build()) {
-            var ts = host.Services.GetService<IOptions<TwitchSettings>>();
-            if (string.IsNullOrWhiteSpace(ts!.Value.ClientId) || string.IsNullOrWhiteSpace(ts.Value.ClientSecret)) {
-                Console.WriteLine("Your Twitch Client ID and secret are set up incorrectly.");
-                return;
+\____/\__,_/\__/   \____/_/_/  /_/  /_____/\__,_/\__,_/_/\___/
+and __                           ____              _
+   / /   ____ ___  ___________ _/ __ \____  ____  (_)__  _____
+  / /   / __ `/ / / / ___/ __ `/ /_/ / __ \/_  / / / _ \/ ___/
+ / /___/ /_/ / /_/ / /  / /_/ / _, _/ /_/ / / /_/ /  __/ /
+/_____/\__,_/\__,_/_/   \__,_/_/ |_|\____/ /___/_/\___/_/
+----------------------------Starting----------------------------");
+        var programName = FiggleFonts.Slant.Render("SubLink");
+        programName = ProgramNameRegex().Replace(programName, string.Empty);
+        Console.Write(programName);
+        Console.WriteLine("----------------------------------------------------------------");
+
+        ExeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? AppDomain.CurrentDomain.BaseDirectory;
+        var platformIfaceType = typeof(IPlatform);
+        bool configsOk = true;
+
+        foreach (var platformLib in Directory.GetFiles(PlatformDllDir, "*.dll")) {
+            var libName = AssemblyName.GetAssemblyName(platformLib);
+            var libAsm = Assembly.Load(libName);
+
+            var platformEntryType = libAsm.GetTypes().FirstOrDefault(t => platformIfaceType.IsAssignableFrom(t));
+
+            if (platformEntryType == null || platformEntryType == default)
+                continue;
+
+            var platformEntry = (IPlatform?)Activator.CreateInstance(platformEntryType);
+
+            if (platformEntry == null)
+                continue;
+
+            HostGlobals.Platforms.Add(platformEntry.GetPlatformName(), new() {
+                Assembly = libAsm,
+                Entry = platformEntry
+            });
+
+            if (!platformEntry.EnsureConfigExists()) {
+                configsOk = false;
+                Console.WriteLine($"Settings file for '{platformEntry.GetPlatformName()}' not found, created a template one.");
             }
-            
-            await host.StartAsync();
-            await host.WaitForShutdownAsync();
         }
+
+        if (!configsOk) {
+            Console.WriteLine("Please update the configs with the required info and start SubLink again.");
+            return;
+        }
+
+        using var host = CreateHostBuilder(args).Build();
+        await host.StartAsync();
+        await host.WaitForShutdownAsync();
     }
 
     [GeneratedRegex(@"^\s+$[\r\n]*", RegexOptions.Multiline)]
-    private static partial Regex ProgramNameRegex();
+    private partial Regex ProgramNameRegex();
 }
