@@ -1,12 +1,13 @@
 ﻿using Serilog;
 using SocketIOClient;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace xyz.yewnyx.SubLink.StreamElements.SEClient;
 
 internal sealed class StreamElementsClient {
-    private const string _socketUri = "https://realtime.streamelements.com";
+    private const string _socketUri = "wss://realtime.streamelements.com";
 
     private readonly ILogger _logger;
     private readonly SocketIOClient.SocketIO _socket;
@@ -18,14 +19,17 @@ internal sealed class StreamElementsClient {
         _logger = logger;
 
         _socket = new(_socketUri, new() {
-            AutoUpgrade = true,
-            ConnectionTimeout = TimeSpan.FromSeconds(30),
-            EIO = SocketIO.Core.EngineIO.V3,
-            Reconnection = true,
-            ReconnectionAttempts = 3,
-            ReconnectionDelay = 500,
             RandomizationFactor = 0.5,
-            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
+            ReconnectionDelay = 500.0,
+            ReconnectionDelayMax = 1000,
+            ReconnectionAttempts = 5,
+            Path = "/socket.io/",
+            ConnectionTimeout = TimeSpan.FromSeconds(30),
+            Reconnection = true,
+            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
+            EIO = SocketIO.Core.EngineIO.V3,
+            AutoUpgrade = true,
+            Query = new KeyValuePair<string, string>[] { new("cluster", "main") },
         });
 
         _socket.OnConnected += OnConnected;
