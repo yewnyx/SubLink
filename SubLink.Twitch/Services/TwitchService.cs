@@ -82,9 +82,13 @@ internal sealed partial class TwitchService {
     private void UpdateTwitchSettings(TwitchSettings twitchSettings) => _settings = twitchSettings;
 
     public async Task StartAsync() {
-        var accessToken = _settings.AccessToken;
+        if (string.IsNullOrWhiteSpace(_settings.ClientId) ||
+            string.IsNullOrWhiteSpace(_settings.ClientSecret)) {
+            _logger.Warning("[{TAG}] Invalid config, skipping", Platform.PlatformName);
+            return;
+        }
 
-        _api.Settings.AccessToken = accessToken;
+        _api.Settings.AccessToken = _settings.AccessToken;
         _api.Settings.ClientId = _settings.ClientId;
         _api.Settings.Scopes = new List<AuthScopes> {
             AuthScopes.Helix_Bits_Read,
@@ -101,7 +105,7 @@ internal sealed partial class TwitchService {
         await ValidateOrUpdateAccessTokenAsync();
         // TODO: eventually, embedding a webview is preferable - that or using a server after all
 
-        var credentials = new ConnectionCredentials(ChannelName, accessToken);
+        var credentials = new ConnectionCredentials(ChannelName, _settings.AccessToken);
         _client.Initialize(credentials, ChannelName);
         _client.Connect();
 
@@ -116,46 +120,44 @@ internal sealed partial class TwitchService {
         await _eventSub.DisconnectAsync();
     }
 
-    private void OnWebsocketConnected(object? sender, WebsocketConnectedArgs e) {
-        Task.Run(async () => {
-            if (!e.IsRequestedReconnect) {
-                await Task.Delay(500);
-                await Task.WhenAll(
-                    SubscribeAsync("channel.channel_points_custom_reward_redemption.add"),
-                    SubscribeAsync("channel.channel_points_custom_reward_redemption.update"),
-                    SubscribeAsync("channel.update"),
-                    SubscribeAsync("channel.cheer"),
-                    SubscribeAsync("channel.follow"),
-                    SubscribeAsync("channel.hype_train.begin"),
-                    SubscribeAsync("channel.hype_train.end"),
-                    SubscribeAsync("channel.hype_train.progress"),
-                    SubscribeAsync("channel.poll.begin"),
-                    SubscribeAsync("channel.poll.end"),
-                    SubscribeAsync("channel.poll.progress"),
-                    SubscribeAsync("channel.prediction.begin"),
-                    SubscribeAsync("channel.prediction.end"),
-                    SubscribeAsync("channel.prediction.lock"),
-                    SubscribeAsync("channel.prediction.progress"),
-                    SubscribeAsync("channel.raid"),
-                    SubscribeAsync("channel.subscribe"),
-                    SubscribeAsync("channel.subscription.end"),
-                    SubscribeAsync("channel.subscription.gift"),
-                    SubscribeAsync("channel.subscription.message"),
-                    SubscribeAsync("stream.offline"),
-                    SubscribeAsync("stream.online")
-                );
-            }
-        });
+    private async Task OnWebsocketConnected(object? sender, WebsocketConnectedArgs e) {
+        if (!e.IsRequestedReconnect) {
+            await Task.Delay(500);
+            await Task.WhenAll(
+                SubscribeAsync("channel.channel_points_custom_reward_redemption.add"),
+                SubscribeAsync("channel.channel_points_custom_reward_redemption.update"),
+                SubscribeAsync("channel.update"),
+                SubscribeAsync("channel.cheer"),
+                SubscribeAsync("channel.follow"),
+                SubscribeAsync("channel.hype_train.begin"),
+                SubscribeAsync("channel.hype_train.end"),
+                SubscribeAsync("channel.hype_train.progress"),
+                SubscribeAsync("channel.poll.begin"),
+                SubscribeAsync("channel.poll.end"),
+                SubscribeAsync("channel.poll.progress"),
+                SubscribeAsync("channel.prediction.begin"),
+                SubscribeAsync("channel.prediction.end"),
+                SubscribeAsync("channel.prediction.lock"),
+                SubscribeAsync("channel.prediction.progress"),
+                SubscribeAsync("channel.raid"),
+                SubscribeAsync("channel.subscribe"),
+                SubscribeAsync("channel.subscription.end"),
+                SubscribeAsync("channel.subscription.gift"),
+                SubscribeAsync("channel.subscription.message"),
+                SubscribeAsync("stream.offline"),
+                SubscribeAsync("stream.online")
+            );
+        }
     }
 
-    private void OnWebsocketDisconnected(object? sender, EventArgs e) { Task.Run(() => {
+    private async Task OnWebsocketDisconnected(object? sender, EventArgs e) {
         _logger.Information("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
-        return Task.CompletedTask;
-    }); }
-    private void OnWebsocketReconnected(object? sender, EventArgs e) { Task.Run(() => {
+        await Task.CompletedTask;
+    }
+    private async Task OnWebsocketReconnected(object? sender, EventArgs e) {
         _logger.Information("[{TAG}] sender: {Sender} event: {@E}", Platform.PlatformName, sender, e);
-        return Task.CompletedTask;
-    }); }
+        await Task.CompletedTask;
+    }
 
     private async Task<CreateEventSubSubscriptionResponse> SubscribeAsync(string subscriptionType) {
         return await _api.Helix.EventSub.CreateEventSubSubscriptionAsync(

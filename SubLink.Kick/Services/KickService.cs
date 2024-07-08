@@ -50,11 +50,18 @@ internal sealed partial class KickService {
     private void UpdateKickSettings(KickSettings kickSettings) => _settings = kickSettings;
 
     public async Task StartAsync() {
+        if (string.IsNullOrWhiteSpace(_settings.PusherKey) ||
+            string.IsNullOrWhiteSpace(_settings.PusherCluster) ||
+            string.IsNullOrWhiteSpace(_settings.ChatroomId)) {
+            _logger.Warning("[{TAG}] Invalid config, skipping", Platform.PlatformName);
+            return;
+        }
+
         if (await _kick.ConnectAsync(_settings.PusherKey, _settings.PusherCluster, _settings.ChatroomId)) {
-            _logger.Information("[{TAG}] Connected to Pusher, chatroom ID {ChatroomId}", "Kick", _settings.ChatroomId);
+            _logger.Information("[{TAG}] Connected to Pusher, chatroom ID {ChatroomId}", Platform.PlatformName, _settings.ChatroomId);
             _kickLoggedInScope = _serviceScopeFactory.CreateScope();
         } else {
-            _logger.Warning("[{TAG}] Failed to connect to Pusher", "Kick");
+            _logger.Warning("[{TAG}] Failed to connect to Pusher", Platform.PlatformName);
             _applicationLifetime.StopApplication();
         }
     }

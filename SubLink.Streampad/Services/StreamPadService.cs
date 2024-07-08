@@ -21,7 +21,7 @@ internal sealed class StreamPadService {
     private readonly StreamPadRules _rules;
 
     private IDisposable? _subscription;
-    private readonly GraphQLHttpClient? _graphQLClient;
+    private GraphQLHttpClient? _graphQLClient;
 
     public StreamPadService(
         ILogger logger,
@@ -33,16 +33,6 @@ internal sealed class StreamPadService {
         _settings = _settingsMonitor.CurrentValue;
 
         _rules = rules;
-
-        if (!string.IsNullOrWhiteSpace(_settings.WebSocketUrl) && !string.IsNullOrWhiteSpace(_settings.ChannelId)) {
-            _logger.Information("[{TAG}] setting up graphql client.", Platform.PlatformName);
-            _graphQLClient = new GraphQLHttpClient(o => {
-                o.WebSocketEndPoint = new Uri(_settings.WebSocketUrl);
-                o.WebSocketProtocol = "graphql-ws";
-            }, new NewtonsoftJsonSerializer());
-        } else {
-            _logger.Information("[{TAG}] settings misconfigured.", Platform.PlatformName);
-        }
     }
 
     private void UpdateStreampadSettings(StreamPadSettings settings) => _settings = settings;
@@ -59,13 +49,19 @@ internal sealed class StreamPadService {
 #pragma warning restore IDE1006 // Naming Styles
 
     public async Task StartAsync() {
-        if (null == _graphQLClient) {
-            _logger.Information("[{TAG}] graphql client not set up.", Platform.PlatformName);
+        if (string.IsNullOrWhiteSpace(_settings.WebSocketUrl) ||
+            string.IsNullOrWhiteSpace(_settings.ChannelId)) {
+            _logger.Warning("[{TAG}] Invalid config, skipping", Platform.PlatformName);
             return;
         }
 
-        _logger.Information("[{TAG}] setting up subscription.", Platform.PlatformName);
+        _logger.Information("[{TAG}] setting up graphql client.", Platform.PlatformName);
+        _graphQLClient = new GraphQLHttpClient(o => {
+            o.WebSocketEndPoint = new Uri(_settings.WebSocketUrl);
+            o.WebSocketProtocol = "graphql-ws";
+        }, new NewtonsoftJsonSerializer());
 
+        _logger.Information("[{TAG}] setting up subscription.", Platform.PlatformName);
         _graphQLClient.WebsocketConnectionState.Subscribe(s => {
             _logger.Information("[{TAG}] WebSocketConnectionState:{s}", Platform.PlatformName, s);
         });

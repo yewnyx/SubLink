@@ -45,39 +45,39 @@ internal sealed class StreamElementsClient {
     }
 
     private async void OnConnected(object? sender, EventArgs e) {
-        _logger.Information("[{TAG}] Connected to StreamElements", "StreamElements");
+        _logger.Information("[{TAG}] Connected", Platform.PlatformName);
         await _socket.EmitAsync("authenticate", new SocketAuth("jwt", _token));
     }
 
     private void OnDisconnected(object? sender, string e) =>
-        _logger.Information("[{TAG}] Disconnected from StreamElements", "StreamElements");
+        _logger.Information("[{TAG}] Disconnected", Platform.PlatformName);
 
     private void OnError(object? sender, string e) =>
-        _logger.Error("[{TAG}] StreamElements error: {ERROR}", "StreamElements", e);
+        _logger.Error("[{TAG}] Error: {ERROR}", Platform.PlatformName, e);
 
     private void OnReconnectAttempt(object? sender, int e) =>
-        _logger.Debug("[{TAG}] Socket reconnect attempt #{e}", "StreamElements", e);
+        _logger.Debug("[{TAG}] Socket reconnect attempt #{e}", Platform.PlatformName, e);
 
     private void OnReconnected(object? sender, int e) =>
-        _logger.Information("[{TAG}] Socket reconnected after {e} attempts", "StreamElements", e);
+        _logger.Information("[{TAG}] Socket reconnected after {e} attempts", Platform.PlatformName, e);
 
     private void OnReconnectError(object? sender, Exception e) =>
-        _logger.Error("[{TAG}] Socket reconnect error:", "StreamElements", e);
+        _logger.Error("[{TAG}] Socket reconnect error:", Platform.PlatformName, e);
 
     private void OnReconnectFailed(object? sender, EventArgs e) =>
-        _logger.Error("[{TAG}] Socket reconnect failed", "StreamElements");
+        _logger.Error("[{TAG}] Socket reconnect failed", Platform.PlatformName);
 
     private void OnAuthenticated(SocketIOResponse response) =>
-        _logger.Information("[{TAG}] Authenticated with StreamElements", "StreamElements");
+        _logger.Information("[{TAG}] Authenticated", Platform.PlatformName);
 
     private void OnUnauthorized(SocketIOResponse response) =>
-        _logger.Information("[{TAG}] Not authorized to use the StreamElements Realtime API", "StreamElements");
+        _logger.Information("[{TAG}] Not authorized to use the Realtime API", Platform.PlatformName);
 
     private void OnEvent(SocketIOResponse response) {
         SocketEvent sockEvent = response.GetValue<SocketEvent>();
 
         if (sockEvent == null) {
-            _logger.Error("[{TAG}] Invalid event data recieved", "StreamElements");
+            _logger.Error("[{TAG}] Invalid event data recieved", Platform.PlatformName);
             return;
         }
 
@@ -94,7 +94,7 @@ internal sealed class StreamElementsClient {
                 break;
             }
             default: {
-                _logger.Debug("[{TAG}] Ignoring unsupported event of type: {TYPE}", "StreamElements", sockEvent.Type);
+                _logger.Debug("[{TAG}] Ignoring unsupported event of type: {TYPE}", Platform.PlatformName, sockEvent.Type);
                 break;
             }
         }
