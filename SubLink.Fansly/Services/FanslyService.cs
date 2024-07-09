@@ -50,11 +50,17 @@ internal sealed partial class FanslyService {
     private void UpdateFanslySettings(FanslySettings settings) => _settings = settings;
 
     public async Task StartAsync() {
+        if (string.IsNullOrWhiteSpace(_settings.Username) ||
+            string.IsNullOrWhiteSpace(_settings.Token)) {
+            _logger.Warning("[{TAG}] Invalid config, skipping", Platform.PlatformName);
+            return;
+        }
+
         if (await _fansly.ConnectAsync(_settings.Token, _settings.Username)) {
-            _logger.Information("[{TAG}] Connected to socket", "Fansly");
+            _logger.Information("[{TAG}] Connected to socket", Platform.PlatformName);
             _fanslyLoggedInScope = _serviceScopeFactory.CreateScope();
         } else {
-            _logger.Warning("[{TAG}] Failed to connect to socket", "Fansly");
+            _logger.Warning("[{TAG}] Failed to connect to socket", Platform.PlatformName);
             _applicationLifetime.StopApplication();
         }
     }

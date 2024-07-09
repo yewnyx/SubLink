@@ -44,7 +44,7 @@ public sealed class DictionaryStringObjectJsonConverter : JsonConverter<Dictiona
         writer.WriteEndObject();
     }
 
-    private static void HandleValue(Utf8JsonWriter writer, string? key, object objectValue) {
+    private static void HandleValue(Utf8JsonWriter writer, string? key, object? objectValue) {
         if (key != null)
             writer.WritePropertyName(key);
 

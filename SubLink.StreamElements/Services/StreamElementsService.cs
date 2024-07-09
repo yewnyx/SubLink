@@ -50,10 +50,15 @@ internal sealed partial class StreamElementsService {
     private void UpdateStreamElementsSettings(StreamElementsSettings settings) => _settings = settings;
 
     public async Task StartAsync() {
+        if (string.IsNullOrWhiteSpace(_settings.JWTToken)) {
+            _logger.Warning("[{TAG}] Invalid config, skipping", Platform.PlatformName);
+            return;
+        }
+
         if (await _streamElements.ConnectAsync(_settings.JWTToken)) {
             _streamElementsLoggedInScope = _serviceScopeFactory.CreateScope();
         } else {
-            _logger.Warning("[{TAG}] Failed to connect to StreamElements", Platform.PlatformName);
+            _logger.Warning("[{TAG}] Failed to connect to socket", Platform.PlatformName);
             _applicationLifetime.StopApplication();
         }
     }
