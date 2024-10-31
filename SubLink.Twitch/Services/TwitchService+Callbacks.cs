@@ -8,6 +8,9 @@ namespace xyz.yewnyx.SubLink.Twitch.Services;
 
 internal sealed partial class TwitchService {
     private void WireCallbacks() {
+        _eventSub.WebsocketConnected += OnWebsocketConnected;
+        _eventSub.WebsocketDisconnected += OnWebsocketDisconnected;
+        _eventSub.WebsocketReconnected += OnWebsocketReconnected;
         _eventSub.ChannelCheer += OnChannelCheer;
         _eventSub.ChannelFollow += OnChannelFollow;
         _eventSub.ChannelHypeTrainBegin += OnChannelHypeTrainBegin;
@@ -31,9 +34,6 @@ internal sealed partial class TwitchService {
         _eventSub.ErrorOccurred += OnErrorOccurred;
         _eventSub.StreamOffline += OnStreamOffline;
         _eventSub.StreamOnline += OnStreamOnline;
-        _eventSub.WebsocketDisconnected += OnWebsocketDisconnected;
-        _eventSub.WebsocketReconnected += OnWebsocketReconnected;
-        _eventSub.WebsocketConnected += OnWebsocketConnected;
     }
 
     private void OnJoinedChannel(object? sender, OnJoinedChannelArgs e) {
