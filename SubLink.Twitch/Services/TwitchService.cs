@@ -122,31 +122,28 @@ internal sealed partial class TwitchService {
 
     private async Task OnWebsocketConnected(object? sender, WebsocketConnectedArgs e) {
         if (!e.IsRequestedReconnect) {
-            await Task.Delay(500);
-            await Task.WhenAll(
-                SubscribeAsync("channel.channel_points_custom_reward_redemption.add"),
-                SubscribeAsync("channel.channel_points_custom_reward_redemption.update"),
-                SubscribeAsync("channel.update"),
-                SubscribeAsync("channel.cheer"),
-                SubscribeAsync("channel.follow"),
-                SubscribeAsync("channel.hype_train.begin"),
-                SubscribeAsync("channel.hype_train.end"),
-                SubscribeAsync("channel.hype_train.progress"),
-                SubscribeAsync("channel.poll.begin"),
-                SubscribeAsync("channel.poll.end"),
-                SubscribeAsync("channel.poll.progress"),
-                SubscribeAsync("channel.prediction.begin"),
-                SubscribeAsync("channel.prediction.end"),
-                SubscribeAsync("channel.prediction.lock"),
-                SubscribeAsync("channel.prediction.progress"),
-                SubscribeAsync("channel.raid"),
-                SubscribeAsync("channel.subscribe"),
-                SubscribeAsync("channel.subscription.end"),
-                SubscribeAsync("channel.subscription.gift"),
-                SubscribeAsync("channel.subscription.message"),
-                SubscribeAsync("stream.offline"),
-                SubscribeAsync("stream.online")
-            );
+            await SubscribeAsync("channel.channel_points_custom_reward_redemption.add");
+            await SubscribeAsync("channel.channel_points_custom_reward_redemption.update");
+            await SubscribeAsync("channel.update");
+            await SubscribeAsync("channel.cheer");
+            await SubscribeAsync("channel.follow");
+            await SubscribeAsync("channel.hype_train.begin");
+            await SubscribeAsync("channel.hype_train.end");
+            await SubscribeAsync("channel.hype_train.progress");
+            await SubscribeAsync("channel.poll.begin");
+            await SubscribeAsync("channel.poll.end");
+            await SubscribeAsync("channel.poll.progress");
+            await SubscribeAsync("channel.prediction.begin");
+            await SubscribeAsync("channel.prediction.end");
+            await SubscribeAsync("channel.prediction.lock");
+            await SubscribeAsync("channel.prediction.progress");
+            await SubscribeAsync("channel.raid");
+            await SubscribeAsync("channel.subscribe");
+            await SubscribeAsync("channel.subscription.end");
+            await SubscribeAsync("channel.subscription.gift");
+            await SubscribeAsync("channel.subscription.message");
+            await SubscribeAsync("stream.offline");
+            await SubscribeAsync("stream.online");
         }
     }
 
