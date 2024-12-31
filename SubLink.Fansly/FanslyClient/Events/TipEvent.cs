@@ -28,6 +28,9 @@ public sealed class TipEvent {
     [JsonPropertyName("centAmount")]
     public int CentAmount { get; set; } = 0;
 
+    [JsonPropertyName("rawAmount")]
+    public uint RawAmount { get; set; } = 0;
+
     [JsonPropertyName("createdAt")]
     public long CreatedAt { get; set; } = 0;
 
@@ -40,12 +43,13 @@ public sealed class TipEvent {
         Username = username;
         Displayname = displayname;
         Content = content;
-        Amount = (float)Math.Round(rawAmount / 1000d, 2, MidpointRounding.ToZero);
-        CentAmount = (int)Math.Round(rawAmount / 10d, 0, MidpointRounding.ToZero);
+        Amount = (float)Math.Round(rawAmount / 1000d, 2, MidpointRounding.AwayFromZero);
+        CentAmount = (int)Math.Round(rawAmount / 10d, 0, MidpointRounding.AwayFromZero);
+        RawAmount = rawAmount;
         CreatedAt = createdAt;
     }
 
-    public TipEvent(string id, string chatRoomId, string senderId, string username, string displayname, string content, float amount, int centAmount, long createdAt) {
+    public TipEvent(string id, string chatRoomId, string senderId, string username, string displayname, string content, float amount, int centAmount, uint rawAmount, long createdAt) {
         Id = id;
         ChatRoomId = chatRoomId;
         SenderId = senderId;
@@ -54,6 +58,7 @@ public sealed class TipEvent {
         Content = content;
         Amount = amount;
         CentAmount = centAmount;
+        RawAmount = rawAmount;
         CreatedAt = createdAt;
     }
 }
