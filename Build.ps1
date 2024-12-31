@@ -3,13 +3,13 @@ $version = "3.0.4";
 $currentDir = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName;
 
 . dotnet.exe restore $currentDir
-. dotnet.exe publish -c Release -r win10-x64 $currentDir/SubLink.References/SubLink.References.csproj /p:Version=$version /p:SkipInvalidConfigurations=true;
-. dotnet.exe publish -c Release -r win10-x64 $currentDir/SubLink/SubLink.csproj /p:Version=$version /p:SkipInvalidConfigurations=true /p:PublishSingleFile=true /p:PublishReadyToRun=true /p:IncludeNativeLibrariesForSelfExtract=true /p:EnableCompressionInSingleFile=true --self-contained true
-. dotnet.exe publish -c Release -r win10-x64 $currentDir/SubLink.Twitch/SubLink.Twitch.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
-. dotnet.exe publish -c Release -r win10-x64 $currentDir/SubLink.Kick/SubLink.Kick.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
-. dotnet.exe publish -c Release -r win10-x64 $currentDir/SubLink.Streampad/SubLink.Streampad.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
-. dotnet.exe publish -c Release -r win10-x64 $currentDir/SubLink.StreamElements/SubLink.StreamElements.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
-. dotnet.exe publish -c Release -r win10-x64 $currentDir/SubLink.Fansly/SubLink.Fansly.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
+. dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.References/SubLink.References.csproj /p:Version=$version /p:SkipInvalidConfigurations=true;
+. dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink/SubLink.csproj /p:Version=$version /p:SkipInvalidConfigurations=true /p:PublishSingleFile=true /p:PublishReadyToRun=true /p:IncludeNativeLibrariesForSelfExtract=true /p:EnableCompressionInSingleFile=true --self-contained true
+. dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.Twitch/SubLink.Twitch.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
+. dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.Kick/SubLink.Kick.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
+. dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.Streampad/SubLink.Streampad.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
+. dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.StreamElements/SubLink.StreamElements.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
+. dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.Fansly/SubLink.Fansly.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
 
 New-Item build-$version -ItemType directory;
 Copy-Item -Path "SubLink\bin\Release\net7.0\win10-x64\publish\SubLink.exe" -Destination build-$version;
