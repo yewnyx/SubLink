@@ -138,8 +138,8 @@ internal sealed class FanslyWSClient {
                             goal.Data.Label,
                             goal.Data.Description,
                             goal.Data.Status,
-                            (int)Math.Round(goal.Data.CurrentAmount / 10d, 0, MidpointRounding.ToZero),
-                            (int)Math.Round(goal.Data.GoalAmount / 10d, 0, MidpointRounding.ToZero),
+                            (int)Math.Round(goal.Data.CurrentAmount / 10d, 0, MidpointRounding.AwayFromZero),
+                            (int)Math.Round(goal.Data.GoalAmount / 10d, 0, MidpointRounding.AwayFromZero),
                             goal.Data.Version
                         ) });
                         break;

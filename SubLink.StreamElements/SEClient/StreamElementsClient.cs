@@ -87,7 +87,7 @@ internal sealed class StreamElementsClient {
                 TipEvent?.Invoke(this, new() {
                     Name = (string?)sockEvent.Data["username"] ?? string.Empty,
                     Amount = amount,
-                    CentAmount = (int)MathF.Round(amount * 100, 0, MidpointRounding.ToZero),
+                    CentAmount = (int)MathF.Round(amount * 100, 0, MidpointRounding.AwayFromZero),
                     Message = (string?)sockEvent.Data["message"] ?? string.Empty,
                     UserCurrency = (string?)sockEvent.Data["currency"] ?? string.Empty
                 });
