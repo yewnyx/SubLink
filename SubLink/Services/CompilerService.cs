@@ -71,7 +71,7 @@ internal partial class CompilerService {
         List<string> assemblies = [];
         assemblies.AddRange(_baseAssemblies);
 
-        var assemblyReferences = Net70.References.All.ToList();
+        var assemblyReferences = Net80.References.All.ToList();
 
         foreach (var platform in HostGlobals.Platforms.Values) {
             platform.Entry.SetLogger(_logger);
