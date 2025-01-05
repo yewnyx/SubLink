@@ -90,7 +90,7 @@ internal sealed partial class TwitchService {
 
         _api.Settings.AccessToken = _settings.AccessToken;
         _api.Settings.ClientId = _settings.ClientId;
-        _api.Settings.Scopes = new List<AuthScopes> {
+        _api.Settings.Scopes = [
             AuthScopes.Helix_Bits_Read,
             AuthScopes.Chat_Read,
             AuthScopes.Chat_Edit,
@@ -100,7 +100,7 @@ internal sealed partial class TwitchService {
             AuthScopes.Helix_Channel_Manage_Polls,
             AuthScopes.Helix_Channel_Read_Polls,
             AuthScopes.Helix_Channel_Read_VIPs,
-        };
+        ];
         
         await ValidateOrUpdateAccessTokenAsync();
         // TODO: eventually, embedding a webview is preferable - that or using a server after all
@@ -179,7 +179,7 @@ internal sealed partial class TwitchService {
             var state = System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, 1000000).ToString("D6");
             var url = _api.Auth.GetAuthorizationCodeUrl(
                 redirectUri,
-                new [] {
+                [
                     AuthScopes.Chat_Read,
                     AuthScopes.Chat_Edit,
                     AuthScopes.Helix_Bits_Read,
@@ -190,7 +190,7 @@ internal sealed partial class TwitchService {
                     AuthScopes.Helix_Channel_Manage_Polls,
                     AuthScopes.Helix_Channel_Read_Polls,
                     AuthScopes.Helix_Channel_Read_VIPs,
-                },
+                ],
                 state: state,
                 clientId: _settings.ClientId);
             

@@ -27,7 +27,7 @@ public class Platform : IPlatform {
     // Useful for enumerating the loaded platforms
     public string GetPlatformName() => PlatformName;
     public string GetServiceSymbol() => "SUBLINK_TWITCH";
-    public string[] GetAdditionalUsings() => new[]{
+    public string[] GetAdditionalUsings() => [
         "TwitchLib.EventSub.Core.Models.ChannelGoals",
         "TwitchLib.EventSub.Core.Models.ChannelPoints",
         "TwitchLib.EventSub.Core.Models.Charity",
@@ -42,8 +42,8 @@ public class Platform : IPlatform {
         "TwitchLib.EventSub.Core.SubscriptionTypes.Stream",
         "TwitchLib.EventSub.Core.SubscriptionTypes.User",
         "xyz.yewnyx.SubLink.Twitch.Services",
-    };
-    public string[] GetAdditionalAssemblies() => Array.Empty<string>();
+    ];
+    public string[] GetAdditionalAssemblies() => [];
 
     public bool EnsureConfigExists() {
         if (!File.Exists(PlatformConfigFile)) {
