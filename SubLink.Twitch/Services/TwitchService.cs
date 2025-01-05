@@ -97,6 +97,7 @@ internal sealed partial class TwitchService {
             AuthScopes.Chat_Edit,
             AuthScopes.Helix_Channel_Manage_Redemptions,
             AuthScopes.Helix_Channel_Read_Redemptions,
+            AuthScopes.Helix_Channel_Read_Predictions,
             AuthScopes.Helix_Channel_Read_Hype_Train,
             AuthScopes.Helix_Channel_Manage_Polls,
             AuthScopes.Helix_Channel_Read_Polls,
@@ -123,12 +124,13 @@ internal sealed partial class TwitchService {
 
     private async Task OnWebsocketConnected(object? sender, WebsocketConnectedArgs e) {
         if (!e.IsRequestedReconnect) {
+            await Task.Delay(100);
             await Task.WhenAll(
                 SubscribeAsync("channel.channel_points_custom_reward_redemption.add"),
                 SubscribeAsync("channel.channel_points_custom_reward_redemption.update"),
                 SubscribeAsync("channel.update"),
                 SubscribeAsync("channel.cheer"),
-                SubscribeAsync("channel.follow"),
+                //SubscribeAsync("channel.follow"),
                 SubscribeAsync("channel.hype_train.begin"),
                 SubscribeAsync("channel.hype_train.end"),
                 SubscribeAsync("channel.hype_train.progress"),
@@ -160,20 +162,56 @@ internal sealed partial class TwitchService {
     }
 
     private async Task<CreateEventSubSubscriptionResponse> SubscribeAsync(string subscriptionType) {
-        var result = await _api.Helix.EventSub.CreateEventSubSubscriptionAsync(
-            subscriptionType,
-            "1",
-            new Dictionary<string, string>{{ "broadcaster_user_id", ChannelId! }},
-            EventSubTransportMethod.Websocket, 
-            _eventSub.SessionId,
-            clientId: _settings.ClientId,
-            accessToken: _settings.AccessToken);
-        _logger.Debug("[{TAG}] {TYPE} subscription result = {RESULT}",
-            Platform.PlatformName,
-            subscriptionType,
-            JsonSerializer.Serialize(result, CJsonSerializerOptions)
-        );
+        CreateEventSubSubscriptionResponse result;
+
+        try
+        {
+
+            result = await _api.Helix.EventSub.CreateEventSubSubscriptionAsync(
+                subscriptionType,
+                SubscriptionTypeToVersion(subscriptionType),
+                SubscriptionTypeToCondition(subscriptionType),
+                EventSubTransportMethod.Websocket,
+                _eventSub.SessionId,
+                clientId: _settings.ClientId,
+                accessToken: _settings.AccessToken
+            );
+            _logger.Debug("[{TAG}] {TYPE} Websocket subscription result = {RESULT}",
+                Platform.PlatformName,
+                subscriptionType,
+                JsonSerializer.Serialize(result, CJsonSerializerOptions)
+            );
+        }
+        catch (Exception ex)
+        {
+            result = new CreateEventSubSubscriptionResponse();
+            _logger.Error("[{TAG}] {TYPE} Websocket subscription error = {RESULT}",
+                Platform.PlatformName,
+                subscriptionType,
+                ex.Message
+            );
+        }
+
         return result;
+    }
+
+    private static string SubscriptionTypeToVersion(string subType)
+    {
+        return subType switch
+        {
+            "channel.update" => "2",
+            "channel.follow" => "2",
+            _ => "1",
+        };
+    }
+
+    private Dictionary<string, string> SubscriptionTypeToCondition(string subType)
+    {
+        return subType switch
+        {
+            "channel.raid" => new() { { "to_broadcaster_user_id", ChannelId! } },
+            _ => new() { { "broadcaster_user_id", ChannelId! } },
+        };
     }
 
     private async Task<AuthCodeResponse> LaunchOAuthFlowAsync() {
@@ -193,6 +231,7 @@ internal sealed partial class TwitchService {
                     AuthScopes.Helix_Channel_Read_Subscriptions,
                     AuthScopes.Helix_Channel_Manage_Redemptions,
                     AuthScopes.Helix_Channel_Read_Redemptions,
+                    AuthScopes.Helix_Channel_Read_Predictions,
                     AuthScopes.Helix_Channel_Read_Hype_Train,
                     AuthScopes.Helix_Channel_Manage_Polls,
                     AuthScopes.Helix_Channel_Read_Polls,

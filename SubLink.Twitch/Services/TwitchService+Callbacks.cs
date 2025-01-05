@@ -12,7 +12,7 @@ internal sealed partial class TwitchService {
         _eventSub.WebsocketDisconnected += OnWebsocketDisconnected;
         _eventSub.WebsocketReconnected += OnWebsocketReconnected;
         _eventSub.ChannelCheer += OnChannelCheer;
-        _eventSub.ChannelFollow += OnChannelFollow;
+        //_eventSub.ChannelFollow += OnChannelFollow;
         _eventSub.ChannelHypeTrainBegin += OnChannelHypeTrainBegin;
         _eventSub.ChannelHypeTrainEnd += OnChannelHypeTrainEnd;
         _eventSub.ChannelHypeTrainProgress += OnChannelHypeTrainProgress;
@@ -55,10 +55,12 @@ internal sealed partial class TwitchService {
             await callback(e.Notification.Payload.Event);
     }
 
+    /*
     private async Task OnChannelFollow(object? sender, ChannelFollowArgs e) {
         if (_rules is TwitchRules {OnFollow: { } callback})
             await callback(e.Notification.Payload.Event);
     }
+    */
 
     private async Task OnChannelHypeTrainBegin(object? sender, ChannelHypeTrainBeginArgs e) {
         if (_rules is TwitchRules {OnHypeTrainBegin: { } callback})

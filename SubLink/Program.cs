@@ -91,8 +91,15 @@ internal partial class Program {
                 configuration
                     .MinimumLevel.Verbose()
                     .WriteTo.File("log/log_.txt", outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
-                    .WriteTo.Console(outputTemplate: outputTemplate,
-                        restrictedToMinimumLevel: LogEventLevel.Information);
+                    .WriteTo.Console(
+                        outputTemplate: outputTemplate,
+
+#if DEBUG
+                        restrictedToMinimumLevel: LogEventLevel.Debug
+#else
+                        restrictedToMinimumLevel: LogEventLevel.Information
+#endif
+                    );
 
                 if (!string.IsNullOrWhiteSpace(webhook.WebhookToken) && webhook.WebhookId != 0)
                     configuration.WriteTo.Async(a => a.Discord(webhook.WebhookId, webhook.WebhookToken,
