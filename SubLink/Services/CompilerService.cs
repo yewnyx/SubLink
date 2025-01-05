@@ -16,7 +16,7 @@ namespace xyz.yewnyx.SubLink.Services;
 internal partial class CompilerService {
     private AssemblyLoadContext? _assemblyLoadContext;
 
-    private static readonly string[] _baseUsings = {
+    private static readonly string[] _baseUsings = [
         "VRC.OSCQuery",
         "BuildSoft.VRChat.Osc",
         "BuildSoft.VRChat.Osc.Avatar",
@@ -30,15 +30,15 @@ internal partial class CompilerService {
         "XSNotifications.Exception",
         "XSNotifications.Helpers",
         "BuildSoft.OscCore.UnityObjects",
-    };
+    ];
 
-    private static readonly string[] _baseAssemblies = {
+    private static readonly string[] _baseAssemblies = [
         "vrcosclib",
         "vrc-oscquery-lib",
         "BuildSoft.OscCore",
         "SubLink",
         "SubLink.References",
-    };
+    ];
 
     private readonly ILogger _logger;
     private readonly ScriptGlobals _globals;
@@ -62,13 +62,13 @@ internal partial class CompilerService {
 
         _assemblyLoadContext = new AssemblyLoadContext("SubLinkScript", true);
 
-        List<string> serviceSymbols = new();
+        List<string> serviceSymbols = [];
 
         // Combine base usings and assemblies with service-specific ones
-        List<string> usings = new();
+        List<string> usings = [];
         usings.AddRange(_baseUsings);
 
-        List<string> assemblies = new();
+        List<string> assemblies = [];
         assemblies.AddRange(_baseAssemblies);
 
         var assemblyReferences = Net70.References.All.ToList();
@@ -169,7 +169,7 @@ internal partial class CompilerService {
         var entryPointMethod = type.GetMethod(entryPoint.MetadataName)!;
 
         var submission = (Func<object[], Task>)entryPointMethod.CreateDelegate(typeof(Func<object[], Task>));
-        return () => (Task<object?>)submission(new object[] { _globals, null! });
+        return () => (Task<object?>)submission([ _globals, null! ]);
     }
 
     private static void PatchLegacyScript(ref SourceText srcText) {
