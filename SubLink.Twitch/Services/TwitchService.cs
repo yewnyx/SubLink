@@ -28,6 +28,7 @@ namespace xyz.yewnyx.SubLink.Twitch.Services;
 
 [UsedImplicitly]
 internal sealed partial class TwitchService {
+    private readonly static JsonSerializerOptions CJsonSerializerOptions = new() { WriteIndented = true };
     private readonly ILogger _logger;
     private readonly IHostApplicationLifetime _applicationLifetime;
     private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -90,17 +91,18 @@ internal sealed partial class TwitchService {
 
         _api.Settings.AccessToken = _settings.AccessToken;
         _api.Settings.ClientId = _settings.ClientId;
-        _api.Settings.Scopes = new List<AuthScopes> {
+        _api.Settings.Scopes = [
             AuthScopes.Helix_Bits_Read,
             AuthScopes.Chat_Read,
             AuthScopes.Chat_Edit,
             AuthScopes.Helix_Channel_Manage_Redemptions,
             AuthScopes.Helix_Channel_Read_Redemptions,
+            AuthScopes.Helix_Channel_Read_Predictions,
             AuthScopes.Helix_Channel_Read_Hype_Train,
             AuthScopes.Helix_Channel_Manage_Polls,
             AuthScopes.Helix_Channel_Read_Polls,
             AuthScopes.Helix_Channel_Read_VIPs,
-        };
+        ];
         
         await ValidateOrUpdateAccessTokenAsync();
         // TODO: eventually, embedding a webview is preferable - that or using a server after all
@@ -122,28 +124,31 @@ internal sealed partial class TwitchService {
 
     private async Task OnWebsocketConnected(object? sender, WebsocketConnectedArgs e) {
         if (!e.IsRequestedReconnect) {
-            await SubscribeAsync("channel.channel_points_custom_reward_redemption.add");
-            await SubscribeAsync("channel.channel_points_custom_reward_redemption.update");
-            await SubscribeAsync("channel.update");
-            await SubscribeAsync("channel.cheer");
-            await SubscribeAsync("channel.follow");
-            await SubscribeAsync("channel.hype_train.begin");
-            await SubscribeAsync("channel.hype_train.end");
-            await SubscribeAsync("channel.hype_train.progress");
-            await SubscribeAsync("channel.poll.begin");
-            await SubscribeAsync("channel.poll.end");
-            await SubscribeAsync("channel.poll.progress");
-            await SubscribeAsync("channel.prediction.begin");
-            await SubscribeAsync("channel.prediction.end");
-            await SubscribeAsync("channel.prediction.lock");
-            await SubscribeAsync("channel.prediction.progress");
-            await SubscribeAsync("channel.raid");
-            await SubscribeAsync("channel.subscribe");
-            await SubscribeAsync("channel.subscription.end");
-            await SubscribeAsync("channel.subscription.gift");
-            await SubscribeAsync("channel.subscription.message");
-            await SubscribeAsync("stream.offline");
-            await SubscribeAsync("stream.online");
+            await Task.Delay(100);
+            await Task.WhenAll(
+                SubscribeAsync("channel.channel_points_custom_reward_redemption.add"),
+                SubscribeAsync("channel.channel_points_custom_reward_redemption.update"),
+                SubscribeAsync("channel.update"),
+                SubscribeAsync("channel.cheer"),
+                //SubscribeAsync("channel.follow"),
+                SubscribeAsync("channel.hype_train.begin"),
+                SubscribeAsync("channel.hype_train.end"),
+                SubscribeAsync("channel.hype_train.progress"),
+                SubscribeAsync("channel.poll.begin"),
+                SubscribeAsync("channel.poll.end"),
+                SubscribeAsync("channel.poll.progress"),
+                SubscribeAsync("channel.prediction.begin"),
+                SubscribeAsync("channel.prediction.end"),
+                SubscribeAsync("channel.prediction.lock"),
+                SubscribeAsync("channel.prediction.progress"),
+                SubscribeAsync("channel.raid"),
+                SubscribeAsync("channel.subscribe"),
+                SubscribeAsync("channel.subscription.end"),
+                SubscribeAsync("channel.subscription.gift"),
+                SubscribeAsync("channel.subscription.message"),
+                SubscribeAsync("stream.offline"),
+                SubscribeAsync("stream.online")
+            );
         }
     }
 
@@ -157,16 +162,56 @@ internal sealed partial class TwitchService {
     }
 
     private async Task<CreateEventSubSubscriptionResponse> SubscribeAsync(string subscriptionType) {
-        return await _api.Helix.EventSub.CreateEventSubSubscriptionAsync(
-            subscriptionType,
-            "1",
-            new Dictionary<string, string>{{"broadcaster_user_id", ChannelId!}},
-            EventSubTransportMethod.Websocket, 
-            _eventSub.SessionId,
-            null,
-            null,
-            _settings.ClientId,
-            _settings.AccessToken);
+        CreateEventSubSubscriptionResponse result;
+
+        try
+        {
+
+            result = await _api.Helix.EventSub.CreateEventSubSubscriptionAsync(
+                subscriptionType,
+                SubscriptionTypeToVersion(subscriptionType),
+                SubscriptionTypeToCondition(subscriptionType),
+                EventSubTransportMethod.Websocket,
+                _eventSub.SessionId,
+                clientId: _settings.ClientId,
+                accessToken: _settings.AccessToken
+            );
+            _logger.Debug("[{TAG}] {TYPE} Websocket subscription result = {RESULT}",
+                Platform.PlatformName,
+                subscriptionType,
+                JsonSerializer.Serialize(result, CJsonSerializerOptions)
+            );
+        }
+        catch (Exception ex)
+        {
+            result = new CreateEventSubSubscriptionResponse();
+            _logger.Error("[{TAG}] {TYPE} Websocket subscription error = {RESULT}",
+                Platform.PlatformName,
+                subscriptionType,
+                ex.Message
+            );
+        }
+
+        return result;
+    }
+
+    private static string SubscriptionTypeToVersion(string subType)
+    {
+        return subType switch
+        {
+            "channel.update" => "2",
+            "channel.follow" => "2",
+            _ => "1",
+        };
+    }
+
+    private Dictionary<string, string> SubscriptionTypeToCondition(string subType)
+    {
+        return subType switch
+        {
+            "channel.raid" => new() { { "to_broadcaster_user_id", ChannelId! } },
+            _ => new() { { "broadcaster_user_id", ChannelId! } },
+        };
     }
 
     private async Task<AuthCodeResponse> LaunchOAuthFlowAsync() {
@@ -179,18 +224,19 @@ internal sealed partial class TwitchService {
             var state = System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, 1000000).ToString("D6");
             var url = _api.Auth.GetAuthorizationCodeUrl(
                 redirectUri,
-                new [] {
+                [
                     AuthScopes.Chat_Read,
                     AuthScopes.Chat_Edit,
                     AuthScopes.Helix_Bits_Read,
                     AuthScopes.Helix_Channel_Read_Subscriptions,
                     AuthScopes.Helix_Channel_Manage_Redemptions,
                     AuthScopes.Helix_Channel_Read_Redemptions,
+                    AuthScopes.Helix_Channel_Read_Predictions,
                     AuthScopes.Helix_Channel_Read_Hype_Train,
                     AuthScopes.Helix_Channel_Manage_Polls,
                     AuthScopes.Helix_Channel_Read_Polls,
                     AuthScopes.Helix_Channel_Read_VIPs,
-                },
+                ],
                 state: state,
                 clientId: _settings.ClientId);
             

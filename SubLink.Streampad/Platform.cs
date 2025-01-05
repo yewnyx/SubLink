@@ -26,10 +26,10 @@ public class Platform : IPlatform {
     // Useful for enumerating the loaded platforms
     public string GetPlatformName() => PlatformName;
     public string GetServiceSymbol() => "SUBLINK_STREAMPAD";
-    public string[] GetAdditionalUsings() => new[]{
+    public string[] GetAdditionalUsings() => [
         "xyz.yewnyx.SubLink.Streampad.Services",
-    };
-    public string[] GetAdditionalAssemblies() => Array.Empty<string>();
+    ];
+    public string[] GetAdditionalAssemblies() => [];
 
     public bool EnsureConfigExists() {
         if (!File.Exists(PlatformConfigFile)) {
