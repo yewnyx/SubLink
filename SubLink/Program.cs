@@ -154,7 +154,7 @@ and __                           ____              _
 
             var platformEntryType = libAsm.GetTypes().FirstOrDefault(t => platformIfaceType.IsAssignableFrom(t));
 
-            if (platformEntryType == null || platformEntryType == default)
+            if (platformEntryType == null || platformEntryType == default || platformEntryType.IsInterface)
                 continue;
 
             var platformEntry = (IPlatform?)Activator.CreateInstance(platformEntryType);
