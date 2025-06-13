@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <ApplicationIcon>..\Icon\SubLink.ico</ApplicationIcon>
+    <ApplicationIcon>..\Icon\SubLinkOBS.ico</ApplicationIcon>
     <RootNamespace>xyz.yewnyx.SubLink.OBS</RootNamespace>
     <Authors>yewnyx</Authors>
     <Product>SubLink</Product>

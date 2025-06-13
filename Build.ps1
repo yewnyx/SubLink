@@ -1,4 +1,4 @@
-$version = "3.0.6";
+$version = "3.1.0";
 
 $currentDir = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName;
 
@@ -10,6 +10,7 @@ $currentDir = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName;
 . dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.Streampad/SubLink.Streampad.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
 . dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.StreamElements/SubLink.StreamElements.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
 . dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.Fansly/SubLink.Fansly.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
+. dotnet.exe publish -c Release -r win-x64 $currentDir/SubLink.OBS/SubLink.OBS.csproj /p:Version=$version /p:SkipInvalidConfigurations=true
 
 New-Item build-$version -ItemType directory;
 Copy-Item -Path "SubLink\bin\Release\net8.0\win-x64\publish\SubLink.exe" -Destination build-$version;
@@ -21,6 +22,7 @@ Copy-Item -Path "SubLink.Kick\bin\Release\net8.0\win-x64\publish\SubLink.Kick.dl
 Copy-Item -Path "SubLink.Streampad\bin\Release\net8.0\win-x64\publish\SubLink.Streampad.dll" -Destination "build-$($version)\Platforms";
 Copy-Item -Path "SubLink.StreamElements\bin\Release\net8.0\win-x64\publish\SubLink.StreamElements.dll" -Destination "build-$($version)\Platforms";
 Copy-Item -Path "SubLink.Fansly\bin\Release\net8.0\win-x64\publish\SubLink.Fansly.dll" -Destination "build-$($version)\Platforms";
+Copy-Item -Path "SubLink.OBS\bin\Release\net8.0\win-x64\publish\SubLink.OBS.dll" -Destination "build-$($version)\Platforms";
 
 if (-not (Test-Path -Path "builds")) {
     New-Item -Path "builds" -ItemType Directory;
