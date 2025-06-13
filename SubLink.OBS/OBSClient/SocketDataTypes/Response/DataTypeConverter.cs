@@ -7,6 +7,7 @@ namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Response;
 
 internal class DataTypeConverter : JsonConverter<InResponseMsg.Data> {
 	private static readonly Dictionary<string, Type> ResponseTypeMap = new() {
+        { "GetHotkeyList", typeof(GetHotkeyList) },
         { "GetInputMute", typeof(GetInputMute) },
         { "ToggleInputMute", typeof(ToggleInputMute) },
         { "GetInputVolume", typeof(GetInputVolume) },

@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Response;
 
 [JsonPolymorphic(UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor)]
+[JsonDerivedType(typeof(GetHotkeyList))]
 [JsonDerivedType(typeof(GetInputMute))]
 [JsonDerivedType(typeof(ToggleInputMute))]
 [JsonDerivedType(typeof(GetInputVolume))]
@@ -14,6 +15,12 @@ namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Response;
 [JsonDerivedType(typeof(GetCurrentSceneTransition))]
 [JsonDerivedType(typeof(GetStudioModeEnabled))]
 public interface IResponseType { }
+
+public class GetHotkeyList : IResponseType {
+    /** Array of hotkey names */
+    [JsonPropertyName("hotkeys")]
+    public string[] Hotkeys { get; set; } = [];
+}
 
 public class GetInputMute : IResponseType {
     /** Whether the input is muted */
@@ -55,12 +62,6 @@ public class GetCurrentProgramScene : IResponseType {
     /** Current program scene UUID */
     [JsonPropertyName("sceneUuid")]
     public string SceneUuid { get; set; } = string.Empty;
-    /** Current program scene name (Deprecated) */
-    [JsonPropertyName("currentProgramSceneName")]
-    public string? CurrentProgramSceneName { get; set; }
-    /** Current program scene UUID (Deprecated) */
-    [JsonPropertyName("currentProgramSceneUuid")]
-    public string? CurrentProgramSceneUuid { get; set; }
 }
 
 public class GetCurrentPreviewScene : IResponseType {
@@ -70,12 +71,6 @@ public class GetCurrentPreviewScene : IResponseType {
     /** Current preview scene UUID */
     [JsonPropertyName("sceneUuid")]
     public string SceneUuid { get; set; } = string.Empty;
-    /** Current preview scene name (Deprecated) */
-    [JsonPropertyName("currentPreviewSceneName")]
-    public string? CurrentPreviewSceneName { get; set; }
-    /** Current preview scene UUID (Deprecated) */
-    [JsonPropertyName("currentPreviewSceneUuid")]
-    public string? CurrentPreviewSceneUuid { get; set; }
 }
 
 public class GetCurrentSceneTransition : IResponseType {

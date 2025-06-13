@@ -41,7 +41,6 @@ internal sealed partial class OBSService {
         _obs = obsClient ?? throw new ArgumentNullException(nameof(obsClient));
 
         _rules = rules;
-        _rules.SetService(this);
 
         WireCallbacks();
     }
@@ -66,6 +65,7 @@ internal sealed partial class OBSService {
 
         if (await _obs.ConnectAsync(_settings.ServerIp, _settings.ServerPort, _settings.ServerPassword)) {
             _obsLoggedInScope = _serviceScopeFactory.CreateScope();
+            _rules.SetService(this);
         } else {
             _logger.Warning("[{TAG}] Failed to connect to websocket", Platform.PlatformName);
             _applicationLifetime.StopApplication();

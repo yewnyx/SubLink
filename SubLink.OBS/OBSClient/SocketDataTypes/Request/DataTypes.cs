@@ -4,6 +4,7 @@ namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Request;
 
 [JsonPolymorphic(UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor)]
 [JsonDerivedType(typeof(SetSourceFilterEnabled))]
+[JsonDerivedType(typeof(GetHotkeyList))]
 [JsonDerivedType(typeof(TriggerHotkeyByName))]
 [JsonDerivedType(typeof(TriggerHotkeyByKeySequence))]
 [JsonDerivedType(typeof(GetInputMute))]
@@ -25,7 +26,8 @@ namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Request;
 [JsonDerivedType(typeof(GetStudioModeEnabled))]
 public interface IRequestDataType { }
 
-public class SetSourceFilterEnabled : IRequestDataType {
+public class SetSourceFilterEnabled : IRequestDataType
+{
     /** Name of the source */
     [JsonPropertyName("sourceName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -41,6 +43,8 @@ public class SetSourceFilterEnabled : IRequestDataType {
     [JsonPropertyName("filterEnabled")]
     public bool FilterEnabled { get; set; }
 }
+
+public class GetHotkeyList : IRequestDataType { }
 
 public class TriggerHotkeyByName : IRequestDataType {
     /** Name of the hotkey to trigger */

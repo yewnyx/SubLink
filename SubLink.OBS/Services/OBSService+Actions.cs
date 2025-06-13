@@ -13,6 +13,19 @@ internal sealed partial class OBSService {
         };
         await _obs.SendDataAsync(outRequestMsg);
     }
+    public async Task<string[]> GetHotkeyListAsync() {
+        OutRequestMsg outRequestMsg = new();
+        outRequestMsg.D.RequestData = new OBSClient.SocketDataTypes.Request.GetHotkeyList();
+        var result = await _obs.SendDataAsync(outRequestMsg);
+
+        if (result == null || !result.RequestStatus.Result) {
+            _logger.Warning("[{TAG}] Failed to get the list of hotkeys: {Comment}", Platform.PlatformName, result?.RequestStatus.Comment ?? "Result is NULL");
+            return [];
+        }
+
+        var responseData = result.ResponseData as OBSClient.SocketDataTypes.Response.GetHotkeyList;
+        return responseData?.Hotkeys ?? [];
+    }
 
     public async Task TriggerHotkeyByNameAsync(string hotkeyName, string? contextName) {
         OutRequestMsg outRequestMsg = new();
@@ -36,24 +49,6 @@ internal sealed partial class OBSService {
             };
 
         outRequestMsg.D.RequestData = reqData;
-        await _obs.SendDataAsync(outRequestMsg);
-    }
-
-    public async Task<string> GetActiveSceneAsync() {
-        OutRequestMsg outRequestMsg = new();
-        outRequestMsg.D.RequestData = new OBSClient.SocketDataTypes.Request.GetCurrentProgramScene();
-        var result = await _obs.SendDataAsync(outRequestMsg);
-
-        if (result == null || !result.RequestStatus.Result)
-            return result?.RequestStatus.Comment ?? "Result is NULL";
-
-        var responseData = result.ResponseData as OBSClient.SocketDataTypes.Response.GetCurrentProgramScene;
-        return responseData?.SceneName ?? "Unknown";
-    }
-
-    public async Task SetActiveSceneAsync(string sceneName) {
-        OutRequestMsg outRequestMsg = new();
-        outRequestMsg.D.RequestData = new OBSClient.SocketDataTypes.Request.SetCurrentProgramScene() { SceneName = sceneName };
         await _obs.SendDataAsync(outRequestMsg);
     }
 
@@ -168,27 +163,25 @@ internal sealed partial class OBSService {
         await _obs.SendDataAsync(outRequestMsg);
     }
 
-    public async Task<string> GetCurrentProgramSceneAsync() {
+    public async Task<string> GetActiveSceneAsync() {
         OutRequestMsg outRequestMsg = new();
         outRequestMsg.D.RequestData = new OBSClient.SocketDataTypes.Request.GetCurrentProgramScene();
         var result = await _obs.SendDataAsync(outRequestMsg);
 
-        if (result == null || !result.RequestStatus.Result) {
-            _logger.Warning("[{TAG}] Failed to get current program scene: {Comment}", Platform.PlatformName, result?.RequestStatus.Comment ?? "Result is NULL");
-            return string.Empty;
-        }
+        if (result == null || !result.RequestStatus.Result)
+            return result?.RequestStatus.Comment ?? "Result is NULL";
 
         var responseData = result.ResponseData as OBSClient.SocketDataTypes.Response.GetCurrentProgramScene;
-        return responseData?.SceneName ?? string.Empty;
+        return responseData?.SceneName ?? "Unknown";
     }
 
-    public async Task SetCurrentProgramSceneAsync(string sceneName) {
+    public async Task SetActiveSceneAsync(string sceneName) {
         OutRequestMsg outRequestMsg = new();
         outRequestMsg.D.RequestData = new OBSClient.SocketDataTypes.Request.SetCurrentProgramScene() { SceneName = sceneName };
         await _obs.SendDataAsync(outRequestMsg);
     }
 
-    public async Task<string> GetCurrentPreviewSceneAsync() {
+    public async Task<string> GetPreviewSceneAsync() {
         OutRequestMsg outRequestMsg = new();
         outRequestMsg.D.RequestData = new OBSClient.SocketDataTypes.Request.GetCurrentPreviewScene();
         var result = await _obs.SendDataAsync(outRequestMsg);
@@ -202,7 +195,7 @@ internal sealed partial class OBSService {
         return responseData?.SceneName ?? string.Empty;
     }
 
-    public async Task SetCurrentPreviewSceneAsync(string sceneName) {
+    public async Task SetPreviewSceneAsync(string sceneName) {
         OutRequestMsg outRequestMsg = new();
         outRequestMsg.D.RequestData = new OBSClient.SocketDataTypes.Request.SetCurrentPreviewScene() { SceneName = sceneName };
         await _obs.SendDataAsync(outRequestMsg);
