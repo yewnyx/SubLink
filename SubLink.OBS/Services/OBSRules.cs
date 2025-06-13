@@ -207,18 +207,14 @@ public sealed class OBSRules : IPlatformRules {
     }
 
     public async Task SetActiveScene(string sceneName, string transitionName = "Cut") {
-        if (_service == null || string.IsNullOrEmpty(sceneName)) return;
+        if (_service == null || string.IsNullOrEmpty(sceneName) || string.IsNullOrEmpty(transitionName)) return;
 
-        if (_studioModeEnabled) {
-            var currentTransition = await _service.GetCurrentSceneTransitionAsync();
-            await _service.SetCurrentSceneTransitionAsync(transitionName);
-            await _service.SetActiveSceneAsync(sceneName);
+        var currentTransition = await _service.GetCurrentSceneTransitionAsync();
+        await _service.SetCurrentSceneTransitionAsync(transitionName);
+        await _service.SetActiveSceneAsync(sceneName);
 
-            if (currentTransition != null)
-                await _service.SetCurrentSceneTransitionAsync(currentTransition.Name);
-        } else {
-            await _service.SetActiveSceneAsync(sceneName);
-        }
+        if (currentTransition != null)
+            await _service.SetCurrentSceneTransitionAsync(currentTransition.Name);
     }
 
     public async Task<string> GetPreviewScene() {
