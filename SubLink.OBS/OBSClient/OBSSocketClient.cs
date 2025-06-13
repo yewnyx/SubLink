@@ -1,11 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using Serilog;
+﻿using Serilog;
 using SuperSocket.ClientEngine;
 using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Reactive;
-using System.Runtime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -15,25 +11,13 @@ using xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes;
 
 namespace xyz.yewnyx.SubLink.OBS.OBSClient;
 
-internal sealed class OBSSocketClient {
+internal sealed class OBSSocketClient(ILogger logger) {
     private const string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36";
     private static readonly JsonSerializerOptions _serializationOpt = new() {
         AllowOutOfOrderMetadataProperties = true
     };
-    private readonly static Dictionary<string, string> _headers = new() {
-        { "authority", "apiv3.fansly.com" },
-        { "accept", "application/json, text/plain, */*" },
-        { "accept-language", "en;q=0.8,en-US;q=0.7" },
-        { "sec-ch-ua", "Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"" },
-        { "sec-ch-ua-mobile", "?0" },
-        { "sec-ch-ua-platform", "\"Windows\"" },
-        { "sec-fetch-dest", "empty" },
-        { "sec-fetch-mode", "cors" },
-        { "sec-fetch-site", "same-site" },
-        { "user-agent", _userAgent }
-    };
 
-    private readonly ILogger _logger;
+    private readonly ILogger _logger = logger;
     private WebSocket? _socket;
 
     public event EventHandler? OBSConnected;
@@ -100,10 +84,7 @@ internal sealed class OBSSocketClient {
     private string _serverPassword = string.Empty;
     private uint _rpcVersion = 0;
     private bool _identified = false;
-
-    public OBSSocketClient(ILogger logger) {
-        _logger = logger;
-    }
+    private readonly Dictionary<string, InResponseMsg.Data?> _requestResults = [];
 
     public async Task<bool> ConnectAsync(string servcerIp, ushort servcerPort, string servcerPassword) {
         if (_socket != null)
@@ -175,7 +156,7 @@ internal sealed class OBSSocketClient {
                     );
                 }
 
-                SendData(ident);
+                SendIdentifyMsg(ident);
                 break;
             }
             case InIdentifiedMsg: {
@@ -545,6 +526,11 @@ internal sealed class OBSSocketClient {
 
                 break;
             }
+            case InResponseMsg: {
+                InResponseMsg responseMsg = (InResponseMsg)inMsg;
+                _requestResults[responseMsg.D.RequestId] = responseMsg.D;
+                break;
+            }
             default: {
                 _logger.Warning("[{TAG}] Unknown data received, message: {Message}", Platform.PlatformName, e.Message);
                 break;
@@ -560,11 +546,26 @@ internal sealed class OBSSocketClient {
         return Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(hash + challenge)));
     }
 
-    private void SendData(IBaseMessage message) {
-        if (!(message is OutIdentifyMsg || _identified))
-            return;
+    private void SendIdentifyMsg(OutIdentifyMsg msg) =>
+        _socket?.Send(JsonSerializer.Serialize(msg));
 
-        string data = JsonSerializer.Serialize(message);
-        _socket?.Send(data);
+    public async Task<InResponseMsg.Data?> SendDataAsync(OutRequestMsg msg) {
+        while (!_identified) {
+            await Task.Delay(10);
+        }
+
+        if (msg.D.RequestData != null)
+            msg.D.RequestType = msg.D.RequestData.GetType().Name;
+
+        _socket?.Send(JsonSerializer.Serialize(msg));
+        _requestResults[msg.D.RequestId] = null;
+        InResponseMsg.Data? result;
+
+        do {
+            await Task.Delay(10); // Add a little delay to avoid hogging resources
+            result = _requestResults[msg.D.RequestId];
+        } while (result == null);
+
+        return result;
     }
 }

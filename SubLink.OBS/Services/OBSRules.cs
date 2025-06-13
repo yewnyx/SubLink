@@ -8,6 +8,8 @@ namespace xyz.yewnyx.SubLink.OBS.Services;
 
 [PublicAPI]
 public sealed class OBSRules : IPlatformRules {
+    private OBSService? _service;
+
     internal Func<InEventMsg.CurrentSceneCollectionChanging, Task>? OnCurrentSceneCollectionChanging;
     internal Func<InEventMsg.CurrentSceneCollectionChanged, Task>? OnCurrentSceneCollectionChanged;
     internal Func<InEventMsg.SceneCollectionListChanged, Task>? OnSceneCollectionListChanged;
@@ -66,6 +68,10 @@ public sealed class OBSRules : IPlatformRules {
     internal Func<InEventMsg.VendorEvent, Task>? OnVendorEvent;
     internal Func<InEventMsg.CustomEvent, Task>? OnCustomEvent;
 
+    internal void SetService(OBSService service) =>
+        _service = service;
+
+    /* Reacts */
     public void ReactToCurrentSceneCollectionChanging(Func<InEventMsg.CurrentSceneCollectionChanging, Task> with) { OnCurrentSceneCollectionChanging = with; }
     public void ReactToCurrentSceneCollectionChanged(Func<InEventMsg.CurrentSceneCollectionChanged, Task> with) { OnCurrentSceneCollectionChanged = with; }
     public void ReactToSceneCollectionListChanged(Func<InEventMsg.SceneCollectionListChanged, Task> with) { OnSceneCollectionListChanged = with; }
@@ -123,4 +129,23 @@ public sealed class OBSRules : IPlatformRules {
     public void ReactToScreenshotSaved(Func<InEventMsg.ScreenshotSaved, Task> with) { OnScreenshotSaved = with; }
     public void ReactToVendorEvent(Func<InEventMsg.VendorEvent, Task> with) { OnVendorEvent = with; }
     public void ReactToCustomEvent(Func<InEventMsg.CustomEvent, Task> with) { OnCustomEvent = with; }
+
+    /* Actions */
+    public async Task SetSourceFilterEnabled(string sourceName, string filterName, bool enabled) {
+        if (_service == null || string.IsNullOrEmpty(sourceName) || string.IsNullOrEmpty(filterName))
+            return;
+        await _service.SetSourceFilterEnabledAsync(sourceName, filterName, enabled);
+    }
+
+    public async Task<string?> GetActiveScene() {
+        if (_service == null)
+            return null;
+        return await _service.GetActiveSceneAsync();
+    }
+
+    public async Task SetActiveScene(string sceneName) {
+        if (_service == null || string.IsNullOrEmpty(sceneName))
+            return;
+        await _service.SetActiveSceneAsync(sceneName);
+    }
 }

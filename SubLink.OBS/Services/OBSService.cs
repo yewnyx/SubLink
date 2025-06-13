@@ -18,9 +18,7 @@ internal sealed partial class OBSService {
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly IOptionsMonitor<OBSSettings> _settingsMonitor;
     private OBSSettings _settings;
-
     private readonly OBSSocketClient _obs;
-
     private readonly OBSRules _rules;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Shhh")]
@@ -43,6 +41,7 @@ internal sealed partial class OBSService {
         _obs = obsClient ?? throw new ArgumentNullException(nameof(obsClient));
 
         _rules = rules;
+        _rules.SetService(this);
 
         WireCallbacks();
     }

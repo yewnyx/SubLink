@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Response;
 
 namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes;
 
@@ -1235,20 +1236,18 @@ public class InResponseMsg : IBaseMessage {
         public string? Comment { get; set; }
     }
 
-    [JsonPropertyName("requestType")]
-    public int RequestType { get; set; } = -1;
-    [JsonPropertyName("requestId")]
-    public string RequestId { get; set; } = string.Empty;
-    [JsonPropertyName("requestStatus")]
-    public RequestStatusObj RequestStatus { get; set; } = new();
-}
+    public class Data {
+        [JsonPropertyName("requestId")]
+        public string RequestId { get; set; } = string.Empty;
+        [JsonPropertyName("requestStatus")]
+        public RequestStatusObj RequestStatus { get; set; } = new();
+        [JsonPropertyName("requestType")]
+        public string RequestType { get; set; } = string.Empty;
+        [JsonPropertyName("responseData")]
+        public IResponseType? ResponseData { get; set; }
+    }
 
-/**
- * obs-websocket is responding to a batch request coming from a client
- */
-public class InResponseBatcMsg : IBaseMessage {
-    [JsonPropertyName("requestId")]
-    public string RequestId { get; set; } = string.Empty;
-    [JsonPropertyName("results")]
-    public InResponseMsg[] Results { get; set; } = [];
+    [JsonPropertyName("d")]
+    [JsonConverter(typeof(DataTypeConverter))]
+    public Data D { get; set; } = new();
 }
