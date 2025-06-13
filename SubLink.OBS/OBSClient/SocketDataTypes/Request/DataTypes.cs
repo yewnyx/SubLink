@@ -19,7 +19,10 @@ namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Request;
 [JsonDerivedType(typeof(SetCurrentProgramScene))]
 [JsonDerivedType(typeof(GetCurrentPreviewScene))]
 [JsonDerivedType(typeof(SetCurrentPreviewScene))]
+[JsonDerivedType(typeof(GetCurrentSceneTransition))]
+[JsonDerivedType(typeof(SetCurrentSceneTransition))]
 [JsonDerivedType(typeof(TriggerStudioModeTransition))]
+[JsonDerivedType(typeof(GetStudioModeEnabled))]
 public interface IRequestDataType { }
 
 public class SetSourceFilterEnabled : IRequestDataType {
@@ -142,7 +145,7 @@ public class SetInputVolume : IRequestDataType {
     /** Volume setting in dB @restrictions >= -100, <= 26 */
     [JsonPropertyName("inputVolumeDb")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public float? InputVolumeDb { get; set; }
+    public float? InputVolumeDB { get; set; }
 }
 
 public class GetInputAudioSyncOffset : IRequestDataType {
@@ -167,8 +170,7 @@ public class SetInputAudioSyncOffset : IRequestDataType {
     public string? InputUuid { get; set; }
     /** New audio sync offset in milliseconds @restrictions >= -950, <= 20000 */
     [JsonPropertyName("inputAudioSyncOffset")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public uint InputAudioSyncOffset { get; set; } = 0;
+    public int InputAudioSyncOffset { get; set; } = 0;
 }
 
 public class GetSceneItemEnabled : IRequestDataType {
@@ -231,4 +233,14 @@ public class SetCurrentPreviewScene : IRequestDataType {
     public string? SceneUuid { get; set; }
 }
 
+public class GetCurrentSceneTransition : IRequestDataType { }
+
+public class SetCurrentSceneTransition : IRequestDataType {
+    /** Name of the transition to make active */
+    [JsonPropertyName("transitionName")]
+    public string TransitionName { get; set; } = string.Empty;
+}
+
 public class TriggerStudioModeTransition : IRequestDataType { }
+
+public class GetStudioModeEnabled : IRequestDataType { }

@@ -81,15 +81,14 @@ internal sealed class OBSSocketClient(ILogger logger) {
     public event EventHandler<VendorEventArgs>? VendorEvent;
     public event EventHandler<CustomEventArgs>? CustomEvent;
 
+    public bool Enabled { get; internal set; } = false;
     private string _serverPassword = string.Empty;
     private uint _rpcVersion = 0;
     private bool _identified = false;
     private readonly Dictionary<string, InResponseMsg.Data?> _requestResults = [];
 
     public async Task<bool> ConnectAsync(string servcerIp, ushort servcerPort, string servcerPassword) {
-        if (_socket != null)
-            return true;
-
+        if (_socket != null) return true;
         _serverPassword = servcerPassword;
 
         try {
@@ -117,9 +116,7 @@ internal sealed class OBSSocketClient(ILogger logger) {
     }
 
     public async Task DisconnectAsync() {
-        if (_socket == null)
-            return;
-
+        if (_socket == null) return;
         if (_socket.State != WebSocketState.Closed)
             await _socket.CloseAsync();
 
@@ -550,9 +547,8 @@ internal sealed class OBSSocketClient(ILogger logger) {
         _socket?.Send(JsonSerializer.Serialize(msg));
 
     public async Task<InResponseMsg.Data?> SendDataAsync(OutRequestMsg msg) {
-        while (!_identified) {
-            await Task.Delay(10);
-        }
+        if (!Enabled) return null;
+        while (!_identified) { await Task.Delay(10); }
 
         if (msg.D.RequestData != null)
             msg.D.RequestType = msg.D.RequestData.GetType().Name;

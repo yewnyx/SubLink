@@ -13,7 +13,9 @@ internal class DataTypeConverter : JsonConverter<InResponseMsg.Data> {
         { "GetInputAudioSyncOffset", typeof(GetInputAudioSyncOffset) },
         { "GetSceneItemEnabled", typeof(GetSceneItemEnabled) },
         { "GetCurrentProgramScene", typeof(GetCurrentProgramScene) },
-        { "GetCurrentPreviewScene", typeof(GetCurrentPreviewScene) }
+        { "GetCurrentPreviewScene", typeof(GetCurrentPreviewScene) },
+        { "GetCurrentSceneTransition", typeof(GetCurrentSceneTransition) },
+        { "GetStudioModeEnabled", typeof(GetStudioModeEnabled) }
 	};
 
     // Any child type of ApiFieldType can be deserialized

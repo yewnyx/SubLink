@@ -9,6 +9,7 @@ namespace xyz.yewnyx.SubLink.OBS.Services;
 [PublicAPI]
 public sealed class OBSRules : IPlatformRules {
     private OBSService? _service;
+    private bool _studioModeEnabled = false;
 
     internal Func<InEventMsg.CurrentSceneCollectionChanging, Task>? OnCurrentSceneCollectionChanging;
     internal Func<InEventMsg.CurrentSceneCollectionChanged, Task>? OnCurrentSceneCollectionChanged;
@@ -68,8 +69,12 @@ public sealed class OBSRules : IPlatformRules {
     internal Func<InEventMsg.VendorEvent, Task>? OnVendorEvent;
     internal Func<InEventMsg.CustomEvent, Task>? OnCustomEvent;
 
-    internal void SetService(OBSService service) =>
+    internal void SetService(OBSService service) {
         _service = service;
+        Task.Run(async () => {
+            _studioModeEnabled = await _service.GetStudioModeEnabledAsync();
+        });
+    }
 
     /* Reacts */
     public void ReactToCurrentSceneCollectionChanging(Func<InEventMsg.CurrentSceneCollectionChanging, Task> with) { OnCurrentSceneCollectionChanging = with; }
@@ -132,20 +137,122 @@ public sealed class OBSRules : IPlatformRules {
 
     /* Actions */
     public async Task SetSourceFilterEnabled(string sourceName, string filterName, bool enabled) {
-        if (_service == null || string.IsNullOrEmpty(sourceName) || string.IsNullOrEmpty(filterName))
-            return;
+        if (_service == null || string.IsNullOrEmpty(sourceName) || string.IsNullOrEmpty(filterName)) return;
         await _service.SetSourceFilterEnabledAsync(sourceName, filterName, enabled);
     }
 
-    public async Task<string?> GetActiveScene() {
-        if (_service == null)
-            return null;
+    public async Task TriggerHotkeyByName(string hotkeyName, string? contextName = null) {
+        if (_service == null || string.IsNullOrEmpty(hotkeyName)) return;
+        await _service.TriggerHotkeyByNameAsync(hotkeyName, contextName);
+    }
+
+    public async Task TriggerHotkeyByKeySequence(string? keyId = null, bool? shift = null, bool? control = null, bool? alt = null, bool? command = null) {
+        if (_service == null || (string.IsNullOrEmpty(keyId) && shift == null && control == null && alt == null && command == null)) return;
+        await _service.TriggerHotkeyByKeySequenceAsync(keyId, shift, control, alt, command);
+    }
+
+    public async Task<string> GetActiveScene() {
+        if (_service == null) return string.Empty;
         return await _service.GetActiveSceneAsync();
     }
 
-    public async Task SetActiveScene(string sceneName) {
-        if (_service == null || string.IsNullOrEmpty(sceneName))
-            return;
-        await _service.SetActiveSceneAsync(sceneName);
+    public async Task SetActiveScene(string sceneName, string transitionName = "Cut") {
+        if (_service == null || string.IsNullOrEmpty(sceneName)) return;
+
+        if (_studioModeEnabled) {
+            var currentTransition = await _service.GetCurrentSceneTransitionAsync();
+            await _service.SetCurrentSceneTransitionAsync(transitionName);
+            await _service.SetActiveSceneAsync(sceneName);
+
+            if (currentTransition != null)
+                await _service.SetCurrentSceneTransitionAsync(currentTransition.Name);
+        } else {
+            await _service.SetActiveSceneAsync(sceneName);
+        }
+    }
+
+    public async Task<bool> GetInputMute(string name) {
+        if (_service == null || string.IsNullOrEmpty(name)) return false;
+        return await _service.GetInputMuteAsync(name);
+    }
+
+    public async Task SetInputMute(string name, bool muted) {
+        if (_service == null || string.IsNullOrEmpty(name)) return;
+        await _service.SetInputMuteAsync(name, muted);
+    }
+
+    public async Task<bool> ToggleInputMute(string name) {
+        if (_service == null || string.IsNullOrEmpty(name)) return false;
+        return await _service.ToggleInputMuteAsync(name);
+    }
+
+    public async Task<InputVolume?> GetInputVolume(string name) {
+        if (_service == null || string.IsNullOrEmpty(name)) return null;
+        return await _service.GetInputVolumeAsync(name);
+    }
+
+    public async Task SetInputVolume(string name, float? multiplier = null, float? db = null) {
+        if (_service == null || string.IsNullOrEmpty(name)) return;
+        await _service.SetInputVolumeAsync(name, multiplier, db);
+    }
+
+    public async Task<int> GetInputAudioSyncOffset(string name) {
+        if (_service == null || string.IsNullOrEmpty(name)) return 0;
+        return await _service.GetInputAudioSyncOffsetAsync(name);
+    }
+
+    public async Task SetInputAudioSyncOffset(string name, int offsetMs) {
+        if (_service == null || string.IsNullOrEmpty(name)) return;
+        await _service.SetInputAudioSyncOffsetAsync(name, offsetMs);
+    }
+
+    public async Task<bool> GetSceneItemEnabled(string name, uint id) {
+        if (_service == null || string.IsNullOrEmpty(name)) return false;
+        return await _service.GetSceneItemEnabledAsync(name, id);
+    }
+
+    public async Task SetSceneItemEnabled(string name, uint id, bool enabled) {
+        if (_service == null || string.IsNullOrEmpty(name)) return;
+        await _service.SetSceneItemEnabledAsync(name, id, enabled);
+    }
+
+    public async Task<string> GetCurrentProgramScene() {
+        if (_service == null) return string.Empty;
+        return await _service.GetCurrentProgramSceneAsync();
+    }
+
+    public async Task SetCurrentProgramScene(string name) {
+        if (_service == null || string.IsNullOrEmpty(name)) return;
+        await _service.SetCurrentProgramSceneAsync(name);
+    }
+
+    public async Task<string> GetCurrentPreviewScene() {
+        if (_service == null) return string.Empty;
+        return await _service.GetCurrentPreviewSceneAsync();
+    }
+
+    public async Task SetCurrentPreviewScene(string name) {
+        if (_service == null || string.IsNullOrEmpty(name)) return;
+        await _service.SetCurrentPreviewSceneAsync(name);
+    }
+
+    public async Task<TransitionInfo?> GetCurrentSceneTransition() {
+        if (_service == null) return null;
+        return await _service.GetCurrentSceneTransitionAsync();
+    }
+
+    public async Task SetCurrentSceneTransition(string name) {
+        if (_service == null || string.IsNullOrEmpty(name)) return;
+        await _service.SetCurrentSceneTransitionAsync(name);
+    }
+
+    public async Task TriggerStudioModeTransition() {
+        if (_service == null) return;
+        await _service.TriggerStudioModeTransitionAsync();
+    }
+
+    public async Task<bool> GetStudioModeEnabled() {
+        if (_service == null) return false;
+        return await _service.GetStudioModeEnabledAsync();
     }
 }

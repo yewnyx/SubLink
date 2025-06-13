@@ -1,3 +1,4 @@
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Response;
@@ -10,6 +11,8 @@ namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Response;
 [JsonDerivedType(typeof(GetSceneItemEnabled))]
 [JsonDerivedType(typeof(GetCurrentProgramScene))]
 [JsonDerivedType(typeof(GetCurrentPreviewScene))]
+[JsonDerivedType(typeof(GetCurrentSceneTransition))]
+[JsonDerivedType(typeof(GetStudioModeEnabled))]
 public interface IResponseType { }
 
 public class GetInputMute : IResponseType {
@@ -30,13 +33,13 @@ public class GetInputVolume : IResponseType {
     public float InputVolumeMul { get; set; }
     /** Volume setting in dB */
     [JsonPropertyName("inputVolumeDb")]
-    public float InputVolumeDb { get; set; }
+    public float InputVolumeDB { get; set; }
 }
 
 public class GetInputAudioSyncOffset : IResponseType {
     /** Audio sync offset in milliseconds */
     [JsonPropertyName("inputAudioSyncOffset")]
-    public uint InputAudioSyncOffset { get; set; }
+    public int InputAudioSyncOffset { get; set; }
 }
 
 public class GetSceneItemEnabled : IResponseType {
@@ -73,4 +76,34 @@ public class GetCurrentPreviewScene : IResponseType {
     /** Current preview scene UUID (Deprecated) */
     [JsonPropertyName("currentPreviewSceneUuid")]
     public string? CurrentPreviewSceneUuid { get; set; }
+}
+
+public class GetCurrentSceneTransition : IResponseType {
+    /** Name of the transition */
+    [JsonPropertyName("transitionName")]
+    public string TransitionName { get; set; } = string.Empty;
+    /** UUID of the transition */
+    [JsonPropertyName("transitionUuid")]
+    public string TransitionUuid { get; set; } = string.Empty;
+    /** Kind of the transition */
+    [JsonPropertyName("transitionKind")]
+    public string TransitionKind { get; set; } = string.Empty;
+    /** Whether the transition uses a fixed (unconfigurable) duration */
+    [JsonPropertyName("transitionFixed")]
+    public bool TransitionFixed { get; set; }
+    /** Configured transition duration in milliseconds. `null` if transition is fixed */
+    [JsonPropertyName("transitionDuration")]
+    public uint? TransitionDuration { get; set; }
+    /** Whether the transition supports being configured */
+    [JsonPropertyName("transitionConfigurable")]
+    public bool TransitionConfigurable { get; set; }
+    /** Object of settings for the transition. `null` if transition is not configurable */
+    [JsonPropertyName("transitionSettings")]
+    public JsonObject TransitionSettings { get; set; } = [];
+}
+
+public class GetStudioModeEnabled : IResponseType {
+    /** Whether studio mode is enabled */
+    [JsonPropertyName("studioModeEnabled")]
+    public bool StudioModeEnabled { get; set; }
 }

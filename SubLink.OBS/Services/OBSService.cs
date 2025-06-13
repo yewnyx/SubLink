@@ -49,6 +49,8 @@ internal sealed partial class OBSService {
     private void UpdateOBSSettings(OBSSettings obsSettings) => _settings = obsSettings;
 
     public async Task StartAsync() {
+        _obs.Enabled = _settings.Enabled;
+
         if (!_settings.Enabled) {
             _logger.Warning("[{TAG}] Disabled in config, skipping", Platform.PlatformName);
             return;
