@@ -2,6 +2,31 @@
 
 [Back To Readme](../../../README.md)
 
+## Legend
+
+- [Set Source Filter Enabled](#SetSourceFilterEnabled)
+- [Get Hotkey List](#GetHotkeyList)
+- [Trigger Hotkey By Name](#TriggerHotkeyByName)
+- [Trigger Hotkey By Key Sequence](#TriggerHotkeyByKeySequence)
+- [Get Input Mute](#GetInputMute)
+- [Set Input Mute](#SetInputMute)
+- [Toggle Input Mute](#ToggleInputMute)
+- [Get Input Volume](#GetInputVolume)
+- [Set Input Volume](#SetInputVolume)
+- [Get Input Audio Sync Offset](#GetInputAudioSyncOffset)
+- [Set Input Audio Sync Offset](#SetInputAudioSyncOffset)
+- [Get Scene Item Enabled](#GetSceneItemEnabled)
+- [Set Scene Item Enabled](#SetSceneItemEnabled)
+- [Get Active Scene](#GetActiveScene)
+- [Set Active Scene](#SetActiveScene)
+- [Get Preview Scene](#GetPreviewScene)
+- [Set Preview Scene](#SetPreviewScene)
+- [Get Current Scene Transition](#GetCurrentSceneTransition)
+- [Set Current Scene Transition](#SetCurrentSceneTransition)
+- [Trigger Transition](#TriggerTransition)
+- [Get Studio Mode Enabled](#GetStudioModeEnabled)
+- [Script Snippets](#Snippets)
+
 ## SetSourceFilterEnabled
 
 Sets the enable state of a source filter.
@@ -18,6 +43,8 @@ await obs.SetSourceFilterEnabled("My Source", "My Filter", true);
 await obs.SetSourceFilterEnabled("My Source", "My Filter 2", false);
 ```
 
+[Back To Legend](#Legend)
+
 ## GetHotkeyList
 
 Gets an array of all hotkey names in OBS.
@@ -31,6 +58,8 @@ Note: Hotkey functionality in obs-websocket comes as-is, and we do not guarantee
 ```csharp
 var hotkeys = await obs.GetHotkeyList();
 ```
+
+[Back To Legend](#Legend)
 
 ## TriggerHotkeyByName
 
@@ -48,6 +77,8 @@ Note: Hotkey functionality in obs-websocket comes as-is, and we do not guarantee
 await obs.TriggerHotkeyByName("OBSBasic.StartStreaming");
 await obs.TriggerHotkeyByName("OBSBasic.SelectScene", "Scene 2");
 ```
+
+[Back To Legend](#Legend)
 
 ## TriggerHotkeyByKeySequence
 
@@ -71,6 +102,8 @@ await obs.TriggerHotkeyByKeySequence("OBS_KEY_F3", control: true); // Ctrl + F3
 await obs.TriggerHotkeyByKeySequence(shift: true, control: true, alt: true); // Shift + Ctrl + Alt
 ```
 
+[Back To Legend](#Legend)
+
 ## GetInputMute
 
 Gets the audio mute state of an input.
@@ -93,6 +126,8 @@ var isMuted = await obs.GetInputMute("desktop1");
 var isMuted = await obs.GetInputMute("Game Capture");
 var isMuted = await obs.GetInputMute("Browser");
 ```
+
+[Back To Legend](#Legend)
 
 ## SetInputMute
 
@@ -118,6 +153,8 @@ await obs.SetInputMute("Game Capture", false);
 await obs.SetInputMute("Browser", false);
 ```
 
+[Back To Legend](#Legend)
+
 ## ToggleInputMute
 
 Toggles the audio mute state of an input.
@@ -141,6 +178,8 @@ var isMuted = await obs.ToggleInputMute("Game Capture");
 var isMuted = await obs.ToggleInputMute("Browser");
 ```
 
+[Back To Legend](#Legend)
+
 ## GetInputVolume
 
 Gets the current volume setting of an input.
@@ -163,6 +202,8 @@ var volume = await obs.GetInputVolume("desktop1");
 var volume = await obs.GetInputVolume("Game Capture");
 var volume = await obs.GetInputVolume("Browser");
 ```
+
+[Back To Legend](#Legend)
 
 ## SetInputVolume
 
@@ -189,6 +230,8 @@ await obs.SetInputVolume("Game Capture", db: -3); // Set via dB
 await obs.SetInputVolume("Browser", 1, 0); // Set via both
 ```
 
+[Back To Legend](#Legend)
+
 ## GetInputAudioSyncOffset
 
 Gets the audio sync offset of an input.
@@ -205,6 +248,8 @@ var ofset = await obs.GetInputAudioSyncOffset("desktop1");
 var ofset = await obs.GetInputAudioSyncOffset("Game Capture");
 var ofset = await obs.GetInputAudioSyncOffset("Browser");
 ```
+
+[Back To Legend](#Legend)
 
 ## SetInputAudioSyncOffset
 
@@ -224,6 +269,8 @@ await obs.SetInputAudioSyncOffset("Game Capture", db: 0);
 await obs.SetInputAudioSyncOffset("Browser", -2);
 ```
 
+[Back To Legend](#Legend)
+
 ## GetSceneItemEnabled
 
 Gets the enable state of a scene item.
@@ -238,6 +285,8 @@ Works for Scenes and Groups
 ```csharp
 var enabled = await obs.GetSceneItemEnabled("desktop1");
 ```
+
+[Back To Legend](#Legend)
 
 ## SetSceneItemEnabled
 
@@ -256,6 +305,8 @@ await obs.SetSceneItemEnabled("My Scene", 1, true);
 await obs.SetSceneItemEnabled("My Scene", 4, false);
 ```
 
+[Back To Legend](#Legend)
+
 ## GetActiveScene
 
 Gets the current active scene.
@@ -267,6 +318,8 @@ Gets the current active scene.
 ```csharp
 var sceneName = await obs.GetActiveScene();
 ```
+
+[Back To Legend](#Legend)
 
 ## SetActiveScene
 
@@ -283,6 +336,8 @@ await obs.SetActiveScene("My Scene");
 await obs.SetActiveScene("My Scene 2", "Super Cool Swipe");
 ```
 
+[Back To Legend](#Legend)
+
 ## GetPreviewScene
 
 Gets the current preview scene.
@@ -295,6 +350,8 @@ Only available when studio mode is enabled.
 ```csharp
 var sceneName = await obs.GetPreviewScene();
 ```
+
+[Back To Legend](#Legend)
 
 ## SetPreviewScene
 
@@ -311,6 +368,8 @@ await obs.SetPreviewScene("My Scene");
 await obs.SetPreviewScene("My Scene 2");
 ```
 
+[Back To Legend](#Legend)
+
 ## GetCurrentSceneTransition
 
 Gets information about the current scene transition.
@@ -322,6 +381,8 @@ Gets information about the current scene transition.
 ```csharp
 var transInfo = await obs.GetCurrentSceneTransition();
 ```
+
+[Back To Legend](#Legend)
 
 ## SetCurrentSceneTransition
 
@@ -338,6 +399,8 @@ Small note: While the namespace of scene transitions is generally unique, that u
 await obs.SetPreviewScene("Cut");
 await obs.SetPreviewScene("My Super Epic Fade");
 ```
+
+[Back To Legend](#Legend)
 
 ## TriggerTransition
 
@@ -363,3 +426,47 @@ Gets whether studio is enabled.
 ```csharp
 var studioMode = await obs.GetStudioModeEnabled();
 ```
+
+[Back To Legend](#Legend)
+
+## Snippets
+
+### Write the available keybind names to the console and log file
+
+```csharp
+async void LogHotkeyNames() {
+    var hotkeys = await obs.GetHotkeyList();
+    var resultStr = "OBS available hotkeys:";
+
+    foreach (var item in hotkeys) {
+        resultStr += $"\r\n  - {item}";
+    }
+
+    logger.Information(resultStr);
+}
+```
+
+### Scene swapping for a certain amount of time
+
+```csharp
+/**
+ * Use method as follows:
+ * SwapSceneForTime("My Funny Scene", TimeSpan.FromSeconds(10));
+ * SwapSceneForTime("My Epic Scene", TimeSpan.FromMinutes(5));
+ */
+void SwapSceneForTime(string newScene, TimeSpan duration) {
+    var task = Task.Run(async () => {
+        // Retrieve the current scene
+        var oldScene = await obs.GetActiveScene();
+        // Swap to the new scene
+        await obs.SetActiveScene(newScene); // Defaults to "Cut" transition
+        // Delay the remaindor for the indicated duration
+        await Task.Delay(duration);
+        // Swap bach to the original scene
+        await obs.SetActiveScene(oldScene);
+    });
+    task.ConfigureAwait(false);
+}
+```
+
+[Back To Legend](#Legend)
