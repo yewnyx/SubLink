@@ -1,76 +1,77 @@
-﻿using System.Threading.Tasks;
-using xyz.yewnyx.SubLink.OBS.OBSClient;
+﻿using System;
+using System.Threading.Tasks;
+using xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Event;
 
 namespace xyz.yewnyx.SubLink.OBS.Services;
 
 internal sealed partial class OBSService {
     private void WireCallbacks() {
-        _obs.OBSConnected += OnObsConnected;
-        _obs.OBSDisconnected += OnObsDisconnected;
-        _obs.OBSError += OnObsError;
-        _obs.CurrentSceneCollectionChanging += OnCurrentSceneCollectionChanging;
-        _obs.CurrentSceneCollectionChanged += OnCurrentSceneCollectionChanged;
-        _obs.SceneCollectionListChanged += OnSceneCollectionListChanged;
-        _obs.CurrentProfileChanging += OnCurrentProfileChanging;
-        _obs.CurrentProfileChanged += OnCurrentProfileChanged;
-        _obs.ProfileListChanged += OnProfileListChanged;
-        _obs.SourceFilterListReindexed += OnSourceFilterListReindexed;
-        _obs.SourceFilterCreated += OnSourceFilterCreated;
-        _obs.SourceFilterRemoved += OnSourceFilterRemoved;
-        _obs.SourceFilterNameChanged += OnSourceFilterNameChanged;
-        _obs.SourceFilterSettingsChanged += OnSourceFilterSettingsChanged;
-        _obs.SourceFilterEnableStateChanged += OnSourceFilterEnableStateChanged;
-        _obs.ExitStarted += OnExitStarted;
-        _obs.InputCreated += OnInputCreated;
-        _obs.InputRemoved += OnInputRemoved;
-        _obs.InputNameChanged += OnInputNameChanged;
-        _obs.InputSettingsChanged += OnInputSettingsChanged;
-        _obs.InputActiveStateChanged += OnInputActiveStateChanged;
-        _obs.InputShowStateChanged += OnInputShowStateChanged;
-        _obs.InputMuteStateChanged += OnInputMuteStateChanged;
-        _obs.InputVolumeChanged += OnInputVolumeChanged;
-        _obs.InputAudioBalanceChanged += OnInputAudioBalanceChanged;
-        _obs.InputAudioSyncOffsetChanged += OnInputAudioSyncOffsetChanged;
-        _obs.InputAudioTracksChanged += OnInputAudioTracksChanged;
-        _obs.InputAudioMonitorTypeChanged += OnInputAudioMonitorTypeChanged;
-        _obs.InputVolumeMeters += OnInputVolumeMeters;
-        _obs.MediaInputPlaybackStarted += OnMediaInputPlaybackStarted;
-        _obs.MediaInputPlaybackEnded += OnMediaInputPlaybackEnded;
-        _obs.MediaInputActionTriggered += OnMediaInputActionTriggered;
-        _obs.StreamStateChanged += OnStreamStateChanged;
-        _obs.RecordStateChanged += OnRecordStateChanged;
-        _obs.RecordFileChanged += OnRecordFileChanged;
-        _obs.ReplayBufferStateChanged += OnReplayBufferStateChanged;
-        _obs.VirtualcamStateChanged += OnVirtualcamStateChanged;
-        _obs.ReplayBufferSaved += OnReplayBufferSaved;
-        _obs.SceneItemCreated += OnSceneItemCreated;
-        _obs.SceneItemRemoved += OnSceneItemRemoved;
-        _obs.SceneItemListReindexed += OnSceneItemListReindexed;
-        _obs.SceneItemEnableStateChanged += OnSceneItemEnableStateChanged;
-        _obs.SceneItemLockStateChanged += OnSceneItemLockStateChanged;
-        _obs.SceneItemSelected += OnSceneItemSelected;
-        _obs.SceneItemTransformChanged += OnSceneItemTransformChanged;
-        _obs.SceneCreated += OnSceneCreated;
-        _obs.SceneRemoved += OnSceneRemoved;
-        _obs.SceneNameChanged += OnSceneNameChanged;
-        _obs.CurrentProgramSceneChanged += OnCurrentProgramSceneChanged;
-        _obs.CurrentPreviewSceneChanged += OnCurrentPreviewSceneChanged;
-        _obs.SceneListChanged += OnSceneListChanged;
-        _obs.CurrentSceneTransitionChanged += OnCurrentSceneTransitionChanged;
-        _obs.CurrentSceneTransitionDurationChanged += OnCurrentSceneTransitionDurationChanged;
-        _obs.SceneTransitionStarted += OnSceneTransitionStarted;
-        _obs.SceneTransitionEnded += OnSceneTransitionEnded;
-        _obs.SceneTransitionVideoEnded += OnSceneTransitionVideoEnded;
-        _obs.StudioModeStateChanged += OnStudioModeStateChanged;
-        _obs.ScreenshotSaved += OnScreenshotSaved;
-        _obs.VendorEvent += OnVendorEvent;
-        _obs.CustomEvent += OnCustomEvent;
+        _obs.OnOBSConnected += OnObsConnected;
+        _obs.OnOBSDisconnected += OnObsDisconnected;
+        _obs.OnOBSError += OnObsError;
+        _obs.OnCurrentSceneCollectionChanging += OnCurrentSceneCollectionChanging;
+        _obs.OnCurrentSceneCollectionChanged += OnCurrentSceneCollectionChanged;
+        _obs.OnSceneCollectionListChanged += OnSceneCollectionListChanged;
+        _obs.OnCurrentProfileChanging += OnCurrentProfileChanging;
+        _obs.OnCurrentProfileChanged += OnCurrentProfileChanged;
+        _obs.OnProfileListChanged += OnProfileListChanged;
+        _obs.OnSourceFilterListReindexed += OnSourceFilterListReindexed;
+        _obs.OnSourceFilterCreated += OnSourceFilterCreated;
+        _obs.OnSourceFilterRemoved += OnSourceFilterRemoved;
+        _obs.OnSourceFilterNameChanged += OnSourceFilterNameChanged;
+        _obs.OnSourceFilterSettingsChanged += OnSourceFilterSettingsChanged;
+        _obs.OnSourceFilterEnableStateChanged += OnSourceFilterEnableStateChanged;
+        _obs.OnExitStarted += OnExitStarted;
+        _obs.OnInputCreated += OnInputCreated;
+        _obs.OnInputRemoved += OnInputRemoved;
+        _obs.OnInputNameChanged += OnInputNameChanged;
+        _obs.OnInputSettingsChanged += OnInputSettingsChanged;
+        _obs.OnInputActiveStateChanged += OnInputActiveStateChanged;
+        _obs.OnInputShowStateChanged += OnInputShowStateChanged;
+        _obs.OnInputMuteStateChanged += OnInputMuteStateChanged;
+        _obs.OnInputVolumeChanged += OnInputVolumeChanged;
+        _obs.OnInputAudioBalanceChanged += OnInputAudioBalanceChanged;
+        _obs.OnInputAudioSyncOffsetChanged += OnInputAudioSyncOffsetChanged;
+        _obs.OnInputAudioTracksChanged += OnInputAudioTracksChanged;
+        _obs.OnInputAudioMonitorTypeChanged += OnInputAudioMonitorTypeChanged;
+        _obs.OnInputVolumeMeters += OnInputVolumeMeters;
+        _obs.OnMediaInputPlaybackStarted += OnMediaInputPlaybackStarted;
+        _obs.OnMediaInputPlaybackEnded += OnMediaInputPlaybackEnded;
+        _obs.OnMediaInputActionTriggered += OnMediaInputActionTriggered;
+        _obs.OnStreamStateChanged += OnStreamStateChanged;
+        _obs.OnRecordStateChanged += OnRecordStateChanged;
+        _obs.OnRecordFileChanged += OnRecordFileChanged;
+        _obs.OnReplayBufferStateChanged += OnReplayBufferStateChanged;
+        _obs.OnVirtualcamStateChanged += OnVirtualcamStateChanged;
+        _obs.OnReplayBufferSaved += OnReplayBufferSaved;
+        _obs.OnSceneItemCreated += OnSceneItemCreated;
+        _obs.OnSceneItemRemoved += OnSceneItemRemoved;
+        _obs.OnSceneItemListReindexed += OnSceneItemListReindexed;
+        _obs.OnSceneItemEnableStateChanged += OnSceneItemEnableStateChanged;
+        _obs.OnSceneItemLockStateChanged += OnSceneItemLockStateChanged;
+        _obs.OnSceneItemSelected += OnSceneItemSelected;
+        _obs.OnSceneItemTransformChanged += OnSceneItemTransformChanged;
+        _obs.OnSceneCreated += OnSceneCreated;
+        _obs.OnSceneRemoved += OnSceneRemoved;
+        _obs.OnSceneNameChanged += OnSceneNameChanged;
+        _obs.OnCurrentProgramSceneChanged += OnCurrentProgramSceneChanged;
+        _obs.OnCurrentPreviewSceneChanged += OnCurrentPreviewSceneChanged;
+        _obs.OnSceneListChanged += OnSceneListChanged;
+        _obs.OnCurrentSceneTransitionChanged += OnCurrentSceneTransitionChanged;
+        _obs.OnCurrentSceneTransitionDurationChanged += OnCurrentSceneTransitionDurationChanged;
+        _obs.OnSceneTransitionStarted += OnSceneTransitionStarted;
+        _obs.OnSceneTransitionEnded += OnSceneTransitionEnded;
+        _obs.OnSceneTransitionVideoEnded += OnSceneTransitionVideoEnded;
+        _obs.OnStudioModeStateChanged += OnStudioModeStateChanged;
+        _obs.OnScreenshotSaved += OnScreenshotSaved;
+        _obs.OnVendorEvent += OnVendorEvent;
+        _obs.OnCustomEvent += OnCustomEvent;
     }
 
-    private void OnObsConnected(object? sender, System.EventArgs e) =>
+    private void OnObsConnected(object? sender, EventArgs e) =>
         _logger.Information("[{TAG}] Connected to websocket", Platform.PlatformName);
 
-    private void OnObsDisconnected(object? sender, System.EventArgs e) =>
+    private void OnObsDisconnected(object? sender, EventArgs e) =>
         _logger.Warning("[{TAG}] Disconnected from websocket", Platform.PlatformName);
 
     private void OnObsError(object? sender, OBSErrorArgs e) =>
@@ -160,10 +161,10 @@ internal sealed partial class OBSService {
         });
     }
 
-    private void OnExitStarted(object? sender, ExitStartedArgs e) {
+    private void OnExitStarted(object? sender, EventArgs e) {
         Task.Run(async () => {
             if (_rules is OBSRules { OnExitStarted: { } callback })
-                await callback(e.Data);
+                await callback();
         });
     }
 

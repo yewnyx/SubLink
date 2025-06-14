@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.InEventMsg;
 
-namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes;
+namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Event;
 
-internal class EventTypeConverter : JsonConverter<BaseEventType> {
+internal class EventTypeConverter : JsonConverter<EventDataType> {
 	private static readonly Dictionary<string, Type> EventTypeMap = new() {
         { "CurrentSceneCollectionChanging", typeof(CurrentSceneCollectionChanging) },
         { "CurrentSceneCollectionChanged", typeof(CurrentSceneCollectionChanged) },
@@ -68,10 +67,10 @@ internal class EventTypeConverter : JsonConverter<BaseEventType> {
 	};
 
     // Any child type of ApiFieldType can be deserialized
-    public override bool CanConvert(Type objectType) => typeof(BaseEventType).IsAssignableFrom(objectType);
+    public override bool CanConvert(Type objectType) => typeof(EventDataType).IsAssignableFrom(objectType);
 
     // We'll get to this one in a bit...
-    public override BaseEventType? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+    public override EventDataType? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         // Check for null values
         if (reader.TokenType == JsonTokenType.Null)
             return null;
@@ -89,7 +88,7 @@ internal class EventTypeConverter : JsonConverter<BaseEventType> {
             // See if that class can be deserialized or not
             if (!string.IsNullOrWhiteSpace(eventType) && EventTypeMap.TryGetValue(eventType, out var targetType))
                 // Deserialize it
-                return JsonSerializer.Deserialize(ref readerAtStart, targetType, options) as BaseEventType;
+                return JsonSerializer.Deserialize(ref readerAtStart, targetType, options) as EventDataType;
 
             throw new NotSupportedException($"{eventType} can not be deserialized");
         }
@@ -97,7 +96,7 @@ internal class EventTypeConverter : JsonConverter<BaseEventType> {
         throw new NotSupportedException("<unknown> can not be deserialized");
     }
 
-    public override void Write(Utf8JsonWriter writer, BaseEventType value, JsonSerializerOptions options) {
+    public override void Write(Utf8JsonWriter writer, EventDataType value, JsonSerializerOptions options) {
         // No need for this one in our use case, but to just dump the object into JSON
         // (without having the className property!), we can do this:
         JsonSerializer.Serialize(writer, value, value.GetType(), options);

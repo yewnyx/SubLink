@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using WebSocket4Net;
 using xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes;
+using xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Event;
 
 namespace xyz.yewnyx.SubLink.OBS.OBSClient;
 
@@ -20,66 +21,66 @@ internal sealed class OBSSocketClient(ILogger logger) {
     private readonly ILogger _logger = logger;
     private WebSocket? _socket;
 
-    public event EventHandler? OBSConnected;
-    public event EventHandler? OBSDisconnected;
-    public event EventHandler<OBSErrorArgs>? OBSError;
-    public event EventHandler<CurrentSceneCollectionChangingArgs>? CurrentSceneCollectionChanging;
-    public event EventHandler<CurrentSceneCollectionChangedArgs>? CurrentSceneCollectionChanged;
-    public event EventHandler<SceneCollectionListChangedArgs>? SceneCollectionListChanged;
-    public event EventHandler<CurrentProfileChangingArgs>? CurrentProfileChanging;
-    public event EventHandler<CurrentProfileChangedArgs>? CurrentProfileChanged;
-    public event EventHandler<ProfileListChangedArgs>? ProfileListChanged;
-    public event EventHandler<SourceFilterListReindexedArgs>? SourceFilterListReindexed;
-    public event EventHandler<SourceFilterCreatedArgs>? SourceFilterCreated;
-    public event EventHandler<SourceFilterRemovedArgs>? SourceFilterRemoved;
-    public event EventHandler<SourceFilterNameChangedArgs>? SourceFilterNameChanged;
-    public event EventHandler<SourceFilterSettingsChangedArgs>? SourceFilterSettingsChanged;
-    public event EventHandler<SourceFilterEnableStateChangedArgs>? SourceFilterEnableStateChanged;
-    public event EventHandler<ExitStartedArgs>? ExitStarted;
-    public event EventHandler<InputCreatedArgs>? InputCreated;
-    public event EventHandler<InputRemovedArgs>? InputRemoved;
-    public event EventHandler<InputNameChangedArgs>? InputNameChanged;
-    public event EventHandler<InputSettingsChangedArgs>? InputSettingsChanged;
-    public event EventHandler<InputActiveStateChangedArgs>? InputActiveStateChanged;
-    public event EventHandler<InputShowStateChangedArgs>? InputShowStateChanged;
-    public event EventHandler<InputMuteStateChangedArgs>? InputMuteStateChanged;
-    public event EventHandler<InputVolumeChangedArgs>? InputVolumeChanged;
-    public event EventHandler<InputAudioBalanceChangedArgs>? InputAudioBalanceChanged;
-    public event EventHandler<InputAudioSyncOffsetChangedArgs>? InputAudioSyncOffsetChanged;
-    public event EventHandler<InputAudioTracksChangedArgs>? InputAudioTracksChanged;
-    public event EventHandler<InputAudioMonitorTypeChangedArgs>? InputAudioMonitorTypeChanged;
-    public event EventHandler<InputVolumeMetersArgs>? InputVolumeMeters;
-    public event EventHandler<MediaInputPlaybackStartedArgs>? MediaInputPlaybackStarted;
-    public event EventHandler<MediaInputPlaybackEndedArgs>? MediaInputPlaybackEnded;
-    public event EventHandler<MediaInputActionTriggeredArgs>? MediaInputActionTriggered;
-    public event EventHandler<StreamStateChangedArgs>? StreamStateChanged;
-    public event EventHandler<RecordStateChangedArgs>? RecordStateChanged;
-    public event EventHandler<RecordFileChangedArgs>? RecordFileChanged;
-    public event EventHandler<ReplayBufferStateChangedArgs>? ReplayBufferStateChanged;
-    public event EventHandler<VirtualcamStateChangedArgs>? VirtualcamStateChanged;
-    public event EventHandler<ReplayBufferSavedArgs>? ReplayBufferSaved;
-    public event EventHandler<SceneItemCreatedArgs>? SceneItemCreated;
-    public event EventHandler<SceneItemRemovedArgs>? SceneItemRemoved;
-    public event EventHandler<SceneItemListReindexedArgs>? SceneItemListReindexed;
-    public event EventHandler<SceneItemEnableStateChangedArgs>? SceneItemEnableStateChanged;
-    public event EventHandler<SceneItemLockStateChangedArgs>? SceneItemLockStateChanged;
-    public event EventHandler<SceneItemSelectedArgs>? SceneItemSelected;
-    public event EventHandler<SceneItemTransformChangedArgs>? SceneItemTransformChanged;
-    public event EventHandler<SceneCreatedArgs>? SceneCreated;
-    public event EventHandler<SceneRemovedArgs>? SceneRemoved;
-    public event EventHandler<SceneNameChangedArgs>? SceneNameChanged;
-    public event EventHandler<CurrentProgramSceneChangedArgs>? CurrentProgramSceneChanged;
-    public event EventHandler<CurrentPreviewSceneChangedArgs>? CurrentPreviewSceneChanged;
-    public event EventHandler<SceneListChangedArgs>? SceneListChanged;
-    public event EventHandler<CurrentSceneTransitionChangedArgs>? CurrentSceneTransitionChanged;
-    public event EventHandler<CurrentSceneTransitionDurationChangedArgs>? CurrentSceneTransitionDurationChanged;
-    public event EventHandler<SceneTransitionStartedArgs>? SceneTransitionStarted;
-    public event EventHandler<SceneTransitionEndedArgs>? SceneTransitionEnded;
-    public event EventHandler<SceneTransitionVideoEndedArgs>? SceneTransitionVideoEnded;
-    public event EventHandler<StudioModeStateChangedArgs>? StudioModeStateChanged;
-    public event EventHandler<ScreenshotSavedArgs>? ScreenshotSaved;
-    public event EventHandler<VendorEventArgs>? VendorEvent;
-    public event EventHandler<CustomEventArgs>? CustomEvent;
+    public event EventHandler? OnOBSConnected;
+    public event EventHandler? OnOBSDisconnected;
+    public event EventHandler<OBSErrorArgs>? OnOBSError;
+    public event EventHandler<CurrentSceneCollectionChangingArgs>? OnCurrentSceneCollectionChanging;
+    public event EventHandler<CurrentSceneCollectionChangedArgs>? OnCurrentSceneCollectionChanged;
+    public event EventHandler<SceneCollectionListChangedArgs>? OnSceneCollectionListChanged;
+    public event EventHandler<CurrentProfileChangingArgs>? OnCurrentProfileChanging;
+    public event EventHandler<CurrentProfileChangedArgs>? OnCurrentProfileChanged;
+    public event EventHandler<ProfileListChangedArgs>? OnProfileListChanged;
+    public event EventHandler<SourceFilterListReindexedArgs>? OnSourceFilterListReindexed;
+    public event EventHandler<SourceFilterCreatedArgs>? OnSourceFilterCreated;
+    public event EventHandler<SourceFilterRemovedArgs>? OnSourceFilterRemoved;
+    public event EventHandler<SourceFilterNameChangedArgs>? OnSourceFilterNameChanged;
+    public event EventHandler<SourceFilterSettingsChangedArgs>? OnSourceFilterSettingsChanged;
+    public event EventHandler<SourceFilterEnableStateChangedArgs>? OnSourceFilterEnableStateChanged;
+    public event EventHandler? OnExitStarted;
+    public event EventHandler<InputCreatedArgs>? OnInputCreated;
+    public event EventHandler<InputRemovedArgs>? OnInputRemoved;
+    public event EventHandler<InputNameChangedArgs>? OnInputNameChanged;
+    public event EventHandler<InputSettingsChangedArgs>? OnInputSettingsChanged;
+    public event EventHandler<InputActiveStateChangedArgs>? OnInputActiveStateChanged;
+    public event EventHandler<InputShowStateChangedArgs>? OnInputShowStateChanged;
+    public event EventHandler<InputMuteStateChangedArgs>? OnInputMuteStateChanged;
+    public event EventHandler<InputVolumeChangedArgs>? OnInputVolumeChanged;
+    public event EventHandler<InputAudioBalanceChangedArgs>? OnInputAudioBalanceChanged;
+    public event EventHandler<InputAudioSyncOffsetChangedArgs>? OnInputAudioSyncOffsetChanged;
+    public event EventHandler<InputAudioTracksChangedArgs>? OnInputAudioTracksChanged;
+    public event EventHandler<InputAudioMonitorTypeChangedArgs>? OnInputAudioMonitorTypeChanged;
+    public event EventHandler<InputVolumeMetersArgs>? OnInputVolumeMeters;
+    public event EventHandler<MediaInputPlaybackStartedArgs>? OnMediaInputPlaybackStarted;
+    public event EventHandler<MediaInputPlaybackEndedArgs>? OnMediaInputPlaybackEnded;
+    public event EventHandler<MediaInputActionTriggeredArgs>? OnMediaInputActionTriggered;
+    public event EventHandler<StreamStateChangedArgs>? OnStreamStateChanged;
+    public event EventHandler<RecordStateChangedArgs>? OnRecordStateChanged;
+    public event EventHandler<RecordFileChangedArgs>? OnRecordFileChanged;
+    public event EventHandler<ReplayBufferStateChangedArgs>? OnReplayBufferStateChanged;
+    public event EventHandler<VirtualcamStateChangedArgs>? OnVirtualcamStateChanged;
+    public event EventHandler<ReplayBufferSavedArgs>? OnReplayBufferSaved;
+    public event EventHandler<SceneItemCreatedArgs>? OnSceneItemCreated;
+    public event EventHandler<SceneItemRemovedArgs>? OnSceneItemRemoved;
+    public event EventHandler<SceneItemListReindexedArgs>? OnSceneItemListReindexed;
+    public event EventHandler<SceneItemEnableStateChangedArgs>? OnSceneItemEnableStateChanged;
+    public event EventHandler<SceneItemLockStateChangedArgs>? OnSceneItemLockStateChanged;
+    public event EventHandler<SceneItemSelectedArgs>? OnSceneItemSelected;
+    public event EventHandler<SceneItemTransformChangedArgs>? OnSceneItemTransformChanged;
+    public event EventHandler<SceneCreatedArgs>? OnSceneCreated;
+    public event EventHandler<SceneRemovedArgs>? OnSceneRemoved;
+    public event EventHandler<SceneNameChangedArgs>? OnSceneNameChanged;
+    public event EventHandler<CurrentProgramSceneChangedArgs>? OnCurrentProgramSceneChanged;
+    public event EventHandler<CurrentPreviewSceneChangedArgs>? OnCurrentPreviewSceneChanged;
+    public event EventHandler<SceneListChangedArgs>? OnSceneListChanged;
+    public event EventHandler<CurrentSceneTransitionChangedArgs>? OnCurrentSceneTransitionChanged;
+    public event EventHandler<CurrentSceneTransitionDurationChangedArgs>? OnCurrentSceneTransitionDurationChanged;
+    public event EventHandler<SceneTransitionStartedArgs>? OnSceneTransitionStarted;
+    public event EventHandler<SceneTransitionEndedArgs>? OnSceneTransitionEnded;
+    public event EventHandler<SceneTransitionVideoEndedArgs>? OnSceneTransitionVideoEnded;
+    public event EventHandler<StudioModeStateChangedArgs>? OnStudioModeStateChanged;
+    public event EventHandler<ScreenshotSavedArgs>? OnScreenshotSaved;
+    public event EventHandler<VendorEventArgs>? OnVendorEvent;
+    public event EventHandler<CustomEventArgs>? OnCustomEvent;
 
     public bool Enabled { get; internal set; } = false;
     private string _serverPassword = string.Empty;
@@ -124,13 +125,13 @@ internal sealed class OBSSocketClient(ILogger logger) {
     }
 
     private void OnSockConnected(object? sender, EventArgs e) =>
-        OBSConnected?.Invoke(this, e);
+        OnOBSConnected?.Invoke(this, e);
 
     private void OnSockDisconnected(object? sender, EventArgs e) =>
-        OBSDisconnected?.Invoke(this, e);
+        OnOBSDisconnected?.Invoke(this, e);
 
     private void OnSockError(object? sender, ErrorEventArgs e) =>
-        OBSError?.Invoke(this, new(e.Exception));
+        OnOBSError?.Invoke(this, new(e.Exception));
 
     private void OnSockMessageReceived(object? sender, MessageReceivedEventArgs e) {
         IBaseMessage? inMsg = JsonSerializer.Deserialize<IBaseMessage>(e.Message, _serializationOpt);
@@ -167,345 +168,343 @@ internal sealed class OBSSocketClient(ILogger logger) {
                 InEventMsg eventMsg = (InEventMsg)inMsg;
 
                 switch (eventMsg.D) {
-                    case InEventMsg.CurrentSceneCollectionChanging: {
-                        CurrentSceneCollectionChanging?.Invoke(this, new() {
-                            Data = (InEventMsg.CurrentSceneCollectionChanging)eventMsg.D
+                    case CurrentSceneCollectionChanging: {
+                        OnCurrentSceneCollectionChanging?.Invoke(this, new() {
+                            Data = ((CurrentSceneCollectionChanging)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.CurrentSceneCollectionChanged: {
-                        CurrentSceneCollectionChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.CurrentSceneCollectionChanged)eventMsg.D
+                    case CurrentSceneCollectionChanged: {
+                        OnCurrentSceneCollectionChanged?.Invoke(this, new() {
+                            Data = ((CurrentSceneCollectionChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneCollectionListChanged: {
-                        SceneCollectionListChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneCollectionListChanged)eventMsg.D
+                    case SceneCollectionListChanged: {
+                        OnSceneCollectionListChanged?.Invoke(this, new() {
+                            Data = ((SceneCollectionListChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.CurrentProfileChanging: {
-                        CurrentProfileChanging?.Invoke(this, new() {
-                            Data = (InEventMsg.CurrentProfileChanging)eventMsg.D
+                    case CurrentProfileChanging: {
+                        OnCurrentProfileChanging?.Invoke(this, new() {
+                            Data = ((CurrentProfileChanging)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.CurrentProfileChanged: {
-                        CurrentProfileChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.CurrentProfileChanged)eventMsg.D
+                    case CurrentProfileChanged: {
+                        OnCurrentProfileChanged?.Invoke(this, new() {
+                            Data = ((CurrentProfileChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.ProfileListChanged: {
-                        ProfileListChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.ProfileListChanged)eventMsg.D
+                    case ProfileListChanged: {
+                        OnProfileListChanged?.Invoke(this, new() {
+                            Data = ((ProfileListChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SourceFilterListReindexed: {
-                        SourceFilterListReindexed?.Invoke(this, new() {
-                            Data = (InEventMsg.SourceFilterListReindexed)eventMsg.D
+                    case SourceFilterListReindexed: {
+                        OnSourceFilterListReindexed?.Invoke(this, new() {
+                            Data = ((SourceFilterListReindexed)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SourceFilterCreated: {
-                        SourceFilterCreated?.Invoke(this, new() {
-                            Data = (InEventMsg.SourceFilterCreated)eventMsg.D
+                    case SourceFilterCreated: {
+                        OnSourceFilterCreated?.Invoke(this, new() {
+                            Data = ((SourceFilterCreated)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SourceFilterRemoved: {
-                        SourceFilterRemoved?.Invoke(this, new() {
-                            Data = (InEventMsg.SourceFilterRemoved)eventMsg.D
+                    case SourceFilterRemoved: {
+                        OnSourceFilterRemoved?.Invoke(this, new() {
+                            Data = ((SourceFilterRemoved)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SourceFilterNameChanged: {
-                        SourceFilterNameChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.SourceFilterNameChanged)eventMsg.D
+                    case SourceFilterNameChanged: {
+                        OnSourceFilterNameChanged?.Invoke(this, new() {
+                            Data = ((SourceFilterNameChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SourceFilterSettingsChanged: {
-                        SourceFilterSettingsChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.SourceFilterSettingsChanged)eventMsg.D
+                    case SourceFilterSettingsChanged: {
+                        OnSourceFilterSettingsChanged?.Invoke(this, new() {
+                            Data = ((SourceFilterSettingsChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SourceFilterEnableStateChanged: {
-                        SourceFilterEnableStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.SourceFilterEnableStateChanged)eventMsg.D
+                    case SourceFilterEnableStateChanged: {
+                        OnSourceFilterEnableStateChanged?.Invoke(this, new() {
+                            Data = ((SourceFilterEnableStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.ExitStarted: {
-                        ExitStarted?.Invoke(this, new() {
-                            Data = (InEventMsg.ExitStarted)eventMsg.D
+                    case ExitStarted: {
+                        OnExitStarted?.Invoke(this, new());
+                        break;
+                    }
+                    case InputCreated: {
+                        OnInputCreated?.Invoke(this, new() {
+                            Data = ((InputCreated)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputCreated: {
-                        InputCreated?.Invoke(this, new() {
-                            Data = (InEventMsg.InputCreated)eventMsg.D
+                    case InputRemoved: {
+                        OnInputRemoved?.Invoke(this, new() {
+                            Data = ((InputRemoved)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputRemoved: {
-                        InputRemoved?.Invoke(this, new() {
-                            Data = (InEventMsg.InputRemoved)eventMsg.D
+                    case InputNameChanged: {
+                        OnInputNameChanged?.Invoke(this, new() {
+                            Data = ((InputNameChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputNameChanged: {
-                        InputNameChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputNameChanged)eventMsg.D
+                    case InputSettingsChanged: {
+                        OnInputSettingsChanged?.Invoke(this, new() {
+                            Data = ((InputSettingsChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputSettingsChanged: {
-                        InputSettingsChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputSettingsChanged)eventMsg.D
+                    case InputActiveStateChanged: {
+                        OnInputActiveStateChanged?.Invoke(this, new() {
+                            Data = ((InputActiveStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputActiveStateChanged: {
-                        InputActiveStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputActiveStateChanged)eventMsg.D
+                    case InputShowStateChanged: {
+                        OnInputShowStateChanged?.Invoke(this, new() {
+                            Data = ((InputShowStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputShowStateChanged: {
-                        InputShowStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputShowStateChanged)eventMsg.D
+                    case InputMuteStateChanged: {
+                        OnInputMuteStateChanged?.Invoke(this, new() {
+                            Data = ((InputMuteStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputMuteStateChanged: {
-                        InputMuteStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputMuteStateChanged)eventMsg.D
+                    case InputVolumeChanged: {
+                        OnInputVolumeChanged?.Invoke(this, new() {
+                            Data = ((InputVolumeChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputVolumeChanged: {
-                        InputVolumeChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputVolumeChanged)eventMsg.D
+                    case InputAudioBalanceChanged: {
+                        OnInputAudioBalanceChanged?.Invoke(this, new() {
+                            Data = ((InputAudioBalanceChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputAudioBalanceChanged: {
-                        InputAudioBalanceChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputAudioBalanceChanged)eventMsg.D
+                    case InputAudioSyncOffsetChanged: {
+                        OnInputAudioSyncOffsetChanged?.Invoke(this, new() {
+                            Data = ((InputAudioSyncOffsetChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputAudioSyncOffsetChanged: {
-                        InputAudioSyncOffsetChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputAudioSyncOffsetChanged)eventMsg.D
+                    case InputAudioTracksChanged: {
+                        OnInputAudioTracksChanged?.Invoke(this, new() {
+                            Data = ((InputAudioTracksChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputAudioTracksChanged: {
-                        InputAudioTracksChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputAudioTracksChanged)eventMsg.D
+                    case InputAudioMonitorTypeChanged: {
+                        OnInputAudioMonitorTypeChanged?.Invoke(this, new() {
+                            Data = ((InputAudioMonitorTypeChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputAudioMonitorTypeChanged: {
-                        InputAudioMonitorTypeChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.InputAudioMonitorTypeChanged)eventMsg.D
+                    case InputVolumeMeters: {
+                        OnInputVolumeMeters?.Invoke(this, new() {
+                            Data = ((InputVolumeMeters)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.InputVolumeMeters: {
-                        InputVolumeMeters?.Invoke(this, new() {
-                            Data = (InEventMsg.InputVolumeMeters)eventMsg.D
+                    case MediaInputPlaybackStarted: {
+                        OnMediaInputPlaybackStarted?.Invoke(this, new() {
+                            Data = ((MediaInputPlaybackStarted)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.MediaInputPlaybackStarted: {
-                        MediaInputPlaybackStarted?.Invoke(this, new() {
-                            Data = (InEventMsg.MediaInputPlaybackStarted)eventMsg.D
+                    case MediaInputPlaybackEnded: {
+                        OnMediaInputPlaybackEnded?.Invoke(this, new() {
+                            Data = ((MediaInputPlaybackEnded)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.MediaInputPlaybackEnded: {
-                        MediaInputPlaybackEnded?.Invoke(this, new() {
-                            Data = (InEventMsg.MediaInputPlaybackEnded)eventMsg.D
+                    case MediaInputActionTriggered: {
+                        OnMediaInputActionTriggered?.Invoke(this, new() {
+                            Data = ((MediaInputActionTriggered)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.MediaInputActionTriggered: {
-                        MediaInputActionTriggered?.Invoke(this, new() {
-                            Data = (InEventMsg.MediaInputActionTriggered)eventMsg.D
+                    case StreamStateChanged: {
+                        OnStreamStateChanged?.Invoke(this, new() {
+                            Data = ((StreamStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.StreamStateChanged: {
-                        StreamStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.StreamStateChanged)eventMsg.D
+                    case RecordStateChanged: {
+                        OnRecordStateChanged?.Invoke(this, new() {
+                            Data = ((RecordStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.RecordStateChanged: {
-                        RecordStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.RecordStateChanged)eventMsg.D
+                    case RecordFileChanged: {
+                        OnRecordFileChanged?.Invoke(this, new() {
+                            Data = ((RecordFileChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.RecordFileChanged: {
-                        RecordFileChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.RecordFileChanged)eventMsg.D
+                    case ReplayBufferStateChanged: {
+                        OnReplayBufferStateChanged?.Invoke(this, new() {
+                            Data = ((ReplayBufferStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.ReplayBufferStateChanged: {
-                        ReplayBufferStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.ReplayBufferStateChanged)eventMsg.D
+                    case VirtualcamStateChanged: {
+                        OnVirtualcamStateChanged?.Invoke(this, new() {
+                            Data = ((VirtualcamStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.VirtualcamStateChanged: {
-                        VirtualcamStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.VirtualcamStateChanged)eventMsg.D
+                    case ReplayBufferSaved: {
+                        OnReplayBufferSaved?.Invoke(this, new() {
+                            Data = ((ReplayBufferSaved)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.ReplayBufferSaved: {
-                        ReplayBufferSaved?.Invoke(this, new() {
-                            Data = (InEventMsg.ReplayBufferSaved)eventMsg.D
+                    case SceneItemCreated: {
+                        OnSceneItemCreated?.Invoke(this, new() {
+                            Data = ((SceneItemCreated)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneItemCreated: {
-                        SceneItemCreated?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneItemCreated)eventMsg.D
+                    case SceneItemRemoved: {
+                        OnSceneItemRemoved?.Invoke(this, new() {
+                            Data = ((SceneItemRemoved)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneItemRemoved: {
-                        SceneItemRemoved?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneItemRemoved)eventMsg.D
+                    case SceneItemListReindexed: {
+                        OnSceneItemListReindexed?.Invoke(this, new() {
+                            Data = ((SceneItemListReindexed)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneItemListReindexed: {
-                        SceneItemListReindexed?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneItemListReindexed)eventMsg.D
+                    case SceneItemEnableStateChanged: {
+                        OnSceneItemEnableStateChanged?.Invoke(this, new() {
+                            Data = ((SceneItemEnableStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneItemEnableStateChanged: {
-                        SceneItemEnableStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneItemEnableStateChanged)eventMsg.D
+                    case SceneItemLockStateChanged: {
+                        OnSceneItemLockStateChanged?.Invoke(this, new() {
+                            Data = ((SceneItemLockStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneItemLockStateChanged: {
-                        SceneItemLockStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneItemLockStateChanged)eventMsg.D
+                    case SceneItemSelected: {
+                        OnSceneItemSelected?.Invoke(this, new() {
+                            Data = ((SceneItemSelected)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneItemSelected: {
-                        SceneItemSelected?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneItemSelected)eventMsg.D
+                    case SceneItemTransformChanged: {
+                        OnSceneItemTransformChanged?.Invoke(this, new() {
+                            Data = ((SceneItemTransformChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneItemTransformChanged: {
-                        SceneItemTransformChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneItemTransformChanged)eventMsg.D
+                    case SceneCreated: {
+                        OnSceneCreated?.Invoke(this, new() {
+                            Data = ((SceneCreated)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneCreated: {
-                        SceneCreated?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneCreated)eventMsg.D
+                    case SceneRemoved: {
+                        OnSceneRemoved?.Invoke(this, new() {
+                            Data = ((SceneRemoved)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneRemoved: {
-                        SceneRemoved?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneRemoved)eventMsg.D
+                    case SceneNameChanged: {
+                        OnSceneNameChanged?.Invoke(this, new() {
+                            Data = ((SceneNameChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneNameChanged: {
-                        SceneNameChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneNameChanged)eventMsg.D
+                    case CurrentProgramSceneChanged: {
+                        OnCurrentProgramSceneChanged?.Invoke(this, new() {
+                            Data = ((CurrentProgramSceneChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.CurrentProgramSceneChanged: {
-                        CurrentProgramSceneChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.CurrentProgramSceneChanged)eventMsg.D
+                    case CurrentPreviewSceneChanged: {
+                        OnCurrentPreviewSceneChanged?.Invoke(this, new() {
+                            Data = ((CurrentPreviewSceneChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.CurrentPreviewSceneChanged: {
-                        CurrentPreviewSceneChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.CurrentPreviewSceneChanged)eventMsg.D
+                    case SceneListChanged: {
+                        OnSceneListChanged?.Invoke(this, new() {
+                            Data = ((SceneListChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneListChanged: {
-                        SceneListChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneListChanged)eventMsg.D
+                    case CurrentSceneTransitionChanged: {
+                        OnCurrentSceneTransitionChanged?.Invoke(this, new() {
+                            Data = ((CurrentSceneTransitionChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.CurrentSceneTransitionChanged: {
-                        CurrentSceneTransitionChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.CurrentSceneTransitionChanged)eventMsg.D
+                    case CurrentSceneTransitionDurationChanged: {
+                        OnCurrentSceneTransitionDurationChanged?.Invoke(this, new() {
+                            Data = ((CurrentSceneTransitionDurationChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.CurrentSceneTransitionDurationChanged: {
-                        CurrentSceneTransitionDurationChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.CurrentSceneTransitionDurationChanged)eventMsg.D
+                    case SceneTransitionStarted: {
+                        OnSceneTransitionStarted?.Invoke(this, new() {
+                            Data = ((SceneTransitionStarted)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneTransitionStarted: {
-                        SceneTransitionStarted?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneTransitionStarted)eventMsg.D
+                    case SceneTransitionEnded: {
+                        OnSceneTransitionEnded?.Invoke(this, new() {
+                            Data = ((SceneTransitionEnded)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneTransitionEnded: {
-                        SceneTransitionEnded?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneTransitionEnded)eventMsg.D
+                    case SceneTransitionVideoEnded: {
+                        OnSceneTransitionVideoEnded?.Invoke(this, new() {
+                            Data = ((SceneTransitionVideoEnded)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.SceneTransitionVideoEnded: {
-                        SceneTransitionVideoEnded?.Invoke(this, new() {
-                            Data = (InEventMsg.SceneTransitionVideoEnded)eventMsg.D
+                    case StudioModeStateChanged: {
+                        OnStudioModeStateChanged?.Invoke(this, new() {
+                            Data = ((StudioModeStateChanged)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.StudioModeStateChanged: {
-                        StudioModeStateChanged?.Invoke(this, new() {
-                            Data = (InEventMsg.StudioModeStateChanged)eventMsg.D
+                    case ScreenshotSaved: {
+                        OnScreenshotSaved?.Invoke(this, new() {
+                            Data = ((ScreenshotSaved)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.ScreenshotSaved: {
-                        ScreenshotSaved?.Invoke(this, new() {
-                            Data = (InEventMsg.ScreenshotSaved)eventMsg.D
+                    case VendorEvent: {
+                        OnVendorEvent?.Invoke(this, new() {
+                            Data = ((VendorEvent)eventMsg.D).EventData
                         });
                         break;
                     }
-                    case InEventMsg.VendorEvent: {
-                        VendorEvent?.Invoke(this, new() {
-                            Data = (InEventMsg.VendorEvent)eventMsg.D
-                        });
-                        break;
-                    }
-                    case InEventMsg.CustomEvent: {
-                        CustomEvent?.Invoke(this, new() {
-                            Data = (InEventMsg.CustomEvent)eventMsg.D
+                    case CustomEvent: {
+                        OnCustomEvent?.Invoke(this, new() {
+                            Data = ((CustomEvent)eventMsg.D).EventData
                         });
                         break;
                     }
@@ -553,15 +552,18 @@ internal sealed class OBSSocketClient(ILogger logger) {
         if (msg.D.RequestData != null)
             msg.D.RequestType = msg.D.RequestData.GetType().Name;
 
-        _socket?.Send(JsonSerializer.Serialize(msg));
         _requestResults[msg.D.RequestId] = null;
         InResponseMsg.Data? result;
+        _socket?.Send(JsonSerializer.Serialize(msg));
 
         do {
             await Task.Delay(10); // Add a little delay to avoid hogging resources
             result = _requestResults[msg.D.RequestId];
         } while (result == null);
 
+        // We're too fast for OBS's websocket.. =I
+        // introduce a little delay to avoid OBS completely messing up requests
+        await Task.Delay(50);
         return result;
     }
 }
