@@ -28,7 +28,6 @@
       <PackageReference Include="System.Text.Json" Version="9.0.6" />
       <PackageReference Include="VRCOscLib" Version="1.6.0" />
       <PackageReference Include="VRChat.OSCQuery" Version="0.0.7" />
-      <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
 
       <Reference Include="SubLink.References">
         <HintPath>..\Dist\SubLink.References.dll</HintPath>
