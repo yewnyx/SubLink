@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Channels;
+using System.Threading.Tasks;
 
 var notifier = new XSNotifier();
 
@@ -337,5 +338,397 @@ fansly.ReactToGoalUpdated(async goalInfo => {
         OscParameter.SendAvatarParameter("Honk", true);
     }
 });
+
+#endif
+
+#if SUBLINK_OBS
+
+logger.Information("[{TAG}] OBS integration enabled", "Script");
+var obs = (OBSRules)rules["OBS"];
+
+obs.ReactToCurrentSceneCollectionChanging(async currentSceneCollectionChanging => {
+    logger.Information("OBS Current Scene Collection `{SceneCollectionName}` Changing",
+        currentSceneCollectionChanging.SceneCollectionName);
+});
+
+obs.ReactToCurrentSceneCollectionChanged(async currentSceneCollectionChanged => {
+    logger.Information("OBS Current Scene Collection `{SceneCollectionName}` Changed",
+        currentSceneCollectionChanged.SceneCollectionName);
+});
+
+obs.ReactToSceneCollectionListChanged(async sceneCollectionListChanged => {
+    logger.Information("OBS Scene Collection List Changed : `{SceneCollections}`",
+        string.Join(", ", sceneCollectionListChanged.SceneCollections));
+});
+
+obs.ReactToCurrentProfileChanging(async currentProfileChanging => {
+    logger.Information("OBS Current Profile `{ProfileName}` Changing",
+        currentProfileChanging.ProfileName);
+});
+
+obs.ReactToCurrentProfileChanged(async currentProfileChanged => {
+    logger.Information("OBS Current Profile `{ProfileName}` Changed",
+        currentProfileChanged.ProfileName);
+});
+
+obs.ReactToProfileListChanged(async profileListChanged => {
+    logger.Information("OBS Profile List Changed : `{Profiles}`",
+        string.Join(", ", profileListChanged.Profiles));
+});
+
+obs.ReactToSourceFilterListReindexed(async sourceFilterListReindexed => {
+    logger.Information("OBS Source `{SourceName}` Filter List Reindexed",
+        sourceFilterListReindexed.SourceName);
+});
+
+obs.ReactToSourceFilterCreated(async sourceFilterCreated => {
+    logger.Information("OBS Source `{SourceName}` Filter `{FilterName}` of kind `{FilterKind}` at index `{FilterIndex}` Created",
+        sourceFilterCreated.SourceName,
+        sourceFilterCreated.FilterName,
+        sourceFilterCreated.FilterKind,
+        sourceFilterCreated.FilterIndex);
+});
+
+obs.ReactToSourceFilterRemoved(async sourceFilterRemoved => {
+    logger.Information("OBS Source `{SourceName}` Filter `{FilterName}` removed",
+        sourceFilterRemoved.SourceName,
+        sourceFilterRemoved.FilterName);
+});
+
+obs.ReactToSourceFilterNameChanged(async sourceFilterNameChanged => {
+    logger.Information("OBS Source `{SourceName}` Filter `{OldFilterName}` renamed to `{FilterName}`",
+        sourceFilterNameChanged.SourceName,
+        sourceFilterNameChanged.OldFilterName,
+        sourceFilterNameChanged.FilterName);
+});
+
+obs.ReactToSourceFilterSettingsChanged(async sourceFilterSettingsChanged => {
+    logger.Information("OBS Source `{SourceName}` Filter `{FilterName}` settings changed",
+        sourceFilterSettingsChanged.SourceName,
+        sourceFilterSettingsChanged.FilterName);
+});
+
+obs.ReactToSourceFilterEnableStateChanged(async sourceFilterEnableStateChanged => {
+    logger.Information("OBS Source `{SourceName}` Filter `{FilterName}` {FilterEnabled}",
+        sourceFilterEnableStateChanged.SourceName,
+        sourceFilterEnableStateChanged.FilterName,
+        sourceFilterEnableStateChanged.FilterEnabled ? "Enabled" : "Disabled");
+});
+
+obs.ReactToExitStarted(async () => {
+    logger.Information("OBS Exit Started");
+});
+
+obs.ReactToInputCreated(async inputCreated => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` of kind `{InputKind}` (Unversioned `{UnversionedInputKind})` created",
+        inputCreated.InputName,
+        inputCreated.InputUuid,
+        inputCreated.InputKind,
+        inputCreated.UnversionedInputKind);
+});
+
+obs.ReactToInputRemoved(async inputRemoved => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` removed",
+        inputRemoved.InputName,
+        inputRemoved.InputUuid);
+});
+
+obs.ReactToInputNameChanged(async inputNameChanged => {
+    logger.Information("OBS Input `{OldInputName}` `{InputUuid}` renamed to `{InputName}`",
+        inputNameChanged.OldInputName,
+        inputNameChanged.InputUuid,
+        inputNameChanged.InputName);
+});
+
+obs.ReactToInputSettingsChanged(async inputSettingsChanged => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` settings changed",
+        inputSettingsChanged.InputName,
+        inputSettingsChanged.InputUuid);
+});
+
+obs.ReactToInputActiveStateChanged(async inputActiveStateChanged => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` {VideoActive}",
+        inputActiveStateChanged.InputName,
+        inputActiveStateChanged.InputUuid,
+        inputActiveStateChanged.VideoActive ? "Activated" : "Deactivated");
+});
+
+obs.ReactToInputShowStateChanged(async inputShowStateChanged => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` {VideoActive}",
+        inputShowStateChanged.InputName,
+        inputShowStateChanged.InputUuid,
+        inputShowStateChanged.VideoShowing ? "Shown" : "Hidden");
+});
+
+obs.ReactToInputMuteStateChanged(async inputMuteStateChanged => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` {VideoActive}",
+        inputMuteStateChanged.InputName,
+        inputMuteStateChanged.InputUuid,
+        inputMuteStateChanged.InputMuted ? "Muted" : "Unmuted");
+});
+
+obs.ReactToInputVolumeChanged(async inputVolumeChanged => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` volume changed, Multiplier `{InputVolumeMul}` dB `{InputVolumeDb}`",
+        inputVolumeChanged.InputName,
+        inputVolumeChanged.InputUuid,
+        inputVolumeChanged.InputVolumeMul,
+        inputVolumeChanged.InputVolumeDb);
+});
+
+obs.ReactToInputAudioBalanceChanged(async inputAudioBalanceChanged => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` audio balance changed to `{InputAudioBalance}`",
+        inputAudioBalanceChanged.InputName,
+        inputAudioBalanceChanged.InputUuid,
+        inputAudioBalanceChanged.InputAudioBalance);
+});
+
+obs.ReactToInputAudioSyncOffsetChanged(async inputAudioSyncOffsetChanged => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` audio sync offset changed to `{InputAudioSyncOffset}`",
+        inputAudioSyncOffsetChanged.InputName,
+        inputAudioSyncOffsetChanged.InputUuid,
+        inputAudioSyncOffsetChanged.InputAudioSyncOffset);
+});
+
+obs.ReactToInputAudioTracksChanged(async inputAudioTracksChanged => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` audio tracks changed",
+        inputAudioTracksChanged.InputName,
+        inputAudioTracksChanged.InputUuid);
+});
+
+obs.ReactToInputAudioMonitorTypeChanged(async inputAudioMonitorTypeChanged => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` audio monitor type changed to `{MonitorType}`",
+        inputAudioMonitorTypeChanged.InputName,
+        inputAudioMonitorTypeChanged.InputUuid,
+        inputAudioMonitorTypeChanged.MonitorType);
+});
+
+obs.ReactToInputVolumeMeters(async inputVolumeMeters => {
+    logger.Information("OBS Input Volume Meters event received");
+});
+
+obs.ReactToMediaInputPlaybackStarted(async mediaInputPlaybackStarted => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` media playback started",
+        mediaInputPlaybackStarted.InputName,
+        mediaInputPlaybackStarted.InputUuid);
+});
+
+obs.ReactToMediaInputPlaybackEnded(async mediaInputPlaybackEnded => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` media playback ended",
+        mediaInputPlaybackEnded.InputName,
+        mediaInputPlaybackEnded.InputUuid);
+});
+
+obs.ReactToMediaInputActionTriggered(async mediaInputActionTriggered => {
+    logger.Information("OBS Input `{InputName}` `{InputUuid}` media action `{MediaAction}` triggered",
+        mediaInputActionTriggered.InputName,
+        mediaInputActionTriggered.InputUuid,
+        mediaInputActionTriggered.MediaAction);
+});
+
+obs.ReactToStreamStateChanged(async streamStateChanged => {
+    logger.Information("OBS Stream state changed to `{OutputActive}` ({OutputState})",
+        streamStateChanged.OutputActive ? "Active" : "Inactive",
+        streamStateChanged.OutputState);
+});
+
+obs.ReactToRecordStateChanged(async recordStateChanged => {
+    logger.Information("OBS Recording state changed to `{OutputActive}` ({OutputState}), saved as: `{OutputPath}`",
+        recordStateChanged.OutputActive ? "Active" : "Inactive",
+        recordStateChanged.OutputState,
+        recordStateChanged.OutputPath ?? "<SAVE FAILED>");
+});
+
+obs.ReactToRecordFileChanged(async recordFileChanged => {
+    logger.Information("OBS Recording output file changed to: `{OutputActive}`",
+        recordFileChanged.NewOutputPath);
+});
+
+obs.ReactToReplayBufferStateChanged(async replayBufferStateChanged => {
+    logger.Information("OBS Replay Buffer state changed to `{OutputActive}` ({OutputState})",
+        replayBufferStateChanged.OutputActive ? "Active" : "Inactive",
+        replayBufferStateChanged.OutputState);
+});
+
+obs.ReactToVirtualcamStateChanged(async virtualcamStateChanged => {
+    logger.Information("OBS Virtualcam state changed to `{OutputActive}` ({OutputState})",
+        virtualcamStateChanged.OutputActive ? "Active" : "Inactive",
+        virtualcamStateChanged.OutputState);
+});
+
+obs.ReactToReplayBufferSaved(async replayBufferSaved => {
+    logger.Information("OBS Replay Buffer saved to: `{OutputActive}`",
+        replayBufferSaved.SavedReplayPath);
+});
+
+obs.ReactToSceneItemCreated(async sceneItemCreated => {
+    logger.Information("OBS Source `{SourceName}` `{SourceUuid}` added to scene `{SceneName}` `{SceneUuid}` with id {SceneItemId} at index {SceneItemIndex}",
+        sceneItemCreated.SourceName,
+        sceneItemCreated.SourceUuid,
+        sceneItemCreated.SceneName,
+        sceneItemCreated.SceneUuid,
+        sceneItemCreated.SceneItemId,
+        sceneItemCreated.SceneItemIndex);
+});
+
+obs.ReactToSceneItemRemoved(async sceneItemRemoved => {
+    logger.Information("OBS Source `{SourceName}` `{SourceUuid}` with id {SceneItemId} removed from scene `{SceneName}` `{SceneUuid}`",
+        sceneItemRemoved.SourceName,
+        sceneItemRemoved.SourceUuid,
+        sceneItemRemoved.SceneName,
+        sceneItemRemoved.SceneUuid,
+        sceneItemRemoved.SceneItemId);
+});
+
+obs.ReactToSceneItemListReindexed(async sceneItemListReindexed => {
+    logger.Information("OBS Scene `{SceneName}` `{SceneUuid}` item list reindexed",
+        sceneItemListReindexed.SceneName,
+        sceneItemListReindexed.SceneUuid);
+});
+
+obs.ReactToSceneItemEnableStateChanged(async sceneItemEnableStateChanged => {
+    logger.Information("OBS Scene item {SceneItemId} {SceneItemEnabled} in scene `{SceneName}` `{SceneUuid}`",
+        sceneItemEnableStateChanged.SceneItemId,
+        sceneItemEnableStateChanged.SceneItemEnabled ? "Enabled" : "Disabled",
+        sceneItemEnableStateChanged.SceneName,
+        sceneItemEnableStateChanged.SceneUuid);
+});
+
+obs.ReactToSceneItemLockStateChanged(async sceneItemLockStateChanged => {
+    logger.Information("OBS Scene item {SceneItemId} {SceneItemLocked} in scene `{SceneName}` `{SceneUuid}`",
+        sceneItemLockStateChanged.SceneItemId,
+        sceneItemLockStateChanged.SceneItemLocked ? "Locked" : "Unlocked",
+        sceneItemLockStateChanged.SceneName,
+        sceneItemLockStateChanged.SceneUuid);
+});
+
+obs.ReactToSceneItemSelected(async sceneItemSelected => {
+    logger.Information("OBS Scene `{SceneName}` `{SceneUuid}` item {SceneItemId} selected",
+        sceneItemSelected.SceneName,
+        sceneItemSelected.SceneUuid,
+        sceneItemSelected.SceneItemId);
+});
+
+obs.ReactToSceneItemTransformChanged(async sceneItemTransformChanged => {
+    logger.Information("OBS Scene `{SceneName}` `{SceneUuid}` item {SceneItemId} transform changed",
+        sceneItemTransformChanged.SceneName,
+        sceneItemTransformChanged.SceneUuid,
+        sceneItemTransformChanged.SceneItemId);
+});
+
+obs.ReactToSceneCreated(async sceneCreated => {
+    logger.Information("OBS Scene {IsGroup}`{SceneName}` `{SceneUuid}` created",
+        sceneCreated.IsGroup ? "group " : "",
+        sceneCreated.SceneName,
+        sceneCreated.SceneUuid);
+});
+
+obs.ReactToSceneRemoved(async sceneRemoved => {
+    logger.Information("OBS Scene {IsGroup}`{SceneName}` `{SceneUuid}` removed",
+        sceneRemoved.IsGroup ? "group " : "",
+        sceneRemoved.SceneName,
+        sceneRemoved.SceneUuid);
+});
+
+obs.ReactToSceneNameChanged(async sceneNameChanged => {
+    logger.Information("OBS Scene `{OldSceneName}` `{SceneUuid}` name changed to `{SceneName}`",
+        sceneNameChanged.OldSceneName,
+        sceneNameChanged.SceneUuid,
+        sceneNameChanged.SceneName);
+});
+
+obs.ReactToCurrentProgramSceneChanged(async currentProgramSceneChanged => {
+    logger.Information("OBS Current program scene changed to `{SceneName}` `{SceneUuid}`",
+        currentProgramSceneChanged.SceneName,
+        currentProgramSceneChanged.SceneUuid);
+});
+
+obs.ReactToCurrentPreviewSceneChanged(async currentPreviewSceneChanged => {
+    logger.Information("OBS Current preview scene changed to `{SceneName}` `{SceneUuid}`",
+        currentPreviewSceneChanged.SceneName,
+        currentPreviewSceneChanged.SceneUuid);
+});
+
+obs.ReactToSceneListChanged(async sceneListChanged => {
+    logger.Information("OBS Scene list changed");
+});
+
+obs.ReactToCurrentSceneTransitionChanged(async currentSceneTransitionChanged => {
+    logger.Information("OBS Current scene transition changed to `{TransitionName}` `{TransitionUuid}`",
+        currentSceneTransitionChanged.TransitionName,
+        currentSceneTransitionChanged.TransitionUuid);
+});
+
+obs.ReactToCurrentSceneTransitionDurationChanged(async currentSceneTransitionDurationChanged => {
+    logger.Information("OBS Current scene transition duration changed to `{TransitionDuration}`",
+        currentSceneTransitionDurationChanged.TransitionDuration);
+});
+
+obs.ReactToSceneTransitionStarted(async sceneTransitionStarted => {
+    logger.Information("OBS Current scene transition `{TransitionName}` `{TransitionUuid}` started",
+        sceneTransitionStarted.TransitionName,
+        sceneTransitionStarted.TransitionUuid);
+});
+
+obs.ReactToSceneTransitionEnded(async sceneTransitionEnded => {
+    logger.Information("OBS Current scene transition `{TransitionName}` `{TransitionUuid}` ended",
+        sceneTransitionEnded.TransitionName,
+        sceneTransitionEnded.TransitionUuid);
+});
+
+obs.ReactToSceneTransitionVideoEnded(async sceneTransitionVideoEnded => {
+    logger.Information("OBS Current scene Video transition `{TransitionName}` `{TransitionUuid}` ended",
+        sceneTransitionVideoEnded.TransitionName,
+        sceneTransitionVideoEnded.TransitionUuid);
+});
+
+obs.ReactToStudioModeStateChanged(async studioModeStateChanged => {
+    logger.Information("OBS Studio mode state {StudioModeEnabled}",
+        studioModeStateChanged.StudioModeEnabled ? "Enabled" : "Disabled");
+});
+
+obs.ReactToScreenshotSaved(async screenshotSaved => {
+    logger.Information("OBS Screenshot saved to: `{SavedScreenshotPath}`",
+        screenshotSaved.SavedScreenshotPath);
+});
+
+obs.ReactToVendorEvent(async vendorEvent => {
+    logger.Information("OBS Vendor `{VendorName}` event of type `{EventType}` triggered",
+        vendorEvent.VendorName,
+        vendorEvent.EventType);
+});
+
+obs.ReactToCustomEvent(async customEvent => {
+    logger.Information("OBS Custom event triggered");
+});
+
+async void LogHotkeyNames() {
+    var hotkeys = await obs.GetHotkeyList();
+    var resultStr = "OBS available hotkeys:";
+
+    foreach (var item in hotkeys) {
+        resultStr += $"\r\n  - {item}";
+    }
+
+    logger.Information(resultStr);
+}
+
+/**
+ * Use method as follows:
+ * SwapSceneForTime("My Funny Scene", TimeSpan.FromSeconds(10));
+ * SwapSceneForTime("My Epic Scene", TimeSpan.FromMinutes(5));
+ */
+void SwapSceneForTime(string newScene, TimeSpan duration) {
+    var task = Task.Run(async () => {
+        // Retrieve the current scene
+        var oldScene = await obs.GetActiveScene();
+        // Swap to the new scene
+        await obs.SetActiveScene(newScene); // Defaults to "Cut" transition
+        // Delay the remaindor for the indicated duration
+        await Task.Delay(duration);
+        // Swap bach to the original scene
+        await obs.SetActiveScene(oldScene);
+    });
+    task.ConfigureAwait(false);
+}
 
 #endif

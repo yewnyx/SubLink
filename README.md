@@ -1,4 +1,4 @@
-<img src="Icon/SubLink.png" alt="SubLink Logo" title="SubLink Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkKick.png" alt="SubLinkKick Logo" title="SubLinkKick Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkStreamElements.png" alt="SubLinkStreamElements Logo" title="SubLinkStreamElements Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkFansly.png" alt="SubLinkFansly Logo" title="SubLinkFansly Logo" width="100" height="100">
+<img src="Icon/SubLink.png" alt="SubLink Logo" title="SubLink Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkKick.png" alt="SubLinkKick Logo" title="SubLinkKick Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkStreamElements.png" alt="SubLinkStreamElements Logo" title="SubLinkStreamElements Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkFansly.png" alt="SubLinkFansly Logo" title="SubLinkFansly Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkOBS.png" alt="SubLinkOBS Logo" title="SubLinkOBS Logo" width="100" height="100">
 
 # SubLink
 
@@ -33,6 +33,7 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 - [Kick Setup](Docs/Setup/Kick.md)
 - [Fansly Setup](Docs/Setup/Fansly.md)
 - [StreamElements Setup](Docs/Setup/StreamElements.md)
+- [OBS Setup](Docs/Setup/OBS.md)
 
 ## Data Types
 
@@ -41,6 +42,11 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 - [Fansly Data Types](Docs/DataTypes/Fansly/Index.md)
 - [StreamElements Data Types](Docs/DataTypes/StreamElements/Index.md)
 - [StreamPad Data Types](Docs/DataTypes/StreamPad/Index.md)
+- [OBS Data Types](Docs/DataTypes/OBS/Index.md)
+
+## Actions
+
+- [OBS Actions](Docs/Actions/OBS/Index.md)
 
 ## Adding Support to Avatars
 
@@ -61,7 +67,7 @@ To receive events from the game you will have to set up some parameters which OS
 Below are config and script upgrade guides, made to help you modernize your setup to be compatible with the current release of SubLink.
 
 - Early releases to v2.1.6 - Follow [this guide](Docs/Update_v2.1.3_To_v2.1.6.md)
-- v2.1.6+ to v3.0.x - Follow [this guide](Docs/Update_v2.1.6_To_v3.0.x.md)
+- v2.1.6+ to v3.0.x+ - Follow [this guide](Docs/Update_v2.1.6_To_v3.0.x.md)
 
 ## Support
 

@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubLink.StreamElements", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubLink.Streampad", "SubLink.Streampad\SubLink.Streampad.csproj", "{8E5DE1DA-D237-40F2-9C6C-EAB65F594DC1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubLink.OBS", "SubLink.OBS\SubLink.OBS.csproj", "{70BE574E-85F3-D717-9D6C-67F0AEEDA81A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{8E5DE1DA-D237-40F2-9C6C-EAB65F594DC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E5DE1DA-D237-40F2-9C6C-EAB65F594DC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E5DE1DA-D237-40F2-9C6C-EAB65F594DC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70BE574E-85F3-D717-9D6C-67F0AEEDA81A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70BE574E-85F3-D717-9D6C-67F0AEEDA81A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70BE574E-85F3-D717-9D6C-67F0AEEDA81A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70BE574E-85F3-D717-9D6C-67F0AEEDA81A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
