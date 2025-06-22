@@ -1,4 +1,4 @@
-<img src="Icon/SubLink.png" alt="SubLink Logo" title="SubLink Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkKick.png" alt="SubLinkKick Logo" title="SubLinkKick Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkStreamElements.png" alt="SubLinkStreamElements Logo" title="SubLinkStreamElements Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkFansly.png" alt="SubLinkFansly Logo" title="SubLinkFansly Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkOBS.png" alt="SubLinkOBS Logo" title="SubLinkOBS Logo" width="100" height="100">
+<img src="Icon/SubLink.png" alt="SubLink Logo" title="SubLink Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkKick.png" alt="SubLinkKick Logo" title="SubLinkKick Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkStreamElements.png" alt="SubLinkStreamElements Logo" title="SubLinkStreamElements Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkFansly.png" alt="SubLinkFansly Logo" title="SubLinkFansly Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkOBS.png" alt="SubLinkOBS Logo" title="SubLinkOBS Logo" width="100" height="100">&nbsp;&nbsp;<img src="Icon/SubLinkOpenShock.png" alt="SubLinkOpenShock Logo" title="SubLinkOpenShock Logo" width="100" height="100">
 
 # SubLink
 
@@ -34,6 +34,7 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 - [Fansly Setup](Docs/Setup/Fansly.md)
 - [StreamElements Setup](Docs/Setup/StreamElements.md)
 - [OBS Setup](Docs/Setup/OBS.md)
+- [OpenShock Setup](Docs/Setup/OpenShock.md)
 
 ## Data Types
 
@@ -43,10 +44,12 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 - [StreamElements Data Types](Docs/DataTypes/StreamElements/Index.md)
 - [StreamPad Data Types](Docs/DataTypes/StreamPad/Index.md)
 - [OBS Data Types](Docs/DataTypes/OBS/Index.md)
+- [OpenShock Data Types](Docs/DataTypes/OpenShock/Index.md)
 
 ## Actions
 
 - [OBS Actions](Docs/Actions/OBS/Index.md)
+- [OpenShock Actions](Docs/Actions/OpenShock/Index.md)
 
 ## Adding Support to Avatars
 

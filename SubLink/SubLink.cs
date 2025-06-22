@@ -732,3 +732,25 @@ void SwapSceneForTime(string newScene, TimeSpan duration) {
 }
 
 #endif
+
+#if SUBLINK_OPENSHOCK
+
+logger.Information("[{TAG}] OpenShock integration enabled", "Script");
+var openShock = (OpenShockRules)rules["OpenShock"];
+
+async void LogOwnShockers() {
+    var shockerInfo = await openShock.GetOwnShockers();
+    string resultStr = "";
+
+    foreach (var hub in shockerInfo) {
+        resultStr += $"Hub `{hub.Name}` ({hub.Id}) has the following shockers:\r\n";
+
+        foreach (var shocker in hub.Shockers) {
+            resultStr += $"  - `{shocker.Name}` ({shocker.Id}) state: {(shocker.IsPaused ? "Paused" : "Live")}\r\n";
+        }
+    }
+
+    logger.Information(resultStr);
+}
+
+#endif
