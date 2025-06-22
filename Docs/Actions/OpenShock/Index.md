@@ -10,7 +10,7 @@
 - [Stop Shocker](#StopShocker)
 - [Get Own Shockers](#GetOwnShockers)
 - [Pause Shocker](#PauseShocker)
-- [Vibrate Shocker](#VibrateShocker)
+- [Resume Shocker](#ResumeShocker)
 - [Script Snippets](#Snippets)
 
 ## VibrateShocker
