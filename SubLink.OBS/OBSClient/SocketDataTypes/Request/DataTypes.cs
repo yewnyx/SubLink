@@ -188,7 +188,6 @@ public class GetSceneItemEnabled : IRequestDataType {
     public string? InputUuid { get; set; }
     /** Numeric ID of the scene item @restrictions >= 0 */
     [JsonPropertyName("sceneItemId")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public uint SceneItemId { get; set; } = 0;
 }
 
@@ -203,12 +202,10 @@ public class SetSceneItemEnabled : IRequestDataType {
     public string? InputUuid { get; set; }
     /** Numeric ID of the scene item @restrictions >= 0 */
     [JsonPropertyName("sceneItemId")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public uint SceneItemId { get; set; } = 0;
     /** New enable state of the scene item */
     [JsonPropertyName("sceneItemEnabled")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public bool SceneItemEnabled { get; set; }
+    public bool SceneItemEnabled { get; set; } = false;
 }
 
 public class GetCurrentProgramScene : IRequestDataType { }
