@@ -5,10 +5,18 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 
 var notifier = new XSNotifier();
+// Also allowed people to use a different IP address:
+// extraOscPort.Open(9011, "192.168.1.15");
+var additionalOSCPort = extraOscPort.Open(9011);
+
+if (additionalOSCPort == null) {
+    logger.Error("Failed to open the additional OSC port");
+}
 
 oscQuery.AddEndpoint<bool>("/avatar/parameters/MuteSelf", Attributes.AccessValues.ReadWrite, new object[] { true });
 oscServer.TryAddMethod("/avatar/parameters/MuteSelf", message => {
     logger.Information($"Received `/avatar/parameters/MuteSelf` value from VRChat : {message.ReadBooleanElement(0)}");
+    additionalOSCPort?.SendValue("/action/give_it_a_name", true);
 });
 
 oscQuery.AddEndpoint("/tracking/vrsystem/head/pose", "ffffff", Attributes.AccessValues.WriteOnly);
@@ -18,6 +26,7 @@ oscServer.TryAddMethod("/tracking/vrsystem/head/pose", message => {
     var position = new Vector3(message.ReadFloatElement(0), message.ReadFloatElement(1), message.ReadFloatElement(2));
     var rotation = new Vector3(message.ReadFloatElement(3), message.ReadFloatElement(4), message.ReadFloatElement(5));
     logger.Information($"VRChat head tracking changed to : Pos{position} rot{rotation}");
+    additionalOSCPort?.SendValue("/some/address/set", 0.75);
 });
 
 #if SUBLINK_TWITCH
