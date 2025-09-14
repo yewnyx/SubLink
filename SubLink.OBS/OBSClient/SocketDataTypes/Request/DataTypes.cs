@@ -179,13 +179,13 @@ public class SetInputAudioSyncOffset : IRequestDataType {
 
 public class GetSceneItemEnabled : IRequestDataType {
     /** Name of the scene the item is in */
-    [JsonPropertyName("inputName")]
+    [JsonPropertyName("sceneName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? InputName { get; set; }
+    public string? SceneName { get; set; }
     /** UUID of the scene the item is in */
-    [JsonPropertyName("inputUuid")]
+    [JsonPropertyName("sceneUuid")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? InputUuid { get; set; }
+    public string? SceneUuid { get; set; }
     /** Numeric ID of the scene item @restrictions >= 0 */
     [JsonPropertyName("sceneItemId")]
     public uint SceneItemId { get; set; } = 0;
@@ -193,13 +193,13 @@ public class GetSceneItemEnabled : IRequestDataType {
 
 public class SetSceneItemEnabled : IRequestDataType {
     /** Name of the scene the item is in */
-    [JsonPropertyName("inputName")]
+    [JsonPropertyName("sceneName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? InputName { get; set; }
+    public string? SceneName { get; set; }
     /** UUID of the scene the item is in */
-    [JsonPropertyName("inputUuid")]
+    [JsonPropertyName("sceneUuid")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? InputUuid { get; set; }
+    public string? SceneUuid { get; set; }
     /** Numeric ID of the scene item @restrictions >= 0 */
     [JsonPropertyName("sceneItemId")]
     public uint SceneItemId { get; set; } = 0;
