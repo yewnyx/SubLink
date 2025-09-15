@@ -45,11 +45,13 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 - [StreamPad Data Types](Docs/DataTypes/StreamPad/Index.md)
 - [OBS Data Types](Docs/DataTypes/OBS/Index.md)
 - [OpenShock Data Types](Docs/DataTypes/OpenShock/Index.md)
+- [Discord Data Types](Docs/DataTypes/Discord/Index.md)
 
 ## Actions
 
 - [OBS Actions](Docs/Actions/OBS/Index.md)
 - [OpenShock Actions](Docs/Actions/OpenShock/Index.md)
+- [Discord Actions](Docs/Actions/Discord/Index.md)
 
 ## Adding Support to Avatars
 
