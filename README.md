@@ -17,9 +17,10 @@ If you need help, feel free to reach out on Twitter or on Discord!
 [SubLink](https://github.com/yewnyx/SubLink) for Twitch is used by the following notable streamers (and more):
 
 - [Roflgator](https://www.twitch.tv/roflgator)
-- [MurderCrumpet](https://www.twitch.tv/murdercrumpet)
 - [Aeriy](https://www.twitch.tv/aeriy)
 - [MikaMoonlight](https://www.twitch.tv/mikamoonlight)
+- [ThatOneRebel](https://www.twitch.tv/thatonerebel)
+- [Idoliii](https://www.twitch.tv/idoliii)
 
 ## Status
 

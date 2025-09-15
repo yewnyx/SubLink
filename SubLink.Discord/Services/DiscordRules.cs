@@ -15,13 +15,13 @@ public sealed class DiscordRules : IPlatformRules {
     }
 
     internal Func<Task>? OnReady;
-    internal Func<int, Task>? OnError;
+    internal Func<DiscordErrorArgs, Task>? OnError;
     internal Func<string, Task>? OnSelectedVoiceChannel;
     internal Func<DiscordVoiceSettingsEventArgs, Task>? OnVoiceSettingsUpdate;
     internal Func<DiscordVoiceStatusEventArgs, Task>? OnVoiceStatusUpdate;
     internal Func<string, Task>? OnGuildStatus;
     internal Func<string, Task>? OnGuildCreate;
-    internal Func<string, Task>? OnChannelCreate;
+    internal Func<DiscordChannelEventArgs, Task>? OnChannelCreate;
     internal Func<string, Task>? OnVoiceStateCreate;
     internal Func<string, Task>? OnVoiceStateUpdate;
     internal Func<string, Task>? OnVoiceStateDelete;
@@ -37,13 +37,13 @@ public sealed class DiscordRules : IPlatformRules {
 
     /* Reacts */
     public void ReactToReady(Func<Task> with) { OnReady = with; }
-    public void ReactToError(Func<int, Task> with) { OnError = with; }
+    public void ReactToError(Func<DiscordErrorArgs, Task> with) { OnError = with; }
     public void ReactToSelectedVoiceChannel(Func<string, Task> with) { OnSelectedVoiceChannel = with; }
     public void ReactToVoiceSettingsUpdate(Func<DiscordVoiceSettingsEventArgs, Task> with) { OnVoiceSettingsUpdate = with; }
     public void ReactToVoiceStatusUpdate(Func<DiscordVoiceStatusEventArgs, Task> with) { OnVoiceStatusUpdate = with; }
     public void ReactToGuildStatus(Func<string, Task> with) { OnGuildStatus = with; }
     public void ReactToGuildCreate(Func<string, Task> with) { OnGuildCreate = with; }
-    public void ReactToChannelCreate(Func<string, Task> with) { OnChannelCreate = with; }
+    public void ReactToChannelCreate(Func<DiscordChannelEventArgs, Task> with) { OnChannelCreate = with; }
     public void ReactToVoiceStateCreate(Func<string, Task> with) { OnVoiceStateCreate = with; }
     public void ReactToVoiceStateUpdate(Func<string, Task> with) { OnVoiceStateUpdate = with; }
     public void ReactToVoiceStateDelete(Func<string, Task> with) { OnVoiceStateDelete = with; }

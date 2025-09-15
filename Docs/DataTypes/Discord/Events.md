@@ -15,10 +15,10 @@ discord.ReactToReady(async () => {
 
 ## ReactToError
 
-- Parameter type `int`
+- Parameter type `DiscordErrorArgs`
 - Boilerplate
 ```csharp
-discord.ReactToError(async ErrorCode => {
+discord.ReactToError(async error => {
     // Your Code
 });
 ```
@@ -75,10 +75,10 @@ discord.ReactToGuildCreate(async guildId => {
 
 ## ReactToChannelCreate
 
-- Parameter type `string`
+- Parameter type `DiscordChannelEventArgs`
 - Boilerplate
 ```csharp
-discord.ReactToChannelCreate(async channelId => {
+discord.ReactToChannelCreate(async channel => {
     // Your Code
 });
 ```

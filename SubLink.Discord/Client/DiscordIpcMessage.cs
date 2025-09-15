@@ -12,24 +12,6 @@ internal static class DiscordIpcMessage
             nonce = $"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}"
         };
 
-    public static object SetVoiceSettings(bool mute, string inputDeviceId = "default", int inputVolume = 100, string outputDeviceId = "default", int outputVolume = 100, string modeType = "VOICE_ACTIVITY", bool autoThreshold = true) =>
-        new {
-            cmd = "SET_VOICE_SETTINGS",
-            args = new {
-                input = new { device_id = inputDeviceId, volume = inputVolume },
-                output = new { device_id = outputDeviceId, volume = outputVolume },
-                mode = new { type = modeType, auto_threshold = autoThreshold },
-                automatic_gain_control = false,
-                echo_cancellation = false,
-                noise_suppression = false,
-                qos = false,
-                silence_warning = false,
-                deaf = false,
-                mute
-            },
-            nonce = $"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}"
-        };
-
     /// <summary>
     /// Minimal payload for muting only
     /// </summary>
@@ -66,13 +48,6 @@ internal static class DiscordIpcMessage
             nonce = $"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}"
         };
 
-    public static object GetGuilds() =>
-        new {
-            cmd = "GET_GUILDS",
-            args = new { },
-            nonce = $"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}"
-        };
-
     public static object GetGuild(string guildId) =>
         new {
             cmd = "GET_GUILD",
@@ -97,9 +72,6 @@ internal static class DiscordIpcMessage
             evt = eventName,
             nonce = $"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}"
         };
-
-    public static object Unsubscribe(string eventName) =>
-        Unsubscribe(eventName, null);
 
     public static object Unsubscribe(string eventName, object? args) =>
         new {

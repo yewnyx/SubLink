@@ -39,7 +39,7 @@ internal sealed partial class DiscordService
     private void OnError(object? sender, DiscordErrorArgs e) =>
         Task.Run(async () => {
             if (_rules is DiscordRules { OnError: { } callback })
-                await callback(e.ErrorCode);
+                await callback(e);
         });
 
     private void OnSelectedVoiceChannel(object? sender, DiscordVoiceChannelIdEventArgs e) =>
@@ -72,10 +72,10 @@ internal sealed partial class DiscordService
                 await callback(e.GuildId);
         });
 
-    private void OnChannelCreate(object? sender, DiscordChannelIdEventArgs e) =>
+    private void OnChannelCreate(object? sender, DiscordChannelEventArgs e) =>
         Task.Run(async () => {
             if (_rules is DiscordRules { OnChannelCreate: { } callback })
-                await callback(e.ChannelId);
+                await callback(e);
         });
 
     private void OnVoiceStateCreate(object? sender, DiscordUserIdEventArgs e) =>
@@ -129,7 +129,7 @@ internal sealed partial class DiscordService
     private void OnNotificationCreate(object? sender, DiscordChannelIdEventArgs e) =>
         Task.Run(async () => {
             if (_rules is DiscordRules { OnNotificationCreate: { } callback })
-                await callback(e.ChannelId);
+                await callback(e.Id);
         });
 
     private void OnActivityJoin(object? sender, EventArgs e) =>

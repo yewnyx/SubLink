@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -21,10 +20,10 @@ internal class DiscordAuth
     {
         using var httpClient = new HttpClient();
         var content = new FormUrlEncodedContent([
-            new KeyValuePair<string, string>("client_id", _clientId),
-            new KeyValuePair<string, string>("client_secret", _clientSecret),
-            new KeyValuePair<string, string>("grant_type", "client_credentials"),
-            new KeyValuePair<string, string>("scope", "rpc rpc.voice.read rpc.voice.write")
+            new("client_id", _clientId),
+            new("client_secret", _clientSecret),
+            new("grant_type", "client_credentials"),
+            new("scope", "rpc rpc.voice.read rpc.voice.write")
         ]);
 
         HttpResponseMessage response = await httpClient.PostAsync("https://discord.com/api/oauth2/token", content);

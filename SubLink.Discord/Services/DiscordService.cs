@@ -19,6 +19,8 @@ internal sealed partial class DiscordService {
     private readonly IOptionsMonitor<DiscordSettings> _settingsMonitor;
     private DiscordSettings _settings;
     private DiscordClient _discord;
+    private DiscordAuth? _auth;
+    private string _accessToken = string.Empty;
 
     private readonly DiscordRules _rules;
 
@@ -41,11 +43,25 @@ internal sealed partial class DiscordService {
         _rules = rules;
 
         _discord = new(_logger);
+        _discord.OnNeedsRestart += Discord_OnNeedsRestart;
 
         WireCallbacks();
     }
 
-    private void UpdateDiscordSettings(DiscordSettings settings) => _settings = settings;
+    private void Discord_OnNeedsRestart(object? sender, EventArgs e)
+    {
+        try
+        {
+            BuildAndAuthorizeIPC().Wait();
+        }
+        catch (Exception ex)
+        {
+            _logger.Error("[{TAG}] Error during restart: {ERROR}", Platform.PlatformName, ex.Message);
+        }
+    }
+
+    private void UpdateDiscordSettings(DiscordSettings settings) =>
+        _settings = settings;
 
     public async Task StartAsync() {
         if (!_settings.Enabled) {
@@ -61,10 +77,29 @@ internal sealed partial class DiscordService {
 
         try
         {
-            DiscordAuth auth = new(_settings.ClientID, _settings.ClientSecret);
-            string accessToken = await auth.FetchAccessTokenAsync();
+            _auth = new(_settings.ClientID, _settings.ClientSecret);
+            _accessToken = await _auth.FetchAccessTokenAsync();
             _logger.Debug("[{TAG}] Access token retrieved successfully.", Platform.PlatformName);
 
+            await BuildAndAuthorizeIPC();
+        }
+        catch (Exception ex)
+        {
+            _logger.Error("[{TAG}] Error during start: {ERROR}", Platform.PlatformName, ex.Message);
+            return;
+        }
+    }
+
+    public async Task StopAsync()
+    {
+        _discord.Dispose();
+        await Task.CompletedTask;
+    }
+
+    private async Task BuildAndAuthorizeIPC()
+    {
+        try
+        {
             // Attempt to connect to any available Discord IPC pipe
             bool connected = false;
             _logger.Information("[{TAG}] Attempting to connect to Discord...", Platform.PlatformName);
@@ -73,30 +108,9 @@ internal sealed partial class DiscordService {
             {
                 string pipeName = $"discord-ipc-{i}";
                 _logger.Debug("[{TAG}] Attempting to connect to {pipeName}...", Platform.PlatformName, pipeName);
+                connected = await _discord.Connect(pipeName);
 
-                var connectTask = Task.Run(() => _discord.Connect(pipeName)); // Start the connect task
-                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(2)); // 2-second timeout
-
-                var completedTask = await Task.WhenAny(connectTask, timeoutTask);
-
-                if (completedTask == connectTask) // Connection completed successfully
-                {
-                    try
-                    {
-                        await connectTask; // Ensure no exceptions occurred
-                        connected = true;
-                        _logger.Information("[{TAG}] Successfully connected to {pipeName}", Platform.PlatformName, pipeName);
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Debug("[{TAG}] Error connecting to {pipeName}: {ERROR}", Platform.PlatformName, pipeName, ex.Message);
-                    }
-                }
-                else // Timeout
-                {
-                    _logger.Debug("[{TAG}] Connection attempt to {pipeName} timed out.", Platform.PlatformName, pipeName);
-                }
+                if (connected) break;
             }
 
             if (!connected)
@@ -105,33 +119,18 @@ internal sealed partial class DiscordService {
                 return;
             }
 
-            // Timeout for the handshake process
-            var handshakeTask = Task.Run(() => _discord.Handshake(_settings.ClientID));
-            var handshakeTimeout = Task.Delay(TimeSpan.FromSeconds(3)); // 3-second timeout for handshake
+            var handshakeResult = await _discord.Handshake(_settings.ClientID);
 
-            var completedHandshake = await Task.WhenAny(handshakeTask, handshakeTimeout);
-
-            if (completedHandshake == handshakeTask)
-            {
-                var handshakeResponse = handshakeTask.Result;
-                _logger.Debug("[{TAG}] Handshake completed successfully.", Platform.PlatformName);
-            }
-            else
+            if (string.IsNullOrEmpty(handshakeResult))
             {
                 _logger.Warning("[{TAG}] Handshake timed out. Try restarting discord.", Platform.PlatformName);
                 return;
             }
 
-            // Timeout for the authentication process
-            var authPayload = DiscordIpcMessage.Authenticate(accessToken);
-            var authTask = Task.Run(() => _discord.SendDataAndWait(1, authPayload));
-            var authTimeout = Task.Delay(TimeSpan.FromSeconds(3)); // 3-second timeout for authentication
+            _logger.Debug("[{TAG}] Handshake completed successfully.", Platform.PlatformName);
 
-            var completedAuth = await Task.WhenAny(authTask, authTimeout);
-
-            if (completedAuth == authTask)
+            if (await _discord.Authenticate(_accessToken))
             {
-                var authResponse = authTask.Result;
                 _logger.Information("[{TAG}] Authenticated successfully!", Platform.PlatformName);
                 // Subscribe to common events
                 _logger.Debug("[{TAG}] Subscribing to READY", Platform.PlatformName);
@@ -200,7 +199,4 @@ internal sealed partial class DiscordService {
             return;
         }
     }
-
-    public async Task StopAsync() =>
-        await Task.CompletedTask;
 }

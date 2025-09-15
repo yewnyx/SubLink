@@ -1,5 +1,4 @@
 ﻿using Serilog;
-using SocketIOClient;
 using System;
 using System.IO;
 using System.IO.Pipes;
@@ -8,7 +7,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using TwitchLib.Api.Core.Interfaces;
 
 namespace xyz.yewnyx.SubLink.Discord.Client;
 
@@ -22,6 +20,7 @@ internal class DiscordClient : IDisposable
     private string _pipeName = string.Empty;
     private readonly ILogger _logger;
 
+    internal event EventHandler? OnNeedsRestart;
     public event EventHandler? OnReady;
     public event EventHandler<DiscordErrorArgs>? OnError;
     public event EventHandler<DiscordVoiceChannelIdEventArgs>? OnSelectedVoiceChannel;
@@ -29,7 +28,7 @@ internal class DiscordClient : IDisposable
     public event EventHandler<DiscordVoiceStatusEventArgs>? OnVoiceStatusUpdate;
     public event EventHandler<DiscordGuildIdEventArgs>? OnGuildStatus;
     public event EventHandler<DiscordGuildIdEventArgs>? OnGuildCreate;
-    public event EventHandler<DiscordChannelIdEventArgs>? OnChannelCreate;
+    public event EventHandler<DiscordChannelEventArgs>? OnChannelCreate;
     public event EventHandler<DiscordUserIdEventArgs>? OnVoiceStateCreate;
     public event EventHandler<DiscordUserIdEventArgs>? OnVoiceStateUpdate;
     public event EventHandler<DiscordUserIdEventArgs>? OnVoiceStateDelete;
@@ -55,27 +54,54 @@ internal class DiscordClient : IDisposable
         _pipeClient = null;
     }
 
-    private void IntConnect()
+    private void InternalConnect()
     {
+        if (_pipeClient != null) return;
+
         _pipeClient = new NamedPipeClientStream(
             serverName: ".",
             pipeName: _pipeName,
             direction: PipeDirection.InOut,
             options: PipeOptions.Asynchronous
         );
-        _pipeClient.Connect(timeout: 1000);
+        _pipeClient.Connect(1000);
     }
 
-    public void Connect(string pipeName)
+    public async Task<bool> Connect(string pipeName)
     {
         _pipeName = pipeName;
-        IntConnect();
+        var connectTask = Task.Run(InternalConnect);
+        var completedTask = await Task.WhenAny(
+            connectTask,
+            Task.Delay(TimeSpan.FromSeconds(2)) // 2-second timeout
+        );
+
+        if (completedTask == connectTask)
+        { // Connection completed successfully
+            try
+            {
+                await connectTask; // Ensure no exceptions occurred
+                _logger.Information("[{TAG}] Successfully connected to {pipeName}", Platform.PlatformName, pipeName);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug("[{TAG}] Error connecting to {pipeName}: {ERROR}", Platform.PlatformName, pipeName, ex.Message);
+            }
+        }
+        else
+        { // Timed out
+            _logger.Debug("[{TAG}] Connection attempt to {pipeName} timed out.", Platform.PlatformName, pipeName);
+        }
+
+        return false;
     }
 
     private void Reconnect()
     {
         Dispose();
-        IntConnect();
+        InternalConnect();
+        OnNeedsRestart?.Invoke(this, new());
     }
 
     public void StartListening()
@@ -91,29 +117,26 @@ internal class DiscordClient : IDisposable
             {
                 while (!_cts.Token.IsCancellationRequested)
                 {
-                    // 1) Read header
                     lock (_readLock)
                     {
                         int got = _pipeClient.Read(header, 0, 8);
                         if (got == 0) break; // pipe closed
                     }
 
-                    // Extract length
                     int length = BitConverter.ToInt32(header, 4);
                     var body = new byte[length];
 
-                    // 2) Read body
                     lock (_readLock)
                     {
                         int read = 0;
-
                         while (read < length)
                             read += _pipeClient.Read(body, read, length - read);
                     }
 
-                    // 3) Deserialize + dispatch
-                    var evt = JsonSerializer.Deserialize<JsonElement>(Encoding.UTF8.GetString(body));
-                    Task.Run(() => HandleRpcEvent(evt));
+                    var jsonStr = Encoding.UTF8.GetString(body);
+                    //_logger.Information("[{TAG}] JSON string received: {jsonStr}", Platform.PlatformName, jsonStr);
+                    var evt = JsonSerializer.Deserialize<JsonElement>(jsonStr);
+                    Task.Run(() => HandleRpcEvent(evt), _cts.Token);
                 }
             }
             catch (IOException ex)
@@ -138,9 +161,10 @@ internal class DiscordClient : IDisposable
             byte[] payloadBytes = Encoding.UTF8.GetBytes(payloadJson);
 
             // Create a header with operation code and payload length
-            byte[] header = BitConverter.GetBytes(op)
-                .Concat(BitConverter.GetBytes(payloadBytes.Length))
-                .ToArray();
+            byte[] header = [
+                .. BitConverter.GetBytes(op),
+                .. BitConverter.GetBytes(payloadBytes.Length)
+            ];
 
             string responseJson = string.Empty;
             lock (_pipeLock)
@@ -159,9 +183,10 @@ internal class DiscordClient : IDisposable
 
                 byte[] responseBytes = new byte[responseLength];
                 _pipeClient.Read(responseBytes, 0, responseLength);
-                _logger.Debug("[{TAG}] Response received: {RESPONSE}", Platform.PlatformName, responseJson);
-                return responseJson;
+                responseJson = Encoding.UTF8.GetString(responseBytes);
             }
+            _logger.Debug("[{TAG}] Response received: {RESPONSE}", Platform.PlatformName, responseJson);
+            return responseJson;
         }
         catch (IOException ex)
         {
@@ -174,7 +199,7 @@ internal class DiscordClient : IDisposable
                 return SendDataAndWait(op, payload); // Retry sending the payload
             }
 
-            throw;
+            return string.Empty;
         }
     }
 
@@ -201,8 +226,53 @@ internal class DiscordClient : IDisposable
         }
     }
 
-    public string Handshake(string clientId) =>
-        SendDataAndWait(0, new { v = 1, client_id = clientId });
+    public async Task<string> Handshake(string clientId)
+    {
+        // Timeout for the handshake process
+        var handshakeTask = Task.Run(() => SendDataAndWait(0, new { v = 1, client_id = clientId }));
+        var completedHandshake = await Task.WhenAny(
+            handshakeTask,
+            Task.Delay(TimeSpan.FromSeconds(3)) // 3-second timeout for handshake
+        );
+
+        if (completedHandshake == handshakeTask)
+        {
+            _logger.Debug("[{TAG}] Handshake completed successfully.", Platform.PlatformName);
+            return await handshakeTask;
+        }
+        else
+        {
+            _logger.Warning("[{TAG}] Handshake timed out. Try restarting discord.", Platform.PlatformName);
+            return string.Empty;
+        }
+    }
+
+    public async Task<bool> Authenticate(string token)
+    {
+        try
+        {
+            // Timeout for the authentication process
+            var authPayload = DiscordIpcMessage.Authenticate(token);
+            var authTask = Task.Run(() => SendDataAndWait(1, authPayload));
+
+            var completedAuth = await Task.WhenAny(
+                authTask,
+                Task.Delay(TimeSpan.FromSeconds(3)) // 3-second timeout for authentication
+            );
+
+            if (completedAuth == authTask)
+            {
+                var authResponse = await authTask;
+                return true;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.Error("[{TAG}] Authentication failure: {ERROR}", Platform.PlatformName, ex.Message);
+        }
+
+        return false;
+    }
 
     private static int VoiceStateToInt(string state) =>
         state switch
@@ -260,144 +330,139 @@ internal class DiscordClient : IDisposable
                 case "READY":
                     {
                         OnReady?.Invoke(this, new());
-                        break;
+                        return;
                     }
                 case "ERROR":
                     {
-                        if (evt.TryGetProperty("data", out var err) && err.TryGetProperty("code", out var codeEl))
-                            OnError?.Invoke(this, new(codeEl.GetInt32()));
-
-                        break;
+                        if (evt.TryGetProperty("data", out var err) && err.TryGetProperty("code", out var codeEl) && err.TryGetProperty("message", out var msgEl))
+                            OnError?.Invoke(this, new(codeEl.GetInt32(), msgEl.GetString() ?? string.Empty));
+                        return;
                     }
                 case "VOICE_CHANNEL_SELECT":
                     {
                         if (evt.TryGetProperty("data", out var vc) && vc.TryGetProperty("channel_id", out var cid))
                             OnSelectedVoiceChannel?.Invoke(this, new(cid.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "VOICE_SETTINGS_UPDATE":
                     {
                         if (evt.TryGetProperty("data", out var vs))
-                        {
-                            float inVol = vs.GetProperty("input").GetProperty("volume").GetSingle();
-                            float outVol = vs.GetProperty("output").GetProperty("volume").GetSingle();
-                            OnVoiceSettingsUpdate?.Invoke(this, new(inVol, outVol));
-                        }
-
-                        break;
+                            OnVoiceSettingsUpdate?.Invoke(this, new(
+                                vs.GetProperty("input").GetProperty("volume").GetSingle(),
+                                vs.GetProperty("output").GetProperty("volume").GetSingle(),
+                                vs.GetProperty("mode").GetProperty("type").GetString() ?? string.Empty,
+                                vs.GetProperty("mode").GetProperty("auto_threshold").GetBoolean(),
+                                vs.GetProperty("mode").GetProperty("threshold").GetSingle(),
+                                vs.GetProperty("mode").GetProperty("delay").GetSingle(),
+                                vs.GetProperty("automatic_gain_control").GetBoolean(),
+                                vs.GetProperty("echo_cancellation").GetBoolean(),
+                                vs.GetProperty("noise_suppression").GetBoolean(),
+                                vs.GetProperty("qos").GetBoolean(),
+                                vs.GetProperty("silence_warning").GetBoolean(),
+                                vs.GetProperty("deaf").GetBoolean(),
+                                vs.GetProperty("mute").GetBoolean()
+                            ));
+                        return;
                     }
                 case "VOICE_CONNECTION_STATUS":
                     {
                         if (evt.TryGetProperty("data", out var vcstat) && vcstat.TryGetProperty("state", out var stateEl))
                         {
                             string state = stateEl.GetString() ?? string.Empty;
-                            int stateCode = VoiceStateToInt(state);
-                            OnVoiceStatusUpdate?.Invoke(this, new(state, stateCode));
+                            OnVoiceStatusUpdate?.Invoke(this, new(state, VoiceStateToInt(state)));
                         }
-
-                        break;
+                        return;
                     }
                 case "GUILD_STATUS":
                     {
                         if (evt.TryGetProperty("data", out var gs) && gs.TryGetProperty("guild", out var g) && g.TryGetProperty("id", out var gidElStatus))
                             OnGuildStatus?.Invoke(this, new(gidElStatus.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "GUILD_CREATE":
                     {
                         if (evt.TryGetProperty("data", out var gc) && gc.TryGetProperty("id", out var gidc))
                             OnGuildCreate?.Invoke(this, new(gidc.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "CHANNEL_CREATE":
                     {
-                        if (evt.TryGetProperty("data", out var ch) && ch.TryGetProperty("id", out var cidEl))
-                            OnChannelCreate?.Invoke(this, new(cidEl.GetString() ?? string.Empty));
-
-                        break;
+                        if (evt.TryGetProperty("data", out var ch) && ch.TryGetProperty("id", out var cidEl) && ch.TryGetProperty("name", out var cnameEl))
+                            OnChannelCreate?.Invoke(this, new(
+                                cidEl.GetString() ?? string.Empty,
+                                cnameEl.GetString() ?? string.Empty
+                            ));
+                        return;
                     }
                 case "VOICE_STATE_CREATE":
                     {
                         if (evt.TryGetProperty("data", out var vsd) && vsd.TryGetProperty("user", out var usr) && usr.TryGetProperty("id", out var uid))
                             OnVoiceStateCreate?.Invoke(this, new(uid.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "VOICE_STATE_UPDATE":
                     {
                         if (evt.TryGetProperty("data", out var vsd) && vsd.TryGetProperty("user", out var usr) && usr.TryGetProperty("id", out var uid))
                             OnVoiceStateUpdate?.Invoke(this, new(uid.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "VOICE_STATE_DELETE":
                     {
                         if (evt.TryGetProperty("data", out var vsd) && vsd.TryGetProperty("user", out var usr) && usr.TryGetProperty("id", out var uid))
                             OnVoiceStateDelete?.Invoke(this, new(uid.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "SPEAKING_START":
                     {
                         if (evt.TryGetProperty("data", out var sp) && sp.TryGetProperty("user_id", out var suid))
                             OnStartSpeaking?.Invoke(this, new(suid.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "SPEAKING_STOP":
                     {
                         if (evt.TryGetProperty("data", out var sp) && sp.TryGetProperty("user_id", out var suid))
                             OnStopSpeaking?.Invoke(this, new(suid.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "MESSAGE_CREATE":
                     {
                         if (evt.TryGetProperty("data", out var msg) && msg.TryGetProperty("message", out var m) && m.TryGetProperty("id", out var mid))
                             OnMessageCreate?.Invoke(this, new(mid.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "MESSAGE_UPDATE":
                     {
                         if (evt.TryGetProperty("data", out var msg) && msg.TryGetProperty("message", out var m) && m.TryGetProperty("id", out var mid))
                             OnMessageUpdate?.Invoke(this, new(mid.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "MESSAGE_DELETE":
                     {
                         if (evt.TryGetProperty("data", out var msg) && msg.TryGetProperty("message", out var m) && m.TryGetProperty("id", out var mid))
                             OnMessageDelete?.Invoke(this, new(mid.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "NOTIFICATION_CREATE":
                     {
                         if (evt.TryGetProperty("data", out var noti) && noti.TryGetProperty("channel_id", out var nch))
                             OnNotificationCreate?.Invoke(this, new(nch.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
                 case "ACTIVITY_JOIN":
                     {
                         OnActivityJoin?.Invoke(this, new());
-                        break;
+                        return;
                     }
                 case "ACTIVITY_SPECTATE":
                     {
                         OnActivitySpectate?.Invoke(this, new());
-                        break;
+                        return;
                     }
                 case "ACTIVITY_JOIN_REQUEST":
                     {
                         if (evt.TryGetProperty("data", out var aj) && aj.TryGetProperty("user", out var aju) && aju.TryGetProperty("id", out var ajuId))
                             OnActivityJoinRequest?.Invoke(this, new(ajuId.GetString() ?? string.Empty));
-
-                        break;
+                        return;
                     }
             }
         }

@@ -773,8 +773,8 @@ discord.ReactToReady(async () => {
     logger.Information("Discord is connected and ready");
 });
 
-discord.ReactToError(async errorCode => {
-    logger.Information("Error: Discord returned error code: {CODE}", errorCode);
+discord.ReactToError(async error => {
+    logger.Information("Discord Error: ({CODE}) {MESSAGE}", error.Code, error.Message);
 });
 
 discord.ReactToSelectedVoiceChannel(async voiceChannelId => {
@@ -782,12 +782,30 @@ discord.ReactToSelectedVoiceChannel(async voiceChannelId => {
 });
 
 discord.ReactToVoiceSettingsUpdate(async voiceSettings => {
-    logger.Information("Discord voice settings updated. Input Volume: {inVol}, Output Volume: {outVol}",
-        voiceSettings.InputVolume, voiceSettings.OutputVolume);
+    logger.Information("""
+Discord voice settings updated.
+- Input Volume: {inVol}
+- Output Volume: {outVol}
+- Voice Activation Type: {type}
+- Voice Activation Auto Threshold: {autoThreshold}
+- Voice Activation Threshold: {threshold}
+- Voice Activation Release Delay: {delay}
+- Voice Auto Gain: {autoGain}
+- Voice Echo Cancelation: {echoCancelation}
+- Voice QoS: {qos}
+- Voice Silence Warning: {warn}
+- Voice Deafened: {deaf}
+- Voice Muted: {mute}
+""",
+        voiceSettings.InputVolume, voiceSettings.OutputVolume,
+        voiceSettings.ModeType, voiceSettings.ModeAutoThreshold, voiceSettings.ModeThreshold, voiceSettings.ModeDelay,
+        voiceSettings.AutoGainControl, voiceSettings.EchoCancelation, voiceSettings.Qos,
+        voiceSettings.SilenceWarning, voiceSettings.Deaf, voiceSettings.Mute
+    );
 });
 
 discord.ReactToVoiceStatusUpdate(async voiceStatus => {
-    logger.Information("Discord voice status updated. State: {state}, Output Volume: {stateCode}",
+    logger.Information("Discord voice status updated. State: {state}, State Code: {stateCode}",
         voiceStatus.State, voiceStatus.StateCode);
 });
 
@@ -799,8 +817,8 @@ discord.ReactToGuildCreate(async guildId => {
     logger.Information("Discord guild created with ID: {ID}", guildId);
 });
 
-discord.ReactToChannelCreate(async channelId => {
-    logger.Information("Discord channel created with ID: {ID}", channelId);
+discord.ReactToChannelCreate(async channel => {
+    logger.Information("Discord channel `{NAME}` created with ID: {ID}", channel.Name, channel.Id);
 });
 
 discord.ReactToVoiceStateCreate(async userId => {
@@ -844,11 +862,11 @@ discord.ReactToActivityJoin(async () => {
 });
 
 discord.ReactToActivitySpectate(async () => {
-    logger.Information("Discord spectating activity", voiceChannelId);
+    logger.Information("Discord spectating activity");
 });
 
 discord.ReactToActivityJoinRequest(async userId => {
-    logger.Information("Discord user with ID {ID} requested to join the activity", voiceChannelId);
+    logger.Information("Discord user with ID {ID} requested to join the activity", userId);
 });
 
 #endif

@@ -56,18 +56,14 @@ internal sealed partial class DiscordService {
         if (!string.IsNullOrWhiteSpace(id))
         {
             if (eventName.Equals("GUILD_STATUS", StringComparison.InvariantCultureIgnoreCase))
-            {
                 args = new { guild_id = id };
-            }
             else if (
                 eventName.StartsWith("VOICE_STATE", StringComparison.InvariantCultureIgnoreCase) ||
                 eventName.StartsWith("MESSAGE_", StringComparison.InvariantCultureIgnoreCase) ||
                 eventName.Equals("SPEAKING_START", StringComparison.InvariantCultureIgnoreCase) ||
                 eventName.Equals("SPEAKING_STOP", StringComparison.InvariantCultureIgnoreCase)
             )
-            {
                 args = new { channel_id = id };
-            }
         }
 
         _discord?.SendCommand(1, DiscordIpcMessage.Unsubscribe(eventName, args));
