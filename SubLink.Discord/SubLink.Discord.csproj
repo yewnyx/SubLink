@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <ApplicationIcon>..\Icon\SubLink.ico</ApplicationIcon>
+    <RootNamespace>xyz.yewnyx.SubLink.Discord</RootNamespace>
+    <Authors>yewnyx</Authors>
+    <Product>SubLink</Product>
+    <Description>SubLink programmable streamer app</Description>
+    <Copyright>©2022-present Yewnyx</Copyright>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SubLink.References">
+      <HintPath>..\Dist\SubLink.References.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

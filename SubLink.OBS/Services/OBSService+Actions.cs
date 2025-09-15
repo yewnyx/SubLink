@@ -136,10 +136,10 @@ internal sealed partial class OBSService {
         await _obs.SendDataAsync(outRequestMsg);
     }
 
-    public async Task<bool> GetSceneItemEnabledAsync(string inputName, uint itemId) {
+    public async Task<bool> GetSceneItemEnabledAsync(string sceneName, uint itemId) {
         OutRequestMsg outRequestMsg = new();
         outRequestMsg.D.RequestData = new OBSClient.SocketDataTypes.Request.GetSceneItemEnabled() {
-            InputName = inputName,
+            SceneName = sceneName,
             SceneItemId = itemId
         };
         var result = await _obs.SendDataAsync(outRequestMsg);
@@ -153,10 +153,10 @@ internal sealed partial class OBSService {
         return responseData?.SceneItemEnabled ?? false;
     }
 
-    public async Task SetSceneItemEnabledAsync(string inputName, uint itemId, bool enabled) {
+    public async Task SetSceneItemEnabledAsync(string sceneName, uint itemId, bool enabled) {
         OutRequestMsg outRequestMsg = new();
         outRequestMsg.D.RequestData = new OBSClient.SocketDataTypes.Request.SetSceneItemEnabled() {
-            InputName = inputName,
+            SceneName = sceneName,
             SceneItemId = itemId,
             SceneItemEnabled = enabled
         };

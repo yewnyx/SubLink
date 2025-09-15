@@ -763,3 +763,110 @@ async void LogOwnShockers() {
 }
 
 #endif
+
+#if SUBLINK_DISCORD
+
+logger.Information("[{TAG}] Discord integration enabled", "Script");
+var discord = (DiscordRules)rules["Discord"];
+
+discord.ReactToReady(async () => {
+    logger.Information("Discord is connected and ready");
+});
+
+discord.ReactToError(async error => {
+    logger.Information("Discord Error: ({CODE}) {MESSAGE}", error.Code, error.Message);
+});
+
+discord.ReactToSelectedVoiceChannel(async voiceChannelId => {
+    logger.Information("Discord voice channel selection changed to: {ID}", voiceChannelId);
+});
+
+discord.ReactToVoiceSettingsUpdate(async voiceSettings => {
+    logger.Information("""
+Discord voice settings updated.
+- Input Volume: {inVol}
+- Output Volume: {outVol}
+- Voice Activation Type: {type}
+- Voice Activation Auto Threshold: {autoThreshold}
+- Voice Activation Threshold: {threshold}
+- Voice Activation Release Delay: {delay}
+- Voice Auto Gain: {autoGain}
+- Voice Echo Cancelation: {echoCancelation}
+- Voice QoS: {qos}
+- Voice Silence Warning: {warn}
+- Voice Deafened: {deaf}
+- Voice Muted: {mute}
+""",
+        voiceSettings.InputVolume, voiceSettings.OutputVolume,
+        voiceSettings.ModeType, voiceSettings.ModeAutoThreshold, voiceSettings.ModeThreshold, voiceSettings.ModeDelay,
+        voiceSettings.AutoGainControl, voiceSettings.EchoCancelation, voiceSettings.Qos,
+        voiceSettings.SilenceWarning, voiceSettings.Deaf, voiceSettings.Mute
+    );
+});
+
+discord.ReactToVoiceStatusUpdate(async voiceStatus => {
+    logger.Information("Discord voice status updated. State: {state}, State Code: {stateCode}",
+        voiceStatus.State, voiceStatus.StateCode);
+});
+
+discord.ReactToGuildStatus(async guildId => {
+    logger.Information("Discord guild status updated for {ID}", guildId);
+});
+
+discord.ReactToGuildCreate(async guildId => {
+    logger.Information("Discord guild created with ID: {ID}", guildId);
+});
+
+discord.ReactToChannelCreate(async channel => {
+    logger.Information("Discord channel `{NAME}` created with ID: {ID}", channel.Name, channel.Id);
+});
+
+discord.ReactToVoiceStateCreate(async userId => {
+    logger.Information("Discord voice state created for user ID: {ID}", userId);
+});
+
+discord.ReactToVoiceStateUpdate(async userId => {
+    logger.Information("Discord voice state updated for user ID: {ID}", userId);
+});
+
+discord.ReactToVoiceStateDelete(async userId => {
+    logger.Information("Discord voice state deleted for user ID: {ID}", userId);
+});
+
+discord.ReactToStartSpeaking(async userId => {
+    logger.Information("Discord user with ID {ID} started speaking", userId);
+});
+
+discord.ReactToStopSpeaking(async userId => {
+    logger.Information("Discord user with ID {ID} stopped speaking", userId);
+});
+
+discord.ReactToMessageCreate(async messageId => {
+    logger.Information("Discord message created with ID: {ID}", messageId);
+});
+
+discord.ReactToMessageUpdate(async messageId => {
+    logger.Information("Discord message updated with ID: {ID}", messageId);
+});
+
+discord.ReactToMessageDelete(async messageId => {
+    logger.Information("Discord message deleted with ID: {ID}", messageId);
+});
+
+discord.ReactToNotificationCreate(async channelId => {
+    logger.Information("Discord notification created for channel with ID: {ID}", channelId);
+});
+
+discord.ReactToActivityJoin(async () => {
+    logger.Information("Discord activity joined");
+});
+
+discord.ReactToActivitySpectate(async () => {
+    logger.Information("Discord spectating activity");
+});
+
+discord.ReactToActivityJoinRequest(async userId => {
+    logger.Information("Discord user with ID {ID} requested to join the activity", userId);
+});
+
+#endif
