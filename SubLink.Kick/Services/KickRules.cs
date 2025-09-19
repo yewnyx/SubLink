@@ -23,9 +23,7 @@ public sealed class KickRules : IPlatformRules {
     internal Func<EventArgs, Task>? OnPinnedMessageDeleted;
 
     public void ReactToChatMessage(Func<ChatMessageEvent, Task> with) { OnChatMessage = with; }
-    public void ReactToGiftedSubscriptions(Func<GiftedSubscriptionsEvent, Task> with) {
-        OnGiftedSubscriptions = with;
-    }
+    public void ReactToGiftedSubscriptions(Func<GiftedSubscriptionsEvent, Task> with) { OnGiftedSubscriptions = with; }
     public void ReactToSubscription(Func<SubscriptionEvent, Task> with) { OnSubscription = with; }
     public void ReactToStreamHost(Func<StreamHostEvent, Task> with) { OnStreamHost = with; }
     public void ReactToUserBanned(Func<UserBannedEvent, Task> with) { OnUserBanned = with; }
@@ -35,10 +33,6 @@ public sealed class KickRules : IPlatformRules {
     public void ReactToChatroomUpdated(Func<ChatroomUpdatedEvent, Task> with) { OnChatroomUpdated = with; }
     public void ReactToPollUpdate(Func<PollUpdateEvent, Task> with) { OnPollUpdate = with; }
     public void ReactToPollDelete(Func<EventArgs, Task> with) { OnPollDelete = with; }
-    public void ReactToPinnedMessageCreated(Func<PinnedMessageCreatedEvent, Task> with) {
-        OnPinnedMessageCreated = with;
-    }
-    public void ReactToPinnedMessageDeleted(Func<EventArgs, Task> with) {
-        OnPinnedMessageDeleted = with;
-    }
+    public void ReactToPinnedMessageCreated(Func<PinnedMessageCreatedEvent, Task> with) { OnPinnedMessageCreated = with; }
+    public void ReactToPinnedMessageDeleted(Func<EventArgs, Task> with) { OnPinnedMessageDeleted = with; }
 }

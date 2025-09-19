@@ -3,8 +3,7 @@
 namespace OpenShock.SDK.CSharp.Models;
 
 [EnumAsInteger]
-public enum ControlType
-{
+public enum ControlType {
     Stop = 0,
     Shock = 1,
     Vibrate = 2,

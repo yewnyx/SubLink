@@ -37,28 +37,11 @@ public sealed class TipEvent {
     public TipEvent() { }
 
     public TipEvent(string id, string chatRoomId, string senderId, string username, string displayname, string content, uint rawAmount, long createdAt) {
-        Id = id;
-        ChatRoomId = chatRoomId;
-        SenderId = senderId;
-        Username = username;
-        Displayname = displayname;
-        Content = content;
+        (Id, ChatRoomId, SenderId, Username, Displayname, Content, RawAmount, CreatedAt) = (id, chatRoomId, senderId, username, displayname, content, rawAmount, createdAt);
         Amount = (float)Math.Round(rawAmount / 1000d, 2, MidpointRounding.AwayFromZero);
         CentAmount = (int)Math.Round(rawAmount / 10d, 0, MidpointRounding.AwayFromZero);
-        RawAmount = rawAmount;
-        CreatedAt = createdAt;
     }
 
-    public TipEvent(string id, string chatRoomId, string senderId, string username, string displayname, string content, float amount, int centAmount, uint rawAmount, long createdAt) {
-        Id = id;
-        ChatRoomId = chatRoomId;
-        SenderId = senderId;
-        Username = username;
-        Displayname = displayname;
-        Content = content;
-        Amount = amount;
-        CentAmount = centAmount;
-        RawAmount = rawAmount;
-        CreatedAt = createdAt;
-    }
+    public TipEvent(string id, string chatRoomId, string senderId, string username, string displayname, string content, float amount, int centAmount, uint rawAmount, long createdAt) =>
+        (Id, ChatRoomId, SenderId, Username, Displayname, Content, Amount, CentAmount, RawAmount, CreatedAt) = (id, chatRoomId, senderId, username, displayname, content, amount, centAmount, rawAmount, createdAt);
 }

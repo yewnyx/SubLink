@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 namespace xyz.yewnyx.SubLink.Discord.Client;
 
-internal static class DiscordIpcMessage
-{
+internal static class DiscordIpcMessage {
+    public static object Handshake(string clientId) =>
+        new { v = 1, client_id = clientId };
+
     public static object Authenticate(string accessToken) =>
         new {
             cmd = "AUTHENTICATE",

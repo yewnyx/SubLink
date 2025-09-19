@@ -50,12 +50,11 @@ public class Platform : IPlatform {
     public void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder) =>
         builder.AddJsonFile(PlatformConfigFile, false, true);
 
-    public void ConfigureServices(HostBuilderContext context, IServiceCollection services) {
+    public void ConfigureServices(HostBuilderContext context, IServiceCollection services) =>
         services
             .Configure<StreamPadSettings>(context.Configuration.GetSection(PlatformName))
             .AddScoped<StreamPadRules>()
             .AddScoped<StreamPadService>();
-    }
 
     public void AppendRules(Dictionary<string, IPlatformRules> rules) {
         var rulesSvc = _serviceProvider?.GetService<StreamPadRules>();
@@ -64,13 +63,11 @@ public class Platform : IPlatform {
             rules.Add(PlatformName, rulesSvc);
     }
 
-    public void SetLogger(ILogger logger) {
+    public void SetLogger(ILogger logger) =>
         _logger = logger;
-    }
 
-    public void SetServiceProvider(IServiceProvider serviceProvider) {
+    public void SetServiceProvider(IServiceProvider serviceProvider) =>
         _serviceProvider = serviceProvider;
-    }
 
     // Let the interface handle this, no reflection overhead
     public async Task StartServiceAsync() {

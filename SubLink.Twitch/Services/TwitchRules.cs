@@ -49,13 +49,9 @@ public sealed class TwitchRules : IPlatformRules {
 
     public void ReactToHypeTrainProgress(Func<HypeTrainProgress, Task> with) { OnHypeTrainProgress = with; }
 
-    public void ReactToPointsCustomRewardRedemptionAdd(Func<ChannelPointsCustomRewardRedemption, Task> with) {
-        OnPointsCustomRewardRedemptionAdd = with;
-    }
+    public void ReactToPointsCustomRewardRedemptionAdd(Func<ChannelPointsCustomRewardRedemption, Task> with) { OnPointsCustomRewardRedemptionAdd = with; }
 
-    public void ReactToPointsCustomRewardRedemptionUpdate(Func<ChannelPointsCustomRewardRedemption, Task> with) {
-        OnPointsCustomRewardRedemptionUpdate = with;
-    }
+    public void ReactToPointsCustomRewardRedemptionUpdate(Func<ChannelPointsCustomRewardRedemption, Task> with) { OnPointsCustomRewardRedemptionUpdate = with; }
 
     public void ReactToPollBegin(Func<ChannelPollBegin, Task> with) { OnPollBegin = with; }
 
@@ -69,9 +65,7 @@ public sealed class TwitchRules : IPlatformRules {
 
     public void ReactToPredictionLock(Func<ChannelPredictionLock, Task> with) { OnPredictionLock = with; }
 
-    public void ReactToPredictionProgress(Func<ChannelPredictionProgress, Task> with) {
-        OnPredictionProgress = with;
-    }
+    public void ReactToPredictionProgress(Func<ChannelPredictionProgress, Task> with) { OnPredictionProgress = with; }
 
     public void ReactToRaid(Func<ChannelRaid, Task> with) { OnRaid = with; }
 
@@ -81,9 +75,7 @@ public sealed class TwitchRules : IPlatformRules {
 
     public void ReactToSubscriptionGift(Func<ChannelSubscriptionGift, Task> with) { OnSubscriptionGift = with; }
 
-    public void ReactToSubscriptionMessage(Func<ChannelSubscriptionMessage, Task> with) {
-        OnSubscriptionMessage = with;
-    }
+    public void ReactToSubscriptionMessage(Func<ChannelSubscriptionMessage, Task> with) { OnSubscriptionMessage = with; }
 
     public void ReactToChannelUpdate(Func<ChannelUpdate, Task> with) { OnChannelUpdate = with; }
 

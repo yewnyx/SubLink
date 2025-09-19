@@ -4,8 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenShock.SDK.CSharp.Serialization;
 
-public class CustomJsonStringEnumConverter : JsonConverterFactory
-{
+public class CustomJsonStringEnumConverter : JsonConverterFactory {
     private static readonly JsonStringEnumConverter JsonStringEnumConverter = new();
 
     public override bool CanConvert(Type typeToConvert) =>

@@ -47,7 +47,8 @@ internal sealed partial class OpenShockService {
         _rules = rules;
     }
 
-    private void UpdateOpenShockSettings(OpenShockSettings settings) => _settings = settings;
+    private void UpdateOpenShockSettings(OpenShockSettings settings) =>
+        _settings = settings;
 
     public async Task StartAsync() {
         if (!_settings.Enabled) {

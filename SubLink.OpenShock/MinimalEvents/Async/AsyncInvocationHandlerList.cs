@@ -4,36 +4,27 @@ using System.Threading.Tasks;
 
 namespace OpenShock.MinimalEvents.Async;
 
-internal sealed class AsyncInvocationHandlerList<T>
-{
-    public ImmutableArray<T> Handlers { get; private set; } = ImmutableArray<T>.Empty;
+internal sealed class AsyncInvocationHandlerList<T> {
+    public ImmutableArray<T> Handlers { get; private set; } = [];
     
-    private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
     
-    public async ValueTask Add(T handler)
-    {
+    public async ValueTask Add(T handler) {
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
-        try
-        {
+        try {
             Handlers = Handlers.Add(handler);
-        }
-        finally
-        {
+        } finally {
             _semaphore.Release();
         }
     }
 
-    public async ValueTask Remove(T handler)
-    {
+    public async ValueTask Remove(T handler) {
         await _semaphore.WaitAsync().ConfigureAwait(false);
         
-        try
-        {
+        try {
             Handlers = Handlers.Remove(handler);
-        }
-        finally
-        {
+        } finally {
             _semaphore.Release();
         }
     }

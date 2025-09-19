@@ -1,7 +1,6 @@
 ﻿using Serilog;
 using SocketIOClient;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace xyz.yewnyx.SubLink.StreamElements.SEClient;
@@ -29,7 +28,7 @@ internal sealed class StreamElementsClient {
             Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
             EIO = SocketIO.Core.EngineIO.V3,
             AutoUpgrade = true,
-            Query = new KeyValuePair<string, string>[] { new("cluster", "main") },
+            Query = [new("cluster", "main")],
         });
 
         _socket.OnConnected += OnConnected;

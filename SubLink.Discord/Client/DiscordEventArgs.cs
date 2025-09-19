@@ -2,8 +2,7 @@
 
 namespace xyz.yewnyx.SubLink.Discord.Client;
 
-public sealed class DiscordErrorArgs(int code, string message) : EventArgs
-{
+public sealed class DiscordErrorArgs(int code, string message) : EventArgs {
     public int Code { get; init; } = code;
     public string Message { get; init; } = message;
 }
@@ -29,38 +28,31 @@ public sealed class DiscordVoiceSettingsEventArgs(
     public bool Mute { get; init; } = mute;
 }
 
-public sealed class DiscordVoiceStatusEventArgs(string state, int stateCode) : EventArgs
-{
+public sealed class DiscordVoiceStatusEventArgs(string state, int stateCode) : EventArgs {
     public string State { get; init; } = state;
     public int StateCode { get; init; } = stateCode;
 }
 
-public sealed class DiscordGuildIdEventArgs(string guildId) : EventArgs
-{
+public sealed class DiscordGuildIdEventArgs(string guildId) : EventArgs {
     public string GuildId { get; init; } = guildId;
 }
 
-public class DiscordChannelIdEventArgs(string id) : EventArgs
-{
+public class DiscordChannelIdEventArgs(string id) : EventArgs {
     public string Id { get; init; } = id;
 }
 
-public sealed class DiscordChannelEventArgs(string id, string name) : DiscordChannelIdEventArgs(id)
-{
+public sealed class DiscordChannelEventArgs(string id, string name) : DiscordChannelIdEventArgs(id) {
     public string Name { get; init; } = name;
 }
 
-public sealed class DiscordVoiceChannelIdEventArgs(string voicechannelId) : EventArgs
-{
+public sealed class DiscordVoiceChannelIdEventArgs(string voicechannelId) : EventArgs {
     public string VoiceChannelId { get; init; } = voicechannelId;
 }
 
-public sealed class DiscordUserIdEventArgs(string userId) : EventArgs
-{
+public sealed class DiscordUserIdEventArgs(string userId) : EventArgs {
     public string UserId { get; init; } = userId;
 }
 
-public sealed class DiscordMessageIdEventArgs(string messageId) : EventArgs
-{
+public sealed class DiscordMessageIdEventArgs(string messageId) : EventArgs {
     public string MessageId { get; init; } = messageId;
 }

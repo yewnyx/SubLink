@@ -4,10 +4,8 @@ using xyz.yewnyx.SubLink.Discord.Client;
 
 namespace xyz.yewnyx.SubLink.Discord.Services;
 
-internal sealed partial class DiscordService
-{
-    private void WireCallbacks()
-    {
+internal sealed partial class DiscordService {
+    private void WireCallbacks() {
         _discord.OnReady += OnReady;
         _discord.OnError += OnError;
         _discord.OnSelectedVoiceChannel += OnSelectedVoiceChannel;

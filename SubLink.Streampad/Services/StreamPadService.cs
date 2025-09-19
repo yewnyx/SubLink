@@ -87,9 +87,7 @@ subscription ($channelId: String) {
         }
 }
 """,
-            Variables = new {
-                channelId = _settings.ChannelId
-            }
+            Variables = new { channelId = _settings.ChannelId }
         };
 
         IObservable<GraphQLResponse<StreamPadSubscriptionResult>> subscriptionStream =
@@ -115,7 +113,8 @@ subscription ($channelId: String) {
                 }
             },
             exception => _logger.Error("[{TAG}] Subscription exception: {Exception}", Platform.PlatformName, exception),
-            () => _logger.Warning("[{TAG}] Subscription completed", Platform.PlatformName));
+            () => _logger.Warning("[{TAG}] Subscription completed", Platform.PlatformName)
+        );
         await Task.CompletedTask;
     }
 

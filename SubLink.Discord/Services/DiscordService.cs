@@ -18,7 +18,7 @@ internal sealed partial class DiscordService {
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly IOptionsMonitor<DiscordSettings> _settingsMonitor;
     private DiscordSettings _settings;
-    private DiscordClient _discord;
+    private readonly DiscordClient _discord;
     private DiscordAuth? _auth;
     private string _accessToken = string.Empty;
 
@@ -48,14 +48,10 @@ internal sealed partial class DiscordService {
         WireCallbacks();
     }
 
-    private void Discord_OnNeedsRestart(object? sender, EventArgs e)
-    {
-        try
-        {
+    private void Discord_OnNeedsRestart(object? sender, EventArgs e) {
+        try {
             BuildAndAuthorizeIPC().Wait();
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             _logger.Error("[{TAG}] Error during restart: {ERROR}", Platform.PlatformName, ex.Message);
         }
     }
@@ -75,37 +71,29 @@ internal sealed partial class DiscordService {
             return;
         }
 
-        try
-        {
+        try {
             _auth = new(_settings.ClientID, _settings.ClientSecret);
             _accessToken = await _auth.FetchAccessTokenAsync();
             _logger.Debug("[{TAG}] Access token retrieved successfully.", Platform.PlatformName);
 
             await BuildAndAuthorizeIPC();
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             _logger.Error("[{TAG}] Error during start: {ERROR}", Platform.PlatformName, ex.Message);
-            return;
         }
     }
 
-    public async Task StopAsync()
-    {
+    public async Task StopAsync() {
         _discord.Dispose();
         await Task.CompletedTask;
     }
 
-    private async Task BuildAndAuthorizeIPC()
-    {
-        try
-        {
+    private async Task BuildAndAuthorizeIPC() {
+        try {
             // Attempt to connect to any available Discord IPC pipe
             bool connected = false;
             _logger.Information("[{TAG}] Attempting to connect to Discord...", Platform.PlatformName);
 
-            for (int i = 0; i < 10; i++) // Attempt discord-ipc-0 through discord-ipc-9
-            {
+            for (int i = 0; i < 10; i++) { // Attempt discord-ipc-0 through discord-ipc-9
                 string pipeName = $"discord-ipc-{i}";
                 _logger.Debug("[{TAG}] Attempting to connect to {pipeName}...", Platform.PlatformName, pipeName);
                 connected = await _discord.Connect(pipeName);
@@ -113,24 +101,21 @@ internal sealed partial class DiscordService {
                 if (connected) break;
             }
 
-            if (!connected)
-            {
+            if (!connected) {
                 _logger.Information("[{TAG}] Failed to connect to Discord IPC pipes. Make sure Discord is running.", Platform.PlatformName);
                 return;
             }
 
             var handshakeResult = await _discord.Handshake(_settings.ClientID);
 
-            if (string.IsNullOrEmpty(handshakeResult))
-            {
+            if (string.IsNullOrEmpty(handshakeResult)) {
                 _logger.Warning("[{TAG}] Handshake timed out. Try restarting discord.", Platform.PlatformName);
                 return;
             }
 
             _logger.Debug("[{TAG}] Handshake completed successfully.", Platform.PlatformName);
 
-            if (await _discord.Authenticate(_accessToken))
-            {
+            if (await _discord.Authenticate(_accessToken)) {
                 _logger.Information("[{TAG}] Authenticated successfully!", Platform.PlatformName);
                 // Subscribe to common events
                 _logger.Debug("[{TAG}] Subscribing to READY", Platform.PlatformName);
@@ -144,21 +129,17 @@ internal sealed partial class DiscordService {
                 _logger.Debug("[{TAG}] Subscribing to VOICE_CONNECTION_STATUS", Platform.PlatformName);
                 _discord.SendDataAndWait(1, DiscordIpcMessage.Subscribe("VOICE_CONNECTION_STATUS"));
 
-                if (!string.IsNullOrEmpty(_settings.DefaultGuildId))
-                {
+                if (!string.IsNullOrEmpty(_settings.DefaultGuildId)) {
                     _logger.Debug("[{TAG}] Subscribing to GUILD_STATUS for {defaultGuildId}", Platform.PlatformName, _settings.DefaultGuildId);
                     _discord.SendDataAndWait(1, DiscordIpcMessage.Subscribe("GUILD_STATUS", new { guild_id = _settings.DefaultGuildId }));
-                }
-                else
-                {
+                } else {
                     _logger.Debug("[{TAG}] DefaultGuildId empty; skipping GUILD_STATUS subscription", Platform.PlatformName);
                 }
 
                 _discord.SendDataAndWait(1, DiscordIpcMessage.Subscribe("GUILD_CREATE"));
                 _discord.SendDataAndWait(1, DiscordIpcMessage.Subscribe("CHANNEL_CREATE"));
 
-                if (!string.IsNullOrEmpty(_settings.DefaultChannelId))
-                {
+                if (!string.IsNullOrEmpty(_settings.DefaultChannelId)) {
                     _logger.Debug("[{TAG}] Subscribing to voice and message events for channel {defaultChannelId}", Platform.PlatformName, _settings.DefaultChannelId);
                     var chArgs = new { channel_id = _settings.DefaultChannelId };
                     _discord.SendDataAndWait(1, DiscordIpcMessage.Subscribe("VOICE_STATE_CREATE", chArgs));
@@ -169,9 +150,7 @@ internal sealed partial class DiscordService {
                     _discord.SendDataAndWait(1, DiscordIpcMessage.Subscribe("MESSAGE_CREATE", chArgs));
                     _discord.SendDataAndWait(1, DiscordIpcMessage.Subscribe("MESSAGE_UPDATE", chArgs));
                     _discord.SendDataAndWait(1, DiscordIpcMessage.Subscribe("MESSAGE_DELETE", chArgs));
-                }
-                else
-                {
+                } else {
                     _logger.Debug("[{TAG}] DefaultChannelId empty; skipping channel-specific subscriptions", Platform.PlatformName);
                 }
 
@@ -181,9 +160,7 @@ internal sealed partial class DiscordService {
                 _discord.SendDataAndWait(1, DiscordIpcMessage.Subscribe("ACTIVITY_JOIN_REQUEST"));
 
                 _discord.StartListening();
-            }
-            else
-            {
+            } else {
                 _logger.Error("[{TAG}] Authentication timed out. Try restarting discord.", Platform.PlatformName);
                 return;
             }
@@ -192,9 +169,7 @@ internal sealed partial class DiscordService {
             _discordLoggedInScope = _serviceScopeFactory.CreateScope();
             _rules.SetService(this);
             return;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             _logger.Error("[{TAG}] Error during start: {ERROR}", Platform.PlatformName, ex.Message);
             return;
         }

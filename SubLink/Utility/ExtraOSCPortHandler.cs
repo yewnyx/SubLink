@@ -3,23 +3,19 @@ using BuildSoft.OscCore.UnityObjects;
 
 namespace xyz.yewnyx.SubLink.Utility;
 
-public class ExtraOSCPortHandler
-{
-    public class ExtraPort
-    {
+public class ExtraOSCPortHandler {
+    public class ExtraPort {
         private readonly uint _id;
         private readonly ExtraOSCPortHandler _handler;
         private readonly OscClient _client;
 
-        internal ExtraPort(string ipAddr, int port, uint id, ExtraOSCPortHandler handler)
-        {
+        internal ExtraPort(string ipAddr, int port, uint id, ExtraOSCPortHandler handler) {
             _id = id;
             _handler = handler;
             _client = new OscClient(ipAddr, port);
         }
 
-        public void Close()
-        {
+        public void Close() {
             _client.Dispose();
             _handler.Remove(_id);
         }
@@ -124,8 +120,7 @@ public class ExtraOSCPortHandler
     private uint curIdx = 0;
     private Dictionary<uint, ExtraPort> _extraPorts = [];
 
-    public ExtraPort? Open(int port, string ipAddr = "127.0.0.1")
-    {
+    public ExtraPort? Open(int port, string ipAddr = "127.0.0.1") {
         try {
             var newIdx = curIdx++;
             var newPort = new ExtraPort(ipAddr, port, newIdx, this);
@@ -140,12 +135,10 @@ public class ExtraOSCPortHandler
     internal void Remove(uint id) =>
         _extraPorts.Remove(id);
 
-    ~ExtraOSCPortHandler()
-    {
+    ~ExtraOSCPortHandler() {
         var items = _extraPorts.ToArray();
 
-        for (int i = 0; i < items.Length; i++)
-        {
+        for (int i = 0; i < items.Length; i++) {
             items[i].Value.Close();
         }
     }

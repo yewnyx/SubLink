@@ -195,29 +195,23 @@ internal sealed partial class TwitchService {
         return result;
     }
 
-    private static string SubscriptionTypeToVersion(string subType)
-    {
-        return subType switch
-        {
+    private static string SubscriptionTypeToVersion(string subType) =>
+        subType switch {
             "channel.update" => "2",
             "channel.follow" => "2",
             _ => "1",
         };
-    }
 
-    private Dictionary<string, string> SubscriptionTypeToCondition(string subType)
-    {
-        return subType switch
-        {
+    private Dictionary<string, string> SubscriptionTypeToCondition(string subType) =>
+        subType switch {
             "channel.raid" => new() { { "to_broadcaster_user_id", ChannelId! } },
             _ => new() { { "broadcaster_user_id", ChannelId! } },
         };
-    }
 
     private async Task<AuthCodeResponse> LaunchOAuthFlowAsync() {
         const string redirectUri = "http://localhost:50666/authorize/";
-        
         using var listener = new HttpListener();
+
         try {
             listener.Prefixes.Add(redirectUri);
         
@@ -278,7 +272,7 @@ internal sealed partial class TwitchService {
                 accessToken = authCodeResponse.AccessToken;
                 refreshToken = authCodeResponse.RefreshToken;
                 validation = await _api.Auth.ValidateAccessTokenAsync(accessToken);
-                if (validation != null) { break; }
+                if (validation != null) break;
             }
 
             // Has a refresh token only, inexplicably, but whatever, try and refresh it
@@ -286,15 +280,13 @@ internal sealed partial class TwitchService {
                 _logger.Warning("[{TAG}] Twitch access token is not configured, but refresh token is available", Platform.PlatformName);
                 _logger.Information("[{TAG}] Attempting Twitch access token refresh", Platform.PlatformName);
                 
-                if (await _api.Auth.RefreshAuthTokenAsync(_settings.RefreshToken, _settings.ClientSecret, _settings.ClientId) is
-                    { } refreshResponse) {
+                if (await _api.Auth.RefreshAuthTokenAsync(_settings.RefreshToken, _settings.ClientSecret, _settings.ClientId) is { } refreshResponse) {
                     _logger.Verbose("Twitch access token refresh succeeded");
                     accessToken = refreshResponse.AccessToken;
                     refreshToken = refreshResponse.RefreshToken;
                     validation = await _api.Auth.ValidateAccessTokenAsync(accessToken);
 
-                    if (validation != null)
-                        break;
+                    if (validation != null) break;
                 } else {
                     _logger.Information("[{TAG}] Twitch access token refresh failed", Platform.PlatformName);
                     refreshToken = null;
@@ -303,10 +295,7 @@ internal sealed partial class TwitchService {
             
             // Validate auth token
             validation = await _api.Auth.ValidateAccessTokenAsync(accessToken);
-            
-            if (validation != null)
-                break;
-
+            if (validation != null) break;
             _logger.Warning("[{TAG}] Your auth token may have expired. Trying to refresh it", Platform.PlatformName);
 
             if (await _api.Auth.RefreshAuthTokenAsync(_settings.RefreshToken, _settings.ClientSecret, _settings.ClientId) is { } refresh2) {
@@ -315,8 +304,7 @@ internal sealed partial class TwitchService {
                 refreshToken = refresh2.RefreshToken;
                 validation = await _api.Auth.ValidateAccessTokenAsync(accessToken);
 
-                if (validation != null)
-                    break;
+                if (validation != null) break;
             }
             
             _logger.Warning("[{TAG}] Your access tokens seem to be invalid. Trying a last-ditch full re-auth", Platform.PlatformName);

@@ -7,19 +7,14 @@ using static VRC.OSCQuery.Extensions;
 namespace xyz.yewnyx.SubLink.Services;
 
 [UsedImplicitly]
-public sealed class OSCSupportService {
+public sealed class OSCSupportService(ILogger logger, ScriptGlobals globals)
+{
     public int OSCPort { get; private set; }
     public int OSCQueryPort { get; private set; }
 
-    private readonly ILogger _logger;
-    private readonly ScriptGlobals _globals;
-    private readonly MeaModDiscovery _discovery;
-
-    public OSCSupportService(ILogger logger, ScriptGlobals globals) {
-        _logger = logger;
-        _globals = globals;
-        _discovery = new();
-    }
+    private readonly ILogger _logger = logger;
+    private readonly ScriptGlobals _globals = globals;
+    private readonly MeaModDiscovery _discovery = new();
 
     public void Start() {
         OSCPort = GetAvailableUdpPort();
@@ -32,7 +27,6 @@ public sealed class OSCSupportService {
         };
 
         _globals.oscServer = OscServer.GetOrCreate(OSCPort);
-
         _globals.oscQuery = new OSCQueryServiceBuilder()
             .WithServiceName("SubLink")
             .WithUdpPort(OSCPort)

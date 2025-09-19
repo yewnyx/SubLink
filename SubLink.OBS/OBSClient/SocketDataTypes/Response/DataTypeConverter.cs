@@ -20,14 +20,13 @@ internal class DataTypeConverter : JsonConverter<InResponseMsg.Data> {
 	};
 
     // Any child type of ApiFieldType can be deserialized
-    public override bool CanConvert(Type objectType) => typeof(InResponseMsg.Data).IsAssignableFrom(objectType);
+    public override bool CanConvert(Type objectType) =>
+        typeof(InResponseMsg.Data).IsAssignableFrom(objectType);
 
     // We'll get to this one in a bit...
-    public override InResponseMsg.Data? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
+    public override InResponseMsg.Data? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         // Check for null values
-        if (reader.TokenType == JsonTokenType.Null)
-            return null;
+        if (reader.TokenType == JsonTokenType.Null) return null;
 
         // Read the `className` from our JSON document
         using var jsonDocument = JsonDocument.ParseValue(ref reader);
@@ -35,13 +34,15 @@ internal class DataTypeConverter : JsonConverter<InResponseMsg.Data> {
 
         if (jsonObject.TryGetProperty("requestId", out var requestIdProp) &&
             jsonObject.TryGetProperty("requestType", out var requestTypeProp) &&
-            jsonObject.TryGetProperty("requestStatus", out var requestStatusProp)) {
+            jsonObject.TryGetProperty("requestStatus", out var requestStatusProp)
+        ) {
             string? requestType = requestTypeProp.GetString();
 
             // See if that class can be deserialized or not
             if (!string.IsNullOrWhiteSpace(requestType) &&
                 requestStatusProp.TryGetProperty("result", out var resultProp) &&
-                requestStatusProp.TryGetProperty("code", out var codeProp)) {
+                requestStatusProp.TryGetProperty("code", out var codeProp)
+            ) {
                 InResponseMsg.Data result = new() {
                     RequestId = requestIdProp.GetString() ?? string.Empty,
                     RequestType = requestType,
@@ -55,8 +56,8 @@ internal class DataTypeConverter : JsonConverter<InResponseMsg.Data> {
                     result.RequestStatus.Comment = commentProp.GetString();
 
                 if (ResponseTypeMap.TryGetValue(requestType, out var targetType) &&
-                        jsonObject.TryGetProperty("responseData", out var responseDataProp))
-                        result.ResponseData = responseDataProp.Deserialize(targetType, options) as IResponseType;
+                    jsonObject.TryGetProperty("responseData", out var responseDataProp))
+                    result.ResponseData = responseDataProp.Deserialize(targetType, options) as IResponseType;
 
                 return result;
             }

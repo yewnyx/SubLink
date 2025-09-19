@@ -547,7 +547,10 @@ internal sealed class OBSSocketClient(ILogger logger) {
 
     public async Task<InResponseMsg.Data?> SendDataAsync(OutRequestMsg msg) {
         if (!Enabled) return null;
-        while (!_identified) { await Task.Delay(10); }
+
+        while (!_identified) {
+            await Task.Delay(10);
+        }
 
         if (msg.D.RequestData != null)
             msg.D.RequestType = msg.D.RequestData.GetType().Name;

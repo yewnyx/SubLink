@@ -9,18 +9,13 @@ using System.Net;
 
 namespace xyz.yewnyx.SubLink.Services;
 
-internal class SubLinkService : BackgroundService {
-    private readonly ILogger _logger;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly SubLinkSettings _settings;
-
-    public SubLinkService(ILogger logger,
-        IServiceScopeFactory serviceScopeFactory,
-        IOptions<SubLinkSettings> settings) {
-        _logger = logger;
-        _serviceScopeFactory = serviceScopeFactory;
-        _settings = settings.Value;
-    }
+internal class SubLinkService(ILogger logger,
+    IServiceScopeFactory serviceScopeFactory,
+    IOptions<SubLinkSettings> settings
+) : BackgroundService {
+    private readonly ILogger _logger = logger;
+    private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
+    private readonly SubLinkSettings _settings = settings.Value;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
         using var sublinkScope = _serviceScopeFactory.CreateScope();

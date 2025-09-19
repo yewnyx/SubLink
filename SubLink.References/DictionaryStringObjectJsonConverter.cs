@@ -49,47 +49,62 @@ public sealed class DictionaryStringObjectJsonConverter : JsonConverter<Dictiona
             writer.WritePropertyName(key);
 
         switch (objectValue) {
-            case string stringValue:
+            case string stringValue: {
                 writer.WriteStringValue(stringValue);
-                break;
-            case DateTime dateTime:
+                return;
+            }
+            case DateTime dateTime: {
                 writer.WriteStringValue(dateTime);
-                break;
-            case long longValue:
+                return;
+            }
+            case long longValue: {
                 writer.WriteNumberValue(longValue);
-                break;
-            case int intValue:
+                return;
+            }
+            case int intValue: {
                 writer.WriteNumberValue(intValue);
-                break;
-            case float floatValue:
+                return;
+            }
+            case float floatValue: {
                 writer.WriteNumberValue(floatValue);
-                break;
-            case double doubleValue:
+                return;
+            }
+            case double doubleValue: {
                 writer.WriteNumberValue(doubleValue);
-                break;
-            case decimal decimalValue:
+                return;
+            }
+            case decimal decimalValue: {
                 writer.WriteNumberValue(decimalValue);
-                break;
-            case bool boolValue:
+                return;
+            }
+            case bool boolValue: {
                 writer.WriteBooleanValue(boolValue);
-                break;
-            case Dictionary<string, object> dict:
+                return;
+            }
+            case Dictionary<string, object> dict: {
                 writer.WriteStartObject();
+
                 foreach (var item in dict) {
                     HandleValue(writer, item.Key, item.Value);
                 }
+
                 writer.WriteEndObject();
-                break;
-            case object[] array:
+                return;
+            }
+            case object[] array: {
                 writer.WriteStartArray();
+
                 foreach (var item in array) {
                     HandleValue(writer, item);
                 }
+
                 writer.WriteEndArray();
-                break;
-            default:
+                return;
+            }
+            default: {
                 writer.WriteNullValue();
-                break;
+                return;
+            }
         }
     }
 
@@ -98,30 +113,30 @@ public sealed class DictionaryStringObjectJsonConverter : JsonConverter<Dictiona
 
     private object? ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options) {
         switch (reader.TokenType) {
-            case JsonTokenType.String:
+            case JsonTokenType.String: {
                 if (reader.TryGetDateTime(out var date))
                     return date;
+
                 return reader.GetString();
-            case JsonTokenType.False:
-                return false;
-            case JsonTokenType.True:
-                return true;
-            case JsonTokenType.Null:
-                return null;
-            case JsonTokenType.Number:
+            }
+            case JsonTokenType.False: return false;
+            case JsonTokenType.True: return true;
+            case JsonTokenType.Null: return null;
+            case JsonTokenType.Number:{
                 if (reader.TryGetInt64(out var result))
                     return result;
+
                 return reader.GetDecimal();
-            case JsonTokenType.StartObject:
-                return Read(ref reader, null!, options);
-            case JsonTokenType.StartArray:
+            }
+            case JsonTokenType.StartObject: return Read(ref reader, null!, options);
+            case JsonTokenType.StartArray: {
                 var list = new List<object?>();
                 while (reader.Read() && reader.TokenType != JsonTokenType.EndArray) {
                     list.Add(ExtractValue(ref reader, options));
                 }
                 return list;
-            default:
-                throw new JsonException($"'{reader.TokenType}' is not supported");
+            }
+            default: throw new JsonException($"'{reader.TokenType}' is not supported");
         }
     }
 }

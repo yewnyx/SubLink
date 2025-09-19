@@ -2,8 +2,7 @@
 
 namespace OpenShock.SDK.CSharp.Models;
 
-public sealed class RootResponse
-{
+public sealed class RootResponse {
     public required string Version { get; set; }
     public required string Commit { get; set; }
     public required DateTimeOffset CurrentTime { get; set; }

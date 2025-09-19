@@ -15,7 +15,6 @@ namespace xyz.yewnyx.SubLink.Services;
 
 internal partial class CompilerService {
     private AssemblyLoadContext? _assemblyLoadContext;
-
     private static readonly string[] _baseUsings = [
         "VRC.OSCQuery",
         "BuildSoft.VRChat.Osc",
@@ -31,7 +30,6 @@ internal partial class CompilerService {
         "XSNotifications.Helpers",
         "BuildSoft.OscCore.UnityObjects",
     ];
-
     private static readonly string[] _baseAssemblies = [
         "vrcosclib",
         "vrc-oscquery-lib",

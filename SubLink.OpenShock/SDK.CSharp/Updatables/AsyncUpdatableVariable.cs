@@ -3,13 +3,10 @@ using System.Threading.Tasks;
 
 namespace OpenShock.SDK.CSharp.Updatables;
 
-public sealed class AsyncUpdatableVariable<T>(T internalValue) : IAsyncUpdatable<T>
-{
-    public T Value
-    {
+public sealed class AsyncUpdatableVariable<T>(T internalValue) : IAsyncUpdatable<T> {
+    public T Value {
         get => _internalValue;
-        set
-        {
+        set {
             if (_internalValue!.Equals(value)) return;
             _internalValue = value;
             Task.Run(() => _updated.InvokeAsyncParallel(value));
@@ -21,8 +18,6 @@ public sealed class AsyncUpdatableVariable<T>(T internalValue) : IAsyncUpdatable
     private T _internalValue = internalValue;
 
 
-    public void UpdateWithoutNotify(T newValue)
-    {
+    public void UpdateWithoutNotify(T newValue) =>
         _internalValue = newValue;
-    }
 }

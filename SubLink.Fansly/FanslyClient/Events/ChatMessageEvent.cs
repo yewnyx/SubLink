@@ -26,13 +26,6 @@ public sealed class ChatMessageEvent {
 
     public ChatMessageEvent() { }
 
-    public ChatMessageEvent(string id, string chatRoomId, string senderId, string username, string displayname, string content, long createdAt) {
-        Id = id;
-        ChatRoomId = chatRoomId;
-        SenderId = senderId;
-        Username = username;
-        Displayname = displayname;
-        Content = content;
-        CreatedAt = createdAt;
-    }
+    public ChatMessageEvent(string id, string chatRoomId, string senderId, string username, string displayname, string content, long createdAt) =>
+        (Id, ChatRoomId, SenderId, Username, Displayname, Content, CreatedAt) = (id, chatRoomId, senderId, username, displayname, content, createdAt);
 }

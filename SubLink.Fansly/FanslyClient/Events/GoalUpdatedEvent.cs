@@ -35,16 +35,6 @@ public sealed class GoalUpdatedEvent {
 
     public GoalUpdatedEvent() { }
 
-    public GoalUpdatedEvent(string id, string chatRoomId, string accountId, uint type, string label, string description, uint status, int currentAmount, int goalAmount, uint version) {
-        Id = id;
-        ChatRoomId = chatRoomId;
-        AccountId = accountId;
-        Type = type;
-        Label = label;
-        Description = description;
-        Status = status;
-        CurrentAmount = currentAmount;
-        GoalAmount = goalAmount;
-        Version = version;
-    }
+    public GoalUpdatedEvent(string id, string chatRoomId, string accountId, uint type, string label, string description, uint status, int currentAmount, int goalAmount, uint version) =>
+        (Id, ChatRoomId, AccountId, Type, Label, Description, Status, CurrentAmount, GoalAmount, Version) = (id, chatRoomId, accountId, type, label, description, status, currentAmount, goalAmount, version);
 }

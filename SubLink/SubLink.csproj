@@ -14,18 +14,15 @@
         <Copyright>©2022-present Yewnyx</Copyright>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
-    <ItemGroup>
-      <Compile Remove="SubLink.cs" />
-    </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Basic.Reference.Assemblies.Net80" Version="1.8.2" />
-      <PackageReference Include="Figgle" Version="0.6.2" />
-      <PackageReference Include="Figgle.Fonts" Version="0.6.2" />
+      <PackageReference Include="Basic.Reference.Assemblies.Net80" Version="1.8.3" />
+      <PackageReference Include="Figgle" Version="0.6.5" />
+      <PackageReference Include="Figgle.Fonts" Version="0.6.5" />
       <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.14.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.14.0" />
-      <PackageReference Include="System.Text.Json" Version="9.0.6" />
+      <PackageReference Include="System.Text.Json" Version="9.0.*" />
       <PackageReference Include="VRCOscLib" Version="1.6.0" />
       <PackageReference Include="VRChat.OSCQuery" Version="0.0.7" />
 
@@ -35,19 +32,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Platforms\" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <Compile Remove="SubLink.cs" />
       <None Include="SubLink.cs">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-    </ItemGroup>
 
-    <ItemGroup>
+      <Folder Include="Platforms\" />
       <None Update="Platforms\.notempty">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+
       <None Update="Settings\.notempty">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

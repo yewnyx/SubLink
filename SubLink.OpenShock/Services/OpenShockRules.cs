@@ -10,9 +10,8 @@ namespace xyz.yewnyx.SubLink.OpenShock.Services;
 public sealed class OpenShockRules : IPlatformRules {
     private OpenShockService? _service;
 
-    internal void SetService(OpenShockService service) {
+    internal void SetService(OpenShockService service) =>
         _service = service;
-    }
 
     /* Actions */
     public async Task<bool> VibrateShocker(string shockerId, byte intensity, ushort duration, bool exclusive = true) {

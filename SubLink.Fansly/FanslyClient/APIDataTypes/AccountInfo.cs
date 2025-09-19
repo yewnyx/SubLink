@@ -16,5 +16,5 @@ internal sealed class AccountInfoResponse : BaseApiResponse {
     }
 
     [JsonPropertyName("response")]
-    public AccountInfo[] Response { get; set; } = Array.Empty<AccountInfo>();
+    public AccountInfo[] Response { get; set; } = [];
 }

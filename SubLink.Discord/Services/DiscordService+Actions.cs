@@ -26,17 +26,13 @@ internal sealed partial class DiscordService {
             { "output", new { volume = vol } }
         }));
 
-    public void SubscribeEvent(string eventName, string? id = null)
-    {
+    public void SubscribeEvent(string eventName, string? id = null) {
         object? args = null;
 
-        if (!string.IsNullOrWhiteSpace(id))
-        {
-            if (eventName.Equals("GUILD_STATUS", StringComparison.InvariantCultureIgnoreCase))
-            {
+        if (!string.IsNullOrWhiteSpace(id)) {
+            if (eventName.Equals("GUILD_STATUS", StringComparison.InvariantCultureIgnoreCase)) {
                 args = new { guild_id = id };
-            }
-            else if (
+            } else if (
                 eventName.StartsWith("VOICE_STATE", StringComparison.InvariantCultureIgnoreCase) ||
                 eventName.StartsWith("MESSAGE_", StringComparison.InvariantCultureIgnoreCase) ||
                 eventName.Equals("SPEAKING_START", StringComparison.InvariantCultureIgnoreCase) ||
@@ -49,21 +45,20 @@ internal sealed partial class DiscordService {
         _discord?.SendCommand(1, DiscordIpcMessage.Subscribe(eventName, args));
     }
 
-    public void UnsubscribeEvent(string eventName, string? id = null)
-    {
+    public void UnsubscribeEvent(string eventName, string? id = null) {
         object? args = null;
 
-        if (!string.IsNullOrWhiteSpace(id))
-        {
-            if (eventName.Equals("GUILD_STATUS", StringComparison.InvariantCultureIgnoreCase))
+        if (!string.IsNullOrWhiteSpace(id)) {
+            if (eventName.Equals("GUILD_STATUS", StringComparison.InvariantCultureIgnoreCase)) {
                 args = new { guild_id = id };
-            else if (
+            } else if (
                 eventName.StartsWith("VOICE_STATE", StringComparison.InvariantCultureIgnoreCase) ||
                 eventName.StartsWith("MESSAGE_", StringComparison.InvariantCultureIgnoreCase) ||
                 eventName.Equals("SPEAKING_START", StringComparison.InvariantCultureIgnoreCase) ||
                 eventName.Equals("SPEAKING_STOP", StringComparison.InvariantCultureIgnoreCase)
-            )
+            ) {
                 args = new { channel_id = id };
+            }
         }
 
         _discord?.SendCommand(1, DiscordIpcMessage.Unsubscribe(eventName, args));

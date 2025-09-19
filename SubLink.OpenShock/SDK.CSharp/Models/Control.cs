@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace OpenShock.SDK.CSharp.Models;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class Control
-{
+public class Control {
     public required Guid Id { get; set; }
     [EnumDataType(typeof(ControlType))]
     public required ControlType Type { get; set; }

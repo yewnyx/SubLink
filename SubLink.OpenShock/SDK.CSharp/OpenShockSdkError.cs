@@ -2,9 +2,4 @@
 
 namespace OpenShock.SDK.CSharp;
 
-public sealed class OpenShockSdkError : Exception
-{
-    public OpenShockSdkError(string message) : base(message)
-    {
-    }
-}
+public sealed class OpenShockSdkError(string message) : Exception(message) { }

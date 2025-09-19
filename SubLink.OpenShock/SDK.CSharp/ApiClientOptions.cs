@@ -2,8 +2,7 @@
 
 namespace OpenShock.SDK.CSharp;
 
-public class ApiClientOptions
-{
+public class ApiClientOptions {
     /// <summary>
     /// OpenShock API server. e.g. https://api.openshock.app
     /// </summary>
@@ -19,8 +18,7 @@ public class ApiClientOptions
     /// </summary>
     public ProgramInfo? Program { get; set; }
 
-    public sealed class ProgramInfo
-    {
+    public sealed class ProgramInfo {
         /// <summary>
         /// Name of the program using the API.
         /// If null, the default value is the name of the calling assembly.

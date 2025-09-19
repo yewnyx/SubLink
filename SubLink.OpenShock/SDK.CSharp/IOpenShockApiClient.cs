@@ -9,8 +9,7 @@ using OpenShock.SDK.CSharp.Models;
 
 namespace OpenShock.SDK.CSharp;
 
-public interface IOpenShockApiClient
-{
+public interface IOpenShockApiClient {
     /// <summary>
     /// Get own shockers with hubs
     /// </summary>

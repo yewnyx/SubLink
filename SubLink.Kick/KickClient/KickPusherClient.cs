@@ -31,8 +31,7 @@ internal sealed class KickPusherClient {
     public KickPusherClient() { }
 
     public async Task<bool> ConnectAsync(string key, string cluster, string chatroomId) {
-        if (_pusher != null)
-            return true;
+        if (_pusher != null) return true;
 
         _pusher = new(key, new() {
             Cluster = cluster,
@@ -73,8 +72,7 @@ internal sealed class KickPusherClient {
     }
 
     public async Task DisconnectAsync() {
-        if (_pusher == null)
-            return;
+        if (_pusher == null) return;
 
         _pusher.UnbindAll();
         await _pusher.UnsubscribeAllAsync();

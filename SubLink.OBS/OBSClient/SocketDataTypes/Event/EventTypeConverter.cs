@@ -67,7 +67,8 @@ internal class EventTypeConverter : JsonConverter<EventDataType> {
 	};
 
     // Any child type of ApiFieldType can be deserialized
-    public override bool CanConvert(Type objectType) => typeof(EventDataType).IsAssignableFrom(objectType);
+    public override bool CanConvert(Type objectType) =>
+        typeof(EventDataType).IsAssignableFrom(objectType);
 
     // We'll get to this one in a bit...
     public override EventDataType? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
@@ -96,9 +97,8 @@ internal class EventTypeConverter : JsonConverter<EventDataType> {
         throw new NotSupportedException("<unknown> can not be deserialized");
     }
 
-    public override void Write(Utf8JsonWriter writer, EventDataType value, JsonSerializerOptions options) {
+    public override void Write(Utf8JsonWriter writer, EventDataType value, JsonSerializerOptions options) =>
         // No need for this one in our use case, but to just dump the object into JSON
         // (without having the className property!), we can do this:
         JsonSerializer.Serialize(writer, value, value.GetType(), options);
-    }
 }

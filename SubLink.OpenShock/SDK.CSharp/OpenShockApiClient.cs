@@ -17,12 +17,10 @@ using OpenShock.SDK.CSharp.Utils;
 
 namespace OpenShock.SDK.CSharp;
 
-public sealed class OpenShockApiClient : IOpenShockApiClient
-{
+public sealed class OpenShockApiClient : IOpenShockApiClient {
     private readonly HttpClient _httpClient;
 
-    private static readonly JsonSerializerOptions JsonSerializerOptions = new()
-    {
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
         PropertyNameCaseInsensitive = true,
         Converters = { new CustomJsonStringEnumConverter() }
     };
@@ -32,13 +30,10 @@ public sealed class OpenShockApiClient : IOpenShockApiClient
     /// Initializes a new instance of the <see cref="OpenShockApiClient"/> class. See parameters' descriptions for more information.
     /// </summary>
     /// <param name="apiClientOptions">Options</param>
-    public OpenShockApiClient(ApiClientOptions apiClientOptions)
-    {
-        _httpClient = new HttpClient
-        {
+    public OpenShockApiClient(ApiClientOptions apiClientOptions) {
+        _httpClient = new HttpClient {
             BaseAddress = apiClientOptions.Server,
-            DefaultRequestHeaders =
-            {
+            DefaultRequestHeaders = {
                 { "User-Agent", GetUserAgent(apiClientOptions) },
                 { "OpenShockToken", apiClientOptions.Token }
             }
@@ -51,21 +46,15 @@ public sealed class OpenShockApiClient : IOpenShockApiClient
     /// You probably want to use the other constructor, as this one primarily exists for testing purposes.
     /// </summary>
     /// <param name="httpClient"></param>
-    public OpenShockApiClient(HttpClient httpClient)
-    {
+    public OpenShockApiClient(HttpClient httpClient) =>
         _httpClient = httpClient;
-    }
 
     /// <inheritdoc />
-    public async Task<OneOf<Success<ImmutableArray<ResponseHubWithShockers>>, UnauthenticatedError>>
-        GetOwnShockers(CancellationToken cancellationToken = default)
-    {
-        using var ownShockersResponse =
-            await _httpClient.GetAsync(OpenShockEndpoints.V1.Shockers.OwnShockers, cancellationToken);
-        if (!ownShockersResponse.IsSuccess())
-        {
-            if (ownShockersResponse.StatusCode == HttpStatusCode.Unauthorized) return new UnauthenticatedError();
+    public async Task<OneOf<Success<ImmutableArray<ResponseHubWithShockers>>, UnauthenticatedError>> GetOwnShockers(CancellationToken cancellationToken = default) {
+        using var ownShockersResponse = await _httpClient.GetAsync(OpenShockEndpoints.V1.Shockers.OwnShockers, cancellationToken);
 
+        if (!ownShockersResponse.IsSuccess()) {
+            if (ownShockersResponse.StatusCode == HttpStatusCode.Unauthorized) return new UnauthenticatedError();
             throw new OpenShockApiError("Failed to get own shockers", ownShockersResponse.StatusCode);
         }
 
@@ -77,29 +66,22 @@ public sealed class OpenShockApiClient : IOpenShockApiClient
 
     /// <inheritdoc />
     public async
-        Task<OneOf<Success<LcgResponse>, NotFound, HubOffline, UnauthenticatedError>>
-        GetHubGateway(Guid hubId, CancellationToken cancellationToken = default)
-    {
-        using var gatewayResponse =
-            await _httpClient.GetAsync(OpenShockEndpoints.V1.Devices.GetGateway(hubId), cancellationToken);
+        Task<OneOf<Success<LcgResponse>, NotFound, HubOffline, UnauthenticatedError>> GetHubGateway(Guid hubId, CancellationToken cancellationToken = default) {
+        using var gatewayResponse = await _httpClient.GetAsync(OpenShockEndpoints.V1.Devices.GetGateway(hubId), cancellationToken);
+        
         if (gatewayResponse.IsSuccess())
-        {
             return new Success<LcgResponse>(
                 await gatewayResponse.Content.ReadBaseResponseAsJsonAsync<LcgResponse>(cancellationToken,
                     JsonSerializerOptions));
-        }
 
         if (gatewayResponse.StatusCode == HttpStatusCode.Unauthorized) return new UnauthenticatedError();
 
         if (!gatewayResponse.IsProblem())
             throw new OpenShockApiError("Error from backend is not a problem response", gatewayResponse.StatusCode);
 
-        var problem =
-            await gatewayResponse.Content.ReadAsJsonAsync<ProblemDetails>(cancellationToken,
-                JsonSerializerOptions);
+        var problem = await gatewayResponse.Content.ReadAsJsonAsync<ProblemDetails>(cancellationToken, JsonSerializerOptions);
 
-        return problem.Type switch
-        {
+        return problem.Type switch {
             "Hub.NotFound" => new NotFound(),
             "Hub.NotOnline" => new HubOffline(),
             _ => throw new OpenShockApiError($"Unknown problem type [{problem.Type}]", gatewayResponse.StatusCode)
@@ -107,23 +89,17 @@ public sealed class OpenShockApiClient : IOpenShockApiClient
     }
 
     /// <inheritdoc />
-    public async Task<RootResponse> GetRoot(CancellationToken cancellationToken = default)
-    {
+    public async Task<RootResponse> GetRoot(CancellationToken cancellationToken = default) {
         using var rootResponse = await _httpClient.GetAsync(OpenShockEndpoints.V1.Root, cancellationToken);
-        return await rootResponse.Content.ReadBaseResponseAsJsonAsync<RootResponse>(cancellationToken,
-            JsonSerializerOptions);
+        return await rootResponse.Content.ReadBaseResponseAsJsonAsync<RootResponse>(cancellationToken, JsonSerializerOptions);
     }
 
     /// <inheritdoc />
-    public async Task<OneOf<Success<SelfResponse>, UnauthenticatedError>> GetSelf(
-        CancellationToken cancellationToken = default)
-    {
+    public async Task<OneOf<Success<SelfResponse>, UnauthenticatedError>> GetSelf(CancellationToken cancellationToken = default) {
         using var selfResponse = await _httpClient.GetAsync(OpenShockEndpoints.V1.Users.Self, cancellationToken);
 
-        if (!selfResponse.IsSuccess())
-        {
+        if (!selfResponse.IsSuccess()) {
             if (selfResponse.StatusCode == HttpStatusCode.Unauthorized) return new UnauthenticatedError();
-
             throw new OpenShockApiError("Failed to get user self", selfResponse.StatusCode);
         }
 
@@ -132,24 +108,17 @@ public sealed class OpenShockApiClient : IOpenShockApiClient
                 JsonSerializerOptions));
     }
 
-    public async Task<OneOf<Success, ShockerNotFoundOrNoAccess, ShockerPaused, ShockerNoPermission, UnauthenticatedError>> ControlShocker(ControlRequest controlRequest)
-    {
-        using var controlResponse =
-            await _httpClient.PostAsJsonAsync(OpenShockEndpoints.V2.Shockers.Control, controlRequest);
+    public async Task<OneOf<Success, ShockerNotFoundOrNoAccess, ShockerPaused, ShockerNoPermission, UnauthenticatedError>> ControlShocker(ControlRequest controlRequest) {
+        using var controlResponse = await _httpClient.PostAsJsonAsync(OpenShockEndpoints.V2.Shockers.Control, controlRequest);
 
         if (controlResponse.IsSuccess()) return new Success();
-
         if (controlResponse.StatusCode == HttpStatusCode.Unauthorized) return new UnauthenticatedError();
-
         if (!controlResponse.IsProblem())
             throw new OpenShockApiError("Error from backend is not a problem response", controlResponse.StatusCode);
 
-        var problem =
-            await controlResponse.Content.ReadAsJsonAsync<ShockerControlProblem>(CancellationToken.None,
-                JsonSerializerOptions);
+        var problem = await controlResponse.Content.ReadAsJsonAsync<ShockerControlProblem>(CancellationToken.None, JsonSerializerOptions);
 
-        return problem.Type switch
-        {
+        return problem.Type switch {
             "Shocker.Control.NotFound" => new ShockerNotFoundOrNoAccess(problem.ShockerId),
             "Shocker.Control.Paused" => new ShockerPaused(problem.ShockerId),
             "Shocker.Control.NoPermission" => new ShockerNoPermission(problem.ShockerId),
@@ -158,18 +127,12 @@ public sealed class OpenShockApiClient : IOpenShockApiClient
     }
 
     /// <inheritdoc />
-    public async Task<OneOf<Success<ResponseHubWithToken>, NotFound, UnauthenticatedError>> GetHub(Guid hubId, CancellationToken cancellationToken = default)
-    {
+    public async Task<OneOf<Success<ResponseHubWithToken>, NotFound, UnauthenticatedError>> GetHub(Guid hubId, CancellationToken cancellationToken = default) {
         using var hubResponse = await _httpClient.GetAsync(OpenShockEndpoints.V1.Devices.Get(hubId), cancellationToken);
 
-        if (!hubResponse.IsSuccess())
-        {
-            if (hubResponse.IsProblem())
-            {
-                var problem =
-                    await hubResponse.Content.ReadAsJsonAsync<ShockerControlProblem>(CancellationToken.None,
-                        JsonSerializerOptions);
-                
+        if (!hubResponse.IsSuccess()) {
+            if (hubResponse.IsProblem()) {
+                var problem = await hubResponse.Content.ReadAsJsonAsync<ShockerControlProblem>(CancellationToken.None, JsonSerializerOptions);
                 if (problem.Type == "Hub.NotFound") return new NotFound();
             }
             
@@ -184,8 +147,7 @@ public sealed class OpenShockApiClient : IOpenShockApiClient
     }
 
     /// <inheritdoc />
-    public async Task<OneOf<Success<bool>, NotFound>> PauseShocker(Guid shockerId, bool paused, CancellationToken cancellationToken = default)
-    {
+    public async Task<OneOf<Success<bool>, NotFound>> PauseShocker(Guid shockerId, bool paused, CancellationToken cancellationToken = default) {
         using var pauseResponse = await _httpClient.PostAsJsonAsync(
             OpenShockEndpoints.V1.Shockers.Pause(shockerId),
             new PauseRequest{ Pause = paused }, JsonSerializerOptions,
@@ -204,20 +166,16 @@ public sealed class OpenShockApiClient : IOpenShockApiClient
         throw new OpenShockApiError("Failed to pause shocker", problem);
     }
 
-    private static string GetUserAgent(ApiClientOptions options)
-    {
+    private static string GetUserAgent(ApiClientOptions options) {
         var clientAssembly = typeof(OpenShockApiClient).Assembly;
         var clientVersion = clientAssembly.GetName().Version!;
 
         string programName;
         Version programVersion;
 
-        if (options.Program == null)
-        {
+        if (options.Program == null) {
             (programName, programVersion) = UserAgentUtils.GetAssemblyInfo();
-        }
-        else
-        {
+        } else {
             programName = options.Program.Name;
             programVersion = options.Program.Version;
         }
@@ -225,10 +183,8 @@ public sealed class OpenShockApiClient : IOpenShockApiClient
         var runtimeVersion = RuntimeInformation.FrameworkDescription;
         if (string.IsNullOrEmpty(runtimeVersion)) runtimeVersion = "Unknown Runtime";
 
-        return
-            $"OpenShock.SDK.CSharp/{clientVersion.Major}.{clientVersion.Minor}.{clientVersion.Build} " +
+        return $"OpenShock.SDK.CSharp/{clientVersion.Major}.{clientVersion.Minor}.{clientVersion.Build} " +
             $"({runtimeVersion}; {UserAgentUtils.GetOs()};" +
             $" {programName} {programVersion.Major}.{programVersion.Minor}.{programVersion.Build})";
     }
-    
 }
