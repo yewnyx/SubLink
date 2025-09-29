@@ -198,6 +198,9 @@ public class InputCreated : EventDataType {
         /** The unversioned kind of input (aka no `_v2` stuff) */
         [JsonPropertyName("unversionedInputKind")]
         public string UnversionedInputKind { get; set; } = string.Empty;
+        /** Bitflag value for the caps that an input supports. See obs_source_info.output_flags in the libobs docs */
+        [JsonPropertyName("inputKindCaps")]
+        public int InputKindCaps { get; set; } = 0;
         /** The settings configured to the input when it was created */
         [JsonPropertyName("inputSettings")]
         public JsonObject InputSettings { get; set; } = [];
@@ -390,7 +393,7 @@ public class InputAudioMonitorTypeChanged : EventDataType {
         public string InputUuid { get; set; } = string.Empty;
         /** New monitor type of the input */
         [JsonPropertyName("monitorType")]
-        public string MonitorType { get; set; } = string.Empty;
+        public InputAudioMonitorType MonitorType { get; set; } = InputAudioMonitorType.OBS_MONITORING_TYPE_NONE;
     }
 
     [JsonPropertyName("eventData")]
@@ -446,7 +449,7 @@ public class MediaInputActionTriggered : EventDataType {
         public string InputUuid { get; set; } = string.Empty;
         /** Action performed on the input. See `ObsMediaInputAction` enum */
         [JsonPropertyName("mediaAction")]
-        public string MediaAction { get; set; } = string.Empty;
+        public ObsMediaInputAction MediaAction { get; set; } = ObsMediaInputAction.OBS_WEBSOCKET_MEDIA_INPUT_ACTION_NONE;
     }
 
     [JsonPropertyName("eventData")]

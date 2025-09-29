@@ -64,7 +64,7 @@ public class InResponseMsg : IBaseMessage {
         [JsonPropertyName("result")]
         public bool Result { get; set; } = false;
         [JsonPropertyName("code")]
-        public int Code { get; set; } = -1;
+        public RequestStatus Code { get; set; } = RequestStatus.Unknown;
         [JsonPropertyName("comment")]
         public string? Comment { get; set; }
     }

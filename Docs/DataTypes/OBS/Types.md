@@ -3,6 +3,22 @@
 [Back To Readme](../../../README.md)  
 [Back To OBS DataTypes Index](Index.md)
 
+## ObsMediaInputAction
+
+- OBS_WEBSOCKET_MEDIA_INPUT_ACTION_NONE     - No action.
+- OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PLAY     - Play the media input.
+- OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PAUSE    - Pause the media input.
+- OBS_WEBSOCKET_MEDIA_INPUT_ACTION_STOP     - Stop the media input.
+- OBS_WEBSOCKET_MEDIA_INPUT_ACTION_RESTART  - Restart the media input.
+- OBS_WEBSOCKET_MEDIA_INPUT_ACTION_NEXT     - Go to the next playlist item.
+- OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PREVIOUS - Go to the previous playlist item.
+
+## InputAudioMonitorType
+
+- OBS_MONITORING_TYPE_NONE
+- OBS_MONITORING_TYPE_MONITOR_ONLY
+- OBS_MONITORING_TYPE_MONITOR_AND_OUTPUT
+
 ## InputVolume
 
 - `float` Multiplier - Volume setting as multiplier
@@ -83,6 +99,7 @@
 - `string`     InputUuid            - UUID of the input
 - `string`     InputKind            - Kind of the input
 - `string`     UnversionedInputKind - Unversioned kind of input (aka no `_v2` stuff)
+- `int`        InputKindCaps        - Bitflag value for the caps that an input supports. See obs_source_info.output_flags in the libobs docs
 - `JsonObject` InputSettings        - Settings configured to the input when it was created
 - `JsonObject` DefaultInputSettings - Default settings for the input
 
@@ -126,7 +143,7 @@
 - `string` InputName      - Name of the input
 - `string` InputUuid      - UUID of the input
 - `float`  InputVolumeMul - New volume level multiplier
-- `float` InputVolumeDb   - New volume level in dB
+- `float`  InputVolumeDb  - New volume level in dB
 
 ## InputAudioBalanceChanged
 
@@ -148,9 +165,9 @@
 
 ## InputAudioMonitorTypeChanged
 
-- `string` InputName   - Name of the input
-- `string` InputUuid   - UUID of the input
-- `string` MonitorType - New monitor type of the input; Available types are: `OBS_MONITORING_TYPE_NONE`, `OBS_MONITORING_TYPE_MONITOR_ONLY`, `OBS_MONITORING_TYPE_MONITOR_AND_OUTPUT`
+- `string`                InputName   - Name of the input
+- `string`                InputUuid   - UUID of the input
+- `InputAudioMonitorType` MonitorType - New monitor type of the input
 
 ## InputVolumeMeters
 
@@ -168,9 +185,9 @@
 
 ## MediaInputActionTriggered
 
-- `string` InputName   - Name of the input
-- `string` InputUuid   - UUID of the input
-- `string` MediaAction - Action performed on the input. See `ObsMediaInputAction` enum
+- `string`              InputName   - Name of the input
+- `string`              InputUuid   - UUID of the input
+- `ObsMediaInputAction` MediaAction - Action performed on the input
 
 ## StreamStateChanged
 

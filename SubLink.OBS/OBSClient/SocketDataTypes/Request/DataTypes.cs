@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace xyz.yewnyx.SubLink.OBS.OBSClient.SocketDataTypes.Request;
 
+// https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#requests
 [JsonPolymorphic(UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor)]
 [JsonDerivedType(typeof(SetSourceFilterEnabled))]
 [JsonDerivedType(typeof(GetHotkeyList))]

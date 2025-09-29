@@ -4,28 +4,32 @@
 
 ## Legend
 
-- [Set Source Filter Enabled](#SetSourceFilterEnabled)
-- [Get Hotkey List](#GetHotkeyList)
-- [Trigger Hotkey By Name](#TriggerHotkeyByName)
-- [Trigger Hotkey By Key Sequence](#TriggerHotkeyByKeySequence)
-- [Get Input Mute](#GetInputMute)
-- [Set Input Mute](#SetInputMute)
-- [Toggle Input Mute](#ToggleInputMute)
-- [Get Input Volume](#GetInputVolume)
-- [Set Input Volume](#SetInputVolume)
-- [Get Input Audio Sync Offset](#GetInputAudioSyncOffset)
-- [Set Input Audio Sync Offset](#SetInputAudioSyncOffset)
-- [Get Scene Item Enabled](#GetSceneItemEnabled)
-- [Set Scene Item Enabled](#SetSceneItemEnabled)
-- [Get Active Scene](#GetActiveScene)
-- [Set Active Scene](#SetActiveScene)
-- [Get Preview Scene](#GetPreviewScene)
-- [Set Preview Scene](#SetPreviewScene)
-- [Get Current Scene Transition](#GetCurrentSceneTransition)
-- [Set Current Scene Transition](#SetCurrentSceneTransition)
-- [Trigger Transition](#TriggerTransition)
-- [Get Studio Mode Enabled](#GetStudioModeEnabled)
-- [Script Snippets](#Snippets)
+- [SubLink Actions OBS](#sublink-actions-obs)
+  - [Legend](#legend)
+  - [SetSourceFilterEnabled](#setsourcefilterenabled)
+  - [GetHotkeyList](#gethotkeylist)
+  - [TriggerHotkeyByName](#triggerhotkeybyname)
+  - [TriggerHotkeyByKeySequence](#triggerhotkeybykeysequence)
+  - [GetInputMute](#getinputmute)
+  - [SetInputMute](#setinputmute)
+  - [ToggleInputMute](#toggleinputmute)
+  - [GetInputVolume](#getinputvolume)
+  - [SetInputVolume](#setinputvolume)
+  - [GetInputAudioSyncOffset](#getinputaudiosyncoffset)
+  - [SetInputAudioSyncOffset](#setinputaudiosyncoffset)
+  - [GetSceneItemEnabled](#getsceneitemenabled)
+  - [SetSceneItemEnabled](#setsceneitemenabled)
+  - [GetActiveScene](#getactivescene)
+  - [SetActiveScene](#setactivescene)
+  - [GetPreviewScene](#getpreviewscene)
+  - [SetPreviewScene](#setpreviewscene)
+  - [GetCurrentSceneTransition](#getcurrentscenetransition)
+  - [SetCurrentSceneTransition](#setcurrentscenetransition)
+  - [TriggerTransition](#triggertransition)
+  - [GetStudioModeEnabled](#getstudiomodeenabled)
+  - [Snippets](#snippets)
+    - [Write the available keybind names to the console and log file](#write-the-available-keybind-names-to-the-console-and-log-file)
+    - [Scene swapping for a certain amount of time](#scene-swapping-for-a-certain-amount-of-time)
 
 ## SetSourceFilterEnabled
 
@@ -265,7 +269,7 @@ Note: The audio sync offset can be negative too!
 
 ```csharp
 await obs.SetInputAudioSyncOffset("desktop1", 2);
-await obs.SetInputAudioSyncOffset("Game Capture", db: 0);
+await obs.SetInputAudioSyncOffset("Game Capture", 0);
 await obs.SetInputAudioSyncOffset("Browser", -2);
 ```
 
@@ -283,7 +287,8 @@ Works for Scenes and Groups
 - Returns: `bool`
 
 ```csharp
-var enabled = await obs.GetSceneItemEnabled("desktop1");
+var enabled = await obs.GetSceneItemEnabled("My Scene", 1);
+var enabled = await obs.GetSceneItemEnabled("My Scene", 4);
 ```
 
 [Back To Legend](#Legend)
@@ -328,7 +333,7 @@ Sets the current active scene.
 - Asynchronous
 - Parameters
    - `string` sceneName      - required - Scene name to set as active for the outputs
-   - `string` transitionName - required - Name of the transition to use; Defaults to `"Cut"`
+   - `string` transitionName - optional - Name of the transition to use; Defaults to `"Cut"`
 - Returns: Nothing
 
 ```csharp

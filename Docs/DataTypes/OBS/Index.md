@@ -64,6 +64,8 @@
 
 ## OBS Types
 
+- [ObsMediaInputAction](Types.md#ObsMediaInputAction)
+- [InputAudioMonitorType](Types.md#InputAudioMonitorType)
 - [InputVolume](Types.md#InputVolume)
 - [TransitionInfo](Types.md#TransitionInfo)
 - [CurrentSceneCollectionChanging](Types.md#CurrentSceneCollectionChanging)

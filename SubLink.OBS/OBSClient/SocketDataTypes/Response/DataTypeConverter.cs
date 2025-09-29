@@ -48,7 +48,7 @@ internal class DataTypeConverter : JsonConverter<InResponseMsg.Data> {
                     RequestType = requestType,
                     RequestStatus = new() {
                         Result = resultProp.GetBoolean(),
-                        Code = codeProp.GetInt32()
+                        Code = (RequestStatus)codeProp.GetUInt32()
                     }
                 };
 
