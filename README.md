@@ -36,6 +36,7 @@ CatGirlEddie remains actively involved with and the foremost expert on creating 
 - [StreamElements Setup](Docs/Setup/StreamElements.md)
 - [OBS Setup](Docs/Setup/OBS.md)
 - [OpenShock Setup](Docs/Setup/OpenShock.md)
+- [Discord Setup](Docs/Setup/Discord.md)
 
 ## Data Types
 
