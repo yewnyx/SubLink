@@ -129,6 +129,7 @@ internal sealed partial class TwitchService {
                 SubscribeAsync("channel.channel_points_custom_reward_redemption.add"),
                 SubscribeAsync("channel.channel_points_custom_reward_redemption.update"),
                 SubscribeAsync("channel.update"),
+                SubscribeAsync("channel.bits.use"),
                 SubscribeAsync("channel.cheer"),
                 //SubscribeAsync("channel.follow"),
                 SubscribeAsync("channel.hype_train.begin"),
@@ -199,6 +200,9 @@ internal sealed partial class TwitchService {
         subType switch {
             "channel.update" => "2",
             "channel.follow" => "2",
+            "channel.hype_train.begin" => "2",
+            "channel.hype_train.progress" => "2",
+            "channel.hype_train.end" => "2",
             _ => "1",
         };
 
