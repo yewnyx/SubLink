@@ -49,41 +49,54 @@ twitch.ReactToMessageReceived(async chatMessage => {
 });
 
 twitch.ReactToChannelBitsUse(async channelBitsUse => {
-    if (channelBitsUse.Type.Equals("cheer", StringComparison.InvariantCultureIgnoreCase)) {
-        logger.Information(
-            "{UserName} cheered {Bits} bits to {BroadcasterUserName} with {Message}",
-            channelBitsUse.UserName, channelBitsUse.Bits, channelBitsUse.BroadcasterUserName, channelBitsUse.Message.Text);
-        return;
+    switch (channelBitsUse.Type) {
+        case "cheer": {
+            logger.Information(
+                "{UserName} cheered {Bits} bits to {BroadcasterUserName} with {Message}",
+                channelBitsUse.UserName, channelBitsUse.Bits, channelBitsUse.BroadcasterUserName, channelBitsUse.Message.Text);
+            return;
+        }
+        case "power_up": {
+            string outText = string.Format(
+                "{UserName} sent a {Type} type 'Power-Up' worth {Bits} bits to {BroadcasterUserName}",
+                channelBitsUse.UserName, channelBitsUse.PowerUp.Type, channelBitsUse.Bits, channelBitsUse.BroadcasterUserName
+            );
+
+            switch (channelBitsUse.PowerUp.Type) {
+                case "message_effect": {
+                    outText += string.Format(" EffectId used: {EffectId}", channelBitsUse.PowerUp.MessageEffectId);
+                    break;
+                }
+                case "celebration": {
+                    if (channelBitsUse.PowerUp.Emote != null)
+                        outText += string.Format(" Emote used: {EmoteName}", channelBitsUse.PowerUp.Emote.Name);
+
+                    if (!string.IsNullOrWhiteSpace(channelBitsUse.PowerUp.MessageEffectId))
+                        outText += string.Format(" EffectId used: {EffectId}", channelBitsUse.PowerUp.MessageEffectId);
+
+                    break;
+                }
+                case "gigantify_an_emote": {
+                    outText += string.Format(" Emote used: {EmoteName}", channelBitsUse.PowerUp.Emote.Name);
+                    break;
+                }
+                default: break;
+            }
+
+            logger.Information(outText);
+            return;
+        }
+        case "combo": {
+            logger.Information(
+                "{UserName} sent a combo worth {Bits} bits to {BroadcasterUserName} with {Message}",
+                channelBitsUse.UserName, channelBitsUse.Bits, channelBitsUse.BroadcasterUserName, channelBitsUse.Message?.Text ?? "");
+            return;
+        }
+        default: {
+            logger.Information("Unknown channel bits use type: {Type}", channelBitsUse.Type);
+            return;
+        }
     }
-
-    // power_up
-    string outText = string.Format(
-        "{UserName} sent a {Type} type 'Power-Up' worth {Bits} bits to {BroadcasterUserName}",
-        channelBitsUse.UserName, channelBitsUse.PowerUp.Type, channelBitsUse.Bits, channelBitsUse.BroadcasterUserName
-    );
-
-    switch (channelBitsUse.PowerUp.Type) {
-        case "message_effect": {
-            outText += string.Format(" EffectId used: {EffectId}", channelBitsUse.PowerUp.MessageEffectId);
-            break;
-        }
-        case "celebration": {
-            if (channelBitsUse.PowerUp.Emote != null)
-                outText += string.Format(" Emote used: {EmoteName}", channelBitsUse.PowerUp.Emote.Name);
-
-            if (!string.IsNullOrWhiteSpace(channelBitsUse.PowerUp.MessageEffectId))
-                outText += string.Format(" EffectId used: {EffectId}", channelBitsUse.PowerUp.MessageEffectId);
-
-            break;
-        }
-        case "gigantify_an_emote": {
-            outText += string.Format(" Emote used: {EmoteName}", channelBitsUse.PowerUp.Emote.Name);
-            break;
-        }
-        default: break;
-    }
-
-    logger.Information(outText);
 });
 
 twitch.ReactToCheer(async channelCheer => {

@@ -203,7 +203,7 @@ This is an enum with the following options:
 - `string` UserLogin - Optional - The tipping user's username
 - `string` UserName - Optional - The tipping user's display name
 - `int` Bits - Required - The number of bits
-- `string` Type - Required - The tip type; Possible values are: cheer, power_up
+- `string` Type - Required - The tip type; Possible values are: cheer, power_up, combo
 - `BitsMessage` Message - Required if `cheer` - The cheer message info
 - `PowerUp` PowerUp - Required if `power_up` - The power-up information
 
