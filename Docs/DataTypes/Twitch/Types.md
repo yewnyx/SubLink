@@ -50,6 +50,42 @@ This is an enum with the following options:
 - `int` CheerAmount - Required - The amount the user has cheered
 - `BadgeColor` Color - Required - The colour of the user's cheer badge
 
+## BitsEmote
+
+- `string` Id - Required - The ID that uniquely identifies this emote
+- `string` EmoteSetId - Required - The ID that identifies the emote set that the emote belongs to
+- `string` OwnerId - Required - The ID of the broadcaster who owns the emote
+- `string[]` Format - Required - The formats that the emote is available in; Possible values: animated, static
+
+## BitsCheermote
+
+- `string` Prefix - Required - The name portion of the Cheermote string that you use in chat to cheer Bits
+- `int` Bits - Required - The amount of Bits cheered
+- `int` Tier - Required - The tier level of the cheermote
+
+## BitsMessageFragments
+
+- `string` Text - Required - The message text in fragment
+- `string` Type - Required - The type of message fragment; Possible values: text, cheermote, emote
+- `BitsEmote` Emote - Required if `emote` - The metadata pertaining to the emote
+- `BitsCheermote` Cheermote - Required if `cheermote` - The metadata pertaining to the cheermote
+
+## BitsMessage
+
+- `string` Text - Required - The chat message in plain text
+- `BitsMessageFragments[]` Fragments - Required - The ordered list of chat message fragments
+
+## PowerUpEmote
+
+- `string` Id - Required - The ID that uniquely identifies this emote
+- `string` Name - Required - The human readable emote token
+
+## PowerUp
+
+- `string` Type - Required - Possible values are: message_effect, celebration, gigantify_an_emote
+- `PowerUpEmote` Emote - Required - Emote associated with the reward
+- `string` MessageEffectId - Optional - The ID of the message effect
+
 ## Noisy
 
 This is an enum with the following options:
@@ -65,6 +101,12 @@ This is an enum with the following options:
 - `string` UserLogin - Required - The contributing user's username
 - `string` Type - Required - The contribution type
 - `int` Total - Required - The total contribution value
+
+## SharedTrainParticipants
+
+- `int` BroadcasterUserId - Required - The shared hypetrain broadcaster user ID
+- `int` BroadcasterUserLogin - Required - The shared hypetrain broadcaster username
+- `int` BroadcasterUserName - Required - The shared hypetrain broadcaster display name
 
 ## RedemptionReward
 
@@ -152,6 +194,19 @@ This is an enum with the following options:
 - `string` TmiSentTs - Required - The message's timestamp
 - `ChatReply` ChatReply - Optional - The message that this one was replying to
 
+## ChannelBitsUse
+
+- `string` BroadcasterUserId - Required - The receiving broadcaster's user ID
+- `string` BroadcasterUserLogin - Required - The receiving broadcaster's username
+- `string` BroadcasterUserName - Required - The receiving broadcaster's display name
+- `string` UserId - Optional - The tipping user's ID
+- `string` UserLogin - Optional - The tipping user's username
+- `string` UserName - Optional - The tipping user's display name
+- `int` Bits - Required - The number of bits
+- `string` Type - Required - The tip type; Possible values are: cheer, power_up
+- `BitsMessage` Message - Required if `cheer` - The cheer message info
+- `PowerUp` PowerUp - Required if `power_up` - The power-up information
+
 ## ChannelCheer
 
 - `bool` IsAnonymous - Required - Indication if the cheer was sent anonymously
@@ -174,45 +229,55 @@ This is an enum with the following options:
 - `string` BroadcasterUserLogin - Required - The receiving broadcaster's username
 - `DateTimeOffset` FollowedAt - Required - The offset when the user followed (Unsure, kinda usseless info)
 
-## HypeTrainBegin
+## HypeTrainBeginV2
 
 - `string` BroadcasterUserId - Required - The hypetrain target broadcaster's ID
-- `string` BroadcasterUserName - Required - The hypetrain target broadcaster's display name
 - `string` BroadcasterUserLogin - Required - The hypetrain target broadcaster's username
+- `string` BroadcasterUserName - Required - The hypetrain target broadcaster's display name
 - `int` Total - Required - The current contribution total value
-- `HypeTrainContribution[]` TopContributions - Required - The list of top contributions
-- `DateTimeOffset` StartedAt - Required - The start time offset
-- `int` Level - Required - The hypetrain's current level
 - `int` Progress - Required - The hypetrain's current level progress
 - `int` Goal - Required - The hypetrain's current level goal
-- `HypeTrainContribution` LastContribution - The contributiuon that started the hypetrain
-- `DateTimeOffset` ExpiresAt - Required - The hypetrain's expiry offset
-
-## HypeTrainEnd
-
-- `string` BroadcasterUserId - Required - The hypetrain target broadcaster's ID
-- `string` BroadcasterUserName - Required - The hypetrain target broadcaster's display name
-- `string` BroadcasterUserLogin - Required - The hypetrain target broadcaster's username
-- `int` Total - Required - The current contribution total value
 - `HypeTrainContribution[]` TopContributions - Required - The list of top contributions
 - `DateTimeOffset` StartedAt - Required - The start time offset
 - `int` Level - Required - The hypetrain's current level
+- `int` AllTimeHighLevel - Required - The hypetrain's all-time highest level
+- `int` AllTimeHighTotal - Required - The hypetrain's all-time highest total value
+- `SharedTrainParticipants[]` SharedTrainParticipants - Optional - The hypertrain's shared participants
+- `DateTimeOffset` StartedAt - Required - The start time offset
+- `DateTimeOffset` ExpiresAt - Required - The hypetrain's expiry offset
+- `string` Type - Required - The hypetrain's type (Normal vs golden kappa)
+- `bool` IsSharedTrain - Required - Wether the hypertrain is shared or not
+
+## HypeTrainEndV2
+
+- `string` BroadcasterUserId - Required - The hypetrain target broadcaster's ID
+- `string` BroadcasterUserLogin - Required - The hypetrain target broadcaster's username
+- `string` BroadcasterUserName - Required - The hypetrain target broadcaster's display name
+- `int` Total - Required - The current contribution total value
+- `HypeTrainContribution[]` TopContributions - Required - The list of top contributions
+- `int` Level - Required - The hypetrain's current level
+- `SharedTrainParticipants[]` SharedTrainParticipants - Optional - The hypertrain's shared participants
+- `DateTimeOffset` StartedAt - Required - The start time offset
 - `DateTimeOffset` CooldownEndsAt - Required - The hypetrain cooldown offset
 - `DateTimeOffset` EndedAt - Required - The offset at which the hypetrain ended
+- `string` Type - Required - The hypetrain's type (Normal vs golden kappa)
+- `bool` IsSharedTrain - Required - Wether the hypertrain is shared or not
 
-## HypeTrainBegin
+## HypeTrainProgressV2
 
 - `string` BroadcasterUserId - Required - The hypetrain target broadcaster's ID
-- `string` BroadcasterUserName - Required - The hypetrain target broadcaster's display name
 - `string` BroadcasterUserLogin - Required - The hypetrain target broadcaster's username
+- `string` BroadcasterUserName - Required - The hypetrain target broadcaster's display name
 - `int` Total - Required - The current contribution total value
-- `HypeTrainContribution[]` TopContributions - Required - The list of top contributions
-- `DateTimeOffset` StartedAt - Required - The start time offset
-- `int` Level - Required - The hypetrain's current level
 - `int` Progress - Required - The hypetrain's current level progress
 - `int` Goal - Required - The hypetrain's current level goal
-- `HypeTrainContribution[]` LastContribution - The contributiuons since the last update
+- `HypeTrainContribution[]` TopContributions - Required - The list of top contributions
+- `int` Level - Required - The hypetrain's current level
+- `SharedTrainParticipants[]` SharedTrainParticipants - Optional - The hypertrain's shared participants
+- `DateTimeOffset` StartedAt - Required - The start time offset
 - `DateTimeOffset` ExpiresAt - Required - The hypetrain's expiry offset
+- `string` Type - Required - The hypetrain's type (Normal vs golden kappa)
+- `bool` IsSharedTrain - Required - Wether the hypertrain is shared or not
 
 ## ChannelPointsCustomRewardRedemption
 

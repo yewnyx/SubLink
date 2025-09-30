@@ -12,11 +12,12 @@ namespace xyz.yewnyx.SubLink.Twitch.Services;
 public sealed class TwitchRules : IPlatformRules {
     internal Func<string, string, Task>? OnJoinedChannel;
     internal Func<ChatMessage, Task>? OnMessageReceived;
+    internal Func<ChannelBitsUse, Task>? OnChannelBitsUse;
     internal Func<ChannelCheer, Task>? OnCheer;
     internal Func<ChannelFollow, Task>? OnFollow;
-    internal Func<HypeTrainBegin, Task>? OnHypeTrainBegin;
-    internal Func<HypeTrainEnd, Task>? OnHypeTrainEnd;
-    internal Func<HypeTrainProgress, Task>? OnHypeTrainProgress;
+    internal Func<HypeTrainBeginV2, Task>? OnHypeTrainBegin;
+    internal Func<HypeTrainEndV2, Task>? OnHypeTrainEnd;
+    internal Func<HypeTrainProgressV2, Task>? OnHypeTrainProgress;
     internal Func<ChannelPointsCustomRewardRedemption, Task>? OnPointsCustomRewardRedemptionAdd;
     internal Func<ChannelPointsCustomRewardRedemption, Task>? OnPointsCustomRewardRedemptionUpdate;
     internal Func<ChannelPollBegin, Task>? OnPollBegin;
@@ -39,15 +40,17 @@ public sealed class TwitchRules : IPlatformRules {
 
     public void ReactToMessageReceived(Func<ChatMessage, Task> with) { OnMessageReceived = with; }
 
+    public void ReactToChannelBitsUse(Func<ChannelBitsUse, Task> with) { OnChannelBitsUse = with; }
+
     public void ReactToCheer(Func<ChannelCheer, Task> with) { OnCheer = with; }
 
     public void ReactToFollow(Func<ChannelFollow, Task> with) { OnFollow = with; }
 
-    public void ReactToHypeTrainBegin(Func<HypeTrainBegin, Task> with) { OnHypeTrainBegin = with; }
+    public void ReactToHypeTrainBegin(Func<HypeTrainBeginV2, Task> with) { OnHypeTrainBegin = with; }
 
-    public void ReactToHypeTrainEnd(Func<HypeTrainEnd, Task> with) { OnHypeTrainEnd = with; }
+    public void ReactToHypeTrainEnd(Func<HypeTrainEndV2, Task> with) { OnHypeTrainEnd = with; }
 
-    public void ReactToHypeTrainProgress(Func<HypeTrainProgress, Task> with) { OnHypeTrainProgress = with; }
+    public void ReactToHypeTrainProgress(Func<HypeTrainProgressV2, Task> with) { OnHypeTrainProgress = with; }
 
     public void ReactToPointsCustomRewardRedemptionAdd(Func<ChannelPointsCustomRewardRedemption, Task> with) { OnPointsCustomRewardRedemptionAdd = with; }
 

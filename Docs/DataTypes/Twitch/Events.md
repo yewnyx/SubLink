@@ -23,6 +23,15 @@ twitch.ReactToMessageReceived(async chatMessage => {
 });
 ```
 
+## ReactToChannelBitsUse
+
+- Parameter type `ChannelBitsUse`
+- Boilerplate
+```csharp
+twitch.ReactToChannelBitsUse(async channelBitsUse => {
+    // Your Code
+});
+
 ## ReactToCheer
 
 - Parameter type `ChannelCheer`
@@ -45,7 +54,7 @@ twitch.ReactToFollow(async follow => {
 
 ## ReactToHypeTrainBegin
 
-- Parameter type `HypeTrainBegin`
+- Parameter type `HypeTrainBeginV2`
 - Boilerplate
 ```csharp
 twitch.ReactToHypeTrainBegin(async hypeTrainBegin => {
@@ -55,7 +64,7 @@ twitch.ReactToHypeTrainBegin(async hypeTrainBegin => {
 
 ## ReactToHypeTrainEnd
 
-- Parameter type `HypeTrainEnd`
+- Parameter type `HypeTrainEndV2`
 - Boilerplate
 ```csharp
 twitch.ReactToHypeTrainEnd(async hypeTrainEnd => {
@@ -65,7 +74,7 @@ twitch.ReactToHypeTrainEnd(async hypeTrainEnd => {
 
 ## ReactToHypeTrainProgress
 
-- Parameter type `HypeTrainProgress`
+- Parameter type `HypeTrainProgressV2`
 - Boilerplate
 ```csharp
 twitch.ReactToHypeTrainProgress(async hypeTrainProgress => {
