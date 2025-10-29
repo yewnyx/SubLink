@@ -1,8 +1,8 @@
-# SubLink DataTypes OBS
+# SubLink DataTypes Discord
 
 [Back To Readme](../../../README.md)
 
-## OBS Events
+## Discord Events
 
 - [ReactToReady](Events.md#ReactToReady)
 - [ReactToError](Events.md#ReactToError)
@@ -25,7 +25,9 @@
 - [ReactToActivitySpectate](Events.md#ReactToActivitySpectate)
 - [ReactToActivityJoinRequest](Events.md#ReactToActivityJoinRequest)
 
-## OBS Types
+## Discord Types
 
+- [DiscordErrorArgs](Types.md#DiscordErrorArgs)
 - [DiscordVoiceSettingsEventArgs](Types.md#DiscordVoiceSettingsEventArgs)
 - [DiscordVoiceStatusEventArgs](Types.md#DiscordVoiceStatusEventArgs)
+- [DiscordChannelEventArgs](Types.md#DiscordChannelEventArgs)

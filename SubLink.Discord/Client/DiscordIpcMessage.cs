@@ -104,8 +104,7 @@ internal static class DiscordIpcMessage {
             nonce = $"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}"
         };
 
-    public static object SetUserVoiceSettings(string userId, float? left = null, float? right = null, int? volume = null, bool? mute = null)
-    {
+    public static object SetUserVoiceSettings(string userId, float? left = null, float? right = null, int? volume = null, bool? mute = null) {
         object? pan = null;
 
         if (left.HasValue && right.HasValue)

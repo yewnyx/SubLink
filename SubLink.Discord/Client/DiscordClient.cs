@@ -276,151 +276,214 @@ internal class DiscordClient(ILogger logger) : IDisposable {
             _ => -1
         };
 
-    private void HandleRpcEvent(JsonElement evt) {
+    private void HandleRpcEvent(JsonElement msg) {
         try {
-            _logger.Debug("[{TAG}] Event received: {evt}", Platform.PlatformName, evt);
-            if (!evt.TryGetProperty("evt", out var evtNameEl)) return;
-            string evtName = evtNameEl.GetString() ?? string.Empty;
-            int evtCode = EventNameToInt(evtName);
+            _logger.Debug("[{TAG}] Message received: {msg}", Platform.PlatformName, msg);
 
-            switch (evtName) {
-                case "READY": {
-                    OnReady?.Invoke(this, new());
-                    return;
-                }
-                case "ERROR": {
-                    if (evt.TryGetProperty("data", out var err) && err.TryGetProperty("code", out var codeEl) && err.TryGetProperty("message", out var msgEl))
-                        OnError?.Invoke(this, new(codeEl.GetInt32(), msgEl.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "VOICE_CHANNEL_SELECT": {
-                    if (evt.TryGetProperty("data", out var vc) && vc.TryGetProperty("channel_id", out var cid))
-                        OnSelectedVoiceChannel?.Invoke(this, new(cid.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "VOICE_SETTINGS_UPDATE": {
-                    if (evt.TryGetProperty("data", out var vs))
-                        OnVoiceSettingsUpdate?.Invoke(this, new(
-                            vs.GetProperty("input").GetProperty("volume").GetSingle(),
-                            vs.GetProperty("output").GetProperty("volume").GetSingle(),
-                            vs.GetProperty("mode").GetProperty("type").GetString() ?? string.Empty,
-                            vs.GetProperty("mode").GetProperty("auto_threshold").GetBoolean(),
-                            vs.GetProperty("mode").GetProperty("threshold").GetSingle(),
-                            vs.GetProperty("mode").GetProperty("delay").GetSingle(),
-                            vs.GetProperty("automatic_gain_control").GetBoolean(),
-                            vs.GetProperty("echo_cancellation").GetBoolean(),
-                            vs.GetProperty("noise_suppression").GetBoolean(),
-                            vs.GetProperty("qos").GetBoolean(),
-                            vs.GetProperty("silence_warning").GetBoolean(),
-                            vs.GetProperty("deaf").GetBoolean(),
-                            vs.GetProperty("mute").GetBoolean()
-                        ));
-
-                    return;
-                }
-                case "VOICE_CONNECTION_STATUS": {
-                    if (evt.TryGetProperty("data", out var vcstat) && vcstat.TryGetProperty("state", out var stateEl)) {
-                        string state = stateEl.GetString() ?? string.Empty;
-                        OnVoiceStatusUpdate?.Invoke(this, new(state, VoiceStateToInt(state)));
-                    }
-
-                    return;
-                }
-                case "GUILD_STATUS": {
-                    if (evt.TryGetProperty("data", out var gs) && gs.TryGetProperty("guild", out var g) && g.TryGetProperty("id", out var gidElStatus))
-                        OnGuildStatus?.Invoke(this, new(gidElStatus.GetString() ?? string.Empty));
-
-                    return;
-
-                }
-                case "GUILD_CREATE": {
-                    if (evt.TryGetProperty("data", out var gc) && gc.TryGetProperty("id", out var gidc))
-                        OnGuildCreate?.Invoke(this, new(gidc.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "CHANNEL_CREATE": {
-                    if (evt.TryGetProperty("data", out var ch) && ch.TryGetProperty("id", out var cidEl) && ch.TryGetProperty("name", out var cnameEl))
-                        OnChannelCreate?.Invoke(this, new(
-                            cidEl.GetString() ?? string.Empty,
-                            cnameEl.GetString() ?? string.Empty
-                        ));
-
-                    return;
-                }
-                case "VOICE_STATE_CREATE": {
-                    if (evt.TryGetProperty("data", out var vsd) && vsd.TryGetProperty("user", out var usr) && usr.TryGetProperty("id", out var uid))
-                        OnVoiceStateCreate?.Invoke(this, new(uid.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "VOICE_STATE_UPDATE": {
-                    if (evt.TryGetProperty("data", out var vsd) && vsd.TryGetProperty("user", out var usr) && usr.TryGetProperty("id", out var uid))
-                        OnVoiceStateUpdate?.Invoke(this, new(uid.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "VOICE_STATE_DELETE": {
-                    if (evt.TryGetProperty("data", out var vsd) && vsd.TryGetProperty("user", out var usr) && usr.TryGetProperty("id", out var uid))
-                        OnVoiceStateDelete?.Invoke(this, new(uid.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "SPEAKING_START": {
-                    if (evt.TryGetProperty("data", out var sp) && sp.TryGetProperty("user_id", out var suid))
-                        OnStartSpeaking?.Invoke(this, new(suid.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "SPEAKING_STOP": {
-                    if (evt.TryGetProperty("data", out var sp) && sp.TryGetProperty("user_id", out var suid))
-                        OnStopSpeaking?.Invoke(this, new(suid.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "MESSAGE_CREATE": {
-                    if (evt.TryGetProperty("data", out var msg) && msg.TryGetProperty("message", out var m) && m.TryGetProperty("id", out var mid))
-                        OnMessageCreate?.Invoke(this, new(mid.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "MESSAGE_UPDATE": {
-                    if (evt.TryGetProperty("data", out var msg) && msg.TryGetProperty("message", out var m) && m.TryGetProperty("id", out var mid))
-                        OnMessageUpdate?.Invoke(this, new(mid.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "MESSAGE_DELETE": {
-                    if (evt.TryGetProperty("data", out var msg) && msg.TryGetProperty("message", out var m) && m.TryGetProperty("id", out var mid))
-                        OnMessageDelete?.Invoke(this, new(mid.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "NOTIFICATION_CREATE": {
-                    if (evt.TryGetProperty("data", out var noti) && noti.TryGetProperty("channel_id", out var nch))
-                        OnNotificationCreate?.Invoke(this, new(nch.GetString() ?? string.Empty));
-
-                    return;
-                }
-                case "ACTIVITY_JOIN": {
-                    OnActivityJoin?.Invoke(this, new());
-                    return;
-                }
-                case "ACTIVITY_SPECTATE": {
-                    OnActivitySpectate?.Invoke(this, new());
-                    return;
-                }
-                case "ACTIVITY_JOIN_REQUEST": {
-                    if (evt.TryGetProperty("data", out var aj) && aj.TryGetProperty("user", out var aju) && aju.TryGetProperty("id", out var ajuId))
-                        OnActivityJoinRequest?.Invoke(this, new(ajuId.GetString() ?? string.Empty));
-
-                    return;
-                }
+            if (!msg.TryGetProperty("cmd", out var commandNameEl)) {
+                _logger.Error($"Unsupported message: {JsonSerializer.Serialize(msg)}");
+                return;
             }
+
+            string commandName = commandNameEl.GetString() ?? string.Empty;
+
+            if (commandName.Equals("SUBSCRIBE", StringComparison.InvariantCultureIgnoreCase)) return;
+
+            if (!msg.TryGetProperty("evt", out var eventNameEl)) {
+                _logger.Error($"Unsupported message: {JsonSerializer.Serialize(msg)}");
+                return;
+            }
+
+            string eventName = eventNameEl.GetString() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(eventName))
+                HandleCommandResponse(commandName, msg);
+            else
+                HandleEvent(eventName, msg);
         } catch (Exception ex) {
             _logger.Warning("[{TAG}] Failed to handle RPC event: {ERROR}", Platform.PlatformName, ex.Message);
+        }
+    }
+
+    private void HandleCommandResponse(string commandName, JsonElement resp) {
+        switch (commandName) {
+            case "GET_VOICE_SETTINGS": {
+                if (resp.TryGetProperty("data", out var vs))
+                    OnVoiceSettingsUpdate?.Invoke(this, new(
+                        vs.GetProperty("input").GetProperty("volume").GetSingle(),
+                        vs.GetProperty("output").GetProperty("volume").GetSingle(),
+                        vs.GetProperty("mode").GetProperty("type").GetString() ?? string.Empty,
+                        vs.GetProperty("mode").GetProperty("auto_threshold").GetBoolean(),
+                        vs.GetProperty("mode").GetProperty("threshold").GetSingle(),
+                        vs.GetProperty("mode").GetProperty("delay").GetSingle(),
+                        vs.GetProperty("automatic_gain_control").GetBoolean(),
+                        vs.GetProperty("echo_cancellation").GetBoolean(),
+                        vs.GetProperty("noise_suppression").GetBoolean(),
+                        vs.GetProperty("qos").GetBoolean(),
+                        vs.GetProperty("silence_warning").GetBoolean(),
+                        vs.GetProperty("deaf").GetBoolean(),
+                        vs.GetProperty("mute").GetBoolean()
+                    ));
+
+                return;
+            }
+            case "GET_GUILD": {
+                if (resp.TryGetProperty("data", out var gs) && gs.TryGetProperty("guild", out var g) && g.TryGetProperty("id", out var gidElStatus))
+                    OnGuildStatus?.Invoke(this, new(gidElStatus.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "GET_SELECTED_VOICE_CHANNEL": {
+                if (resp.TryGetProperty("data", out var vc) && vc.TryGetProperty("channel_id", out var cid))
+                    OnSelectedVoiceChannel?.Invoke(this, new(cid.GetString() ?? string.Empty));
+
+                return;
+            }
+            default: return; // Ignore
+        }
+    }
+
+    private void HandleEvent(string eventName, JsonElement evt) {
+        int evtCode = EventNameToInt(eventName);
+
+        switch (eventName) {
+            case "READY": {
+                OnReady?.Invoke(this, new());
+                return;
+            }
+            case "ERROR": {
+                if (evt.TryGetProperty("data", out var err) && err.TryGetProperty("code", out var codeEl) && err.TryGetProperty("message", out var msgEl))
+                    OnError?.Invoke(this, new(codeEl.GetInt32(), msgEl.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "VOICE_CHANNEL_SELECT": {
+                if (evt.TryGetProperty("data", out var vc) && vc.TryGetProperty("channel_id", out var cid))
+                    OnSelectedVoiceChannel?.Invoke(this, new(cid.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "VOICE_SETTINGS_UPDATE": {
+                if (evt.TryGetProperty("data", out var vs))
+                    OnVoiceSettingsUpdate?.Invoke(this, new(
+                        vs.GetProperty("input").GetProperty("volume").GetSingle(),
+                        vs.GetProperty("output").GetProperty("volume").GetSingle(),
+                        vs.GetProperty("mode").GetProperty("type").GetString() ?? string.Empty,
+                        vs.GetProperty("mode").GetProperty("auto_threshold").GetBoolean(),
+                        vs.GetProperty("mode").GetProperty("threshold").GetSingle(),
+                        vs.GetProperty("mode").GetProperty("delay").GetSingle(),
+                        vs.GetProperty("automatic_gain_control").GetBoolean(),
+                        vs.GetProperty("echo_cancellation").GetBoolean(),
+                        vs.GetProperty("noise_suppression").GetBoolean(),
+                        vs.GetProperty("qos").GetBoolean(),
+                        vs.GetProperty("silence_warning").GetBoolean(),
+                        vs.GetProperty("deaf").GetBoolean(),
+                        vs.GetProperty("mute").GetBoolean()
+                    ));
+
+                return;
+            }
+            case "VOICE_CONNECTION_STATUS": {
+                if (evt.TryGetProperty("data", out var vcstat) && vcstat.TryGetProperty("state", out var stateEl)) {
+                    string state = stateEl.GetString() ?? string.Empty;
+                    OnVoiceStatusUpdate?.Invoke(this, new(state, VoiceStateToInt(state)));
+                }
+
+                return;
+            }
+            case "GUILD_STATUS": {
+                if (evt.TryGetProperty("data", out var gs) && gs.TryGetProperty("guild", out var g) && g.TryGetProperty("id", out var gidElStatus))
+                    OnGuildStatus?.Invoke(this, new(gidElStatus.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "GUILD_CREATE": {
+                if (evt.TryGetProperty("data", out var gc) && gc.TryGetProperty("id", out var gidc))
+                    OnGuildCreate?.Invoke(this, new(gidc.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "CHANNEL_CREATE": {
+                if (evt.TryGetProperty("data", out var ch) && ch.TryGetProperty("id", out var cidEl) && ch.TryGetProperty("name", out var cnameEl))
+                    OnChannelCreate?.Invoke(this, new(
+                        cidEl.GetString() ?? string.Empty,
+                        cnameEl.GetString() ?? string.Empty
+                    ));
+
+                return;
+            }
+            case "VOICE_STATE_CREATE": {
+                if (evt.TryGetProperty("data", out var vsd) && vsd.TryGetProperty("user", out var usr) && usr.TryGetProperty("id", out var uid))
+                    OnVoiceStateCreate?.Invoke(this, new(uid.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "VOICE_STATE_UPDATE": {
+                if (evt.TryGetProperty("data", out var vsd) && vsd.TryGetProperty("user", out var usr) && usr.TryGetProperty("id", out var uid))
+                    OnVoiceStateUpdate?.Invoke(this, new(uid.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "VOICE_STATE_DELETE": {
+                if (evt.TryGetProperty("data", out var vsd) && vsd.TryGetProperty("user", out var usr) && usr.TryGetProperty("id", out var uid))
+                    OnVoiceStateDelete?.Invoke(this, new(uid.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "SPEAKING_START": {
+                if (evt.TryGetProperty("data", out var sp) && sp.TryGetProperty("user_id", out var suid))
+                    OnStartSpeaking?.Invoke(this, new(suid.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "SPEAKING_STOP": {
+                if (evt.TryGetProperty("data", out var sp) && sp.TryGetProperty("user_id", out var suid))
+                    OnStopSpeaking?.Invoke(this, new(suid.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "MESSAGE_CREATE": {
+                if (evt.TryGetProperty("data", out var msg) && msg.TryGetProperty("message", out var m) && m.TryGetProperty("id", out var mid))
+                    OnMessageCreate?.Invoke(this, new(mid.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "MESSAGE_UPDATE": {
+                if (evt.TryGetProperty("data", out var msg) && msg.TryGetProperty("message", out var m) && m.TryGetProperty("id", out var mid))
+                    OnMessageUpdate?.Invoke(this, new(mid.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "MESSAGE_DELETE": {
+                if (evt.TryGetProperty("data", out var msg) && msg.TryGetProperty("message", out var m) && m.TryGetProperty("id", out var mid))
+                    OnMessageDelete?.Invoke(this, new(mid.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "NOTIFICATION_CREATE": {
+                if (evt.TryGetProperty("data", out var noti) && noti.TryGetProperty("channel_id", out var nch))
+                    OnNotificationCreate?.Invoke(this, new(nch.GetString() ?? string.Empty));
+
+                return;
+            }
+            case "ACTIVITY_JOIN": {
+                OnActivityJoin?.Invoke(this, new());
+                return;
+            }
+            case "ACTIVITY_SPECTATE": {
+                OnActivitySpectate?.Invoke(this, new());
+                return;
+            }
+            case "ACTIVITY_JOIN_REQUEST": {
+                if (evt.TryGetProperty("data", out var aj) && aj.TryGetProperty("user", out var aju) && aju.TryGetProperty("id", out var ajuId))
+                    OnActivityJoinRequest?.Invoke(this, new(ajuId.GetString() ?? string.Empty));
+
+                return;
+            }
+            default: {
+                _logger.Error($"Unsupported event: {JsonSerializer.Serialize(evt)}");
+                return;
+            }
         }
     }
 }

@@ -96,7 +96,7 @@ The result is returned in the `ReactToVoiceSettingsUpdate` event.
 - Returns: Nothing
 
 ```csharp
-discord.RequestSelectedVoiceChannel();
+discord.RequestVoiceSettings();
 ```
 
 [Back To Legend](#Legend)
