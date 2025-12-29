@@ -64,8 +64,8 @@ public class Platform : IPlatform {
       "channel:read:redemptions",
       "channel:read:subscriptions",
       "channel:read:vips",
-      "chat:edit",
-      "chat:read"
+      "user:read:chat",
+      "moderator:read:followers"
     ]
   }
 }

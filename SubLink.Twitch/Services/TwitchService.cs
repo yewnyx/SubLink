@@ -65,13 +65,13 @@ internal sealed partial class TwitchService {
         
         _api = new TwitchAPI();
         var clientOptions = new ClientOptions {
-            MessagesAllowedInPeriod = 750,
-            ThrottlingPeriod = TimeSpan.FromSeconds(30),
+            //MessagesAllowedInPeriod = 750,
+            //ThrottlingPeriod = TimeSpan.FromSeconds(30),
         };
         var customClient = new WebSocketClient(clientOptions);
         _client = new TwitchClient(customClient);
-        _client.OnJoinedChannel += OnJoinedChannel;
-        _client.OnMessageReceived += OnMessageReceived;
+        //_client.OnJoinedChannel += OnJoinedChannel;
+        //_client.OnMessageReceived += OnMessageReceived;
 
         _eventSub = eventSub ?? throw new ArgumentNullException(nameof(eventSub));
         
@@ -92,24 +92,25 @@ internal sealed partial class TwitchService {
         _api.Settings.AccessToken = _settings.AccessToken;
         _api.Settings.ClientId = _settings.ClientId;
         _api.Settings.Scopes = [
-            AuthScopes.Helix_Bits_Read,
-            AuthScopes.Chat_Read,
-            AuthScopes.Chat_Edit,
-            AuthScopes.Helix_Channel_Manage_Redemptions,
-            AuthScopes.Helix_Channel_Read_Redemptions,
-            AuthScopes.Helix_Channel_Read_Predictions,
-            AuthScopes.Helix_Channel_Read_Hype_Train,
-            AuthScopes.Helix_Channel_Manage_Polls,
-            AuthScopes.Helix_Channel_Read_Polls,
-            AuthScopes.Helix_Channel_Read_VIPs,
+            AuthScopes.Bits_Read,
+            AuthScopes.Channel_Manage_Polls,
+            AuthScopes.Channel_Manage_Redemptions,
+            AuthScopes.Channel_Read_Hype_Train,
+            AuthScopes.Channel_Read_Predictions,
+            AuthScopes.Channel_Read_Redemptions,
+            AuthScopes.Channel_Read_Subscriptions,
+            AuthScopes.Channel_Read_Polls,
+            AuthScopes.Channel_Read_VIPs,
+            AuthScopes.Moderator_Read_Followers,
+            AuthScopes.User_Read_Chat,
         ];
         
         await ValidateOrUpdateAccessTokenAsync();
         // TODO: eventually, embedding a webview is preferable - that or using a server after all
 
-        var credentials = new ConnectionCredentials(ChannelName, _settings.AccessToken);
+        var credentials = new ConnectionCredentials(ChannelName!, _settings.AccessToken);
         _client.Initialize(credentials, ChannelName);
-        _client.Connect();
+        await _client.ConnectAsync();
 
         if (await _eventSub.ConnectAsync()) {
             _logger.Information("[{TAG}] Connected to EventSub", Platform.PlatformName);
@@ -130,8 +131,9 @@ internal sealed partial class TwitchService {
                 SubscribeAsync("channel.channel_points_custom_reward_redemption.update"),
                 SubscribeAsync("channel.update"),
                 SubscribeAsync("channel.bits.use"),
+                SubscribeAsync("channel.chat.message"),
                 SubscribeAsync("channel.cheer"),
-                //SubscribeAsync("channel.follow"),
+                SubscribeAsync("channel.follow"),
                 SubscribeAsync("channel.hype_train.begin"),
                 SubscribeAsync("channel.hype_train.end"),
                 SubscribeAsync("channel.hype_train.progress"),
@@ -208,6 +210,8 @@ internal sealed partial class TwitchService {
 
     private Dictionary<string, string> SubscriptionTypeToCondition(string subType) =>
         subType switch {
+            "channel.chat.message" => new() { { "broadcaster_user_id", ChannelId! }, { "user_id", ChannelId! } },
+            "channel.follow" => new() { { "broadcaster_user_id", ChannelId! }, { "moderator_user_id", ChannelId! } },
             "channel.raid" => new() { { "to_broadcaster_user_id", ChannelId! } },
             _ => new() { { "broadcaster_user_id", ChannelId! } },
         };
@@ -223,17 +227,17 @@ internal sealed partial class TwitchService {
             var url = _api.Auth.GetAuthorizationCodeUrl(
                 redirectUri,
                 [
-                    AuthScopes.Chat_Read,
-                    AuthScopes.Chat_Edit,
-                    AuthScopes.Helix_Bits_Read,
-                    AuthScopes.Helix_Channel_Read_Subscriptions,
-                    AuthScopes.Helix_Channel_Manage_Redemptions,
-                    AuthScopes.Helix_Channel_Read_Redemptions,
-                    AuthScopes.Helix_Channel_Read_Predictions,
-                    AuthScopes.Helix_Channel_Read_Hype_Train,
-                    AuthScopes.Helix_Channel_Manage_Polls,
-                    AuthScopes.Helix_Channel_Read_Polls,
-                    AuthScopes.Helix_Channel_Read_VIPs,
+                    AuthScopes.Bits_Read,
+                    AuthScopes.Channel_Manage_Polls,
+                    AuthScopes.Channel_Manage_Redemptions,
+                    AuthScopes.Channel_Read_Hype_Train,
+                    AuthScopes.Channel_Read_Predictions,
+                    AuthScopes.Channel_Read_Redemptions,
+                    AuthScopes.Channel_Read_Subscriptions,
+                    AuthScopes.Channel_Read_Polls,
+                    AuthScopes.Channel_Read_VIPs,
+                    AuthScopes.Moderator_Read_Followers,
+                    AuthScopes.User_Read_Chat,
                 ],
                 state: state,
                 clientId: _settings.ClientId);

@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
-using TwitchLib.Api.Helix;
-using TwitchLib.Client.Events;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TwitchLib.Client.Enums;
+using TwitchLib.Client.Models;
 using TwitchLib.EventSub.Core.EventArgs.Channel;
 using TwitchLib.EventSub.Core.EventArgs.Stream;
 using TwitchLib.EventSub.Websockets.Core.EventArgs;
@@ -13,8 +16,9 @@ internal sealed partial class TwitchService {
         _eventSub.WebsocketDisconnected += OnWebsocketDisconnected;
         _eventSub.WebsocketReconnected += OnWebsocketReconnected;
         _eventSub.ChannelBitsUse += OnChannelBitsUse;
+        _eventSub.ChannelChatMessage += OnChannelChatMessage;
         _eventSub.ChannelCheer += OnChannelCheer;
-        //_eventSub.ChannelFollow += OnChannelFollow;
+        _eventSub.ChannelFollow += OnChannelFollow;
         _eventSub.ChannelHypeTrainBeginV2 += OnChannelHypeTrainBegin;
         _eventSub.ChannelHypeTrainEndV2 += OnChannelHypeTrainEnd;
         _eventSub.ChannelHypeTrainProgressV2 += OnChannelHypeTrainProgress;
@@ -38,6 +42,7 @@ internal sealed partial class TwitchService {
         _eventSub.StreamOnline += OnStreamOnline;
     }
 
+    /*
     private void OnJoinedChannel(object? sender, OnJoinedChannelArgs e) {
         Task.Run(async () => {
             if (_rules is TwitchRules { OnJoinedChannel: { } callback })
@@ -51,10 +56,89 @@ internal sealed partial class TwitchService {
                 await callback(e.ChatMessage);
         });
     }
+    */
 
     private async Task OnChannelBitsUse(object? sender, ChannelBitsUseArgs e) {
         if (_rules is TwitchRules { OnChannelBitsUse: { } callback })
             await callback(e.Payload.Event);
+    }
+
+    private async Task OnChannelChatMessage(object? sender, ChannelChatMessageArgs e) {
+        var modernMsg = e.Payload.Event;
+
+        if (_rules is TwitchRules { OnChatMessage: { } callback })
+            await callback(modernMsg);
+
+        UserType modernMsgToUserType() {
+            if (modernMsg.IsBroadcaster)
+                return UserType.Broadcaster;
+            if (modernMsg.IsModerator)
+                return UserType.Moderator;
+            if (modernMsg.IsStaff)
+                return UserType.Staff;
+            return UserType.Viewer;
+        }
+
+        int bits = modernMsg.Cheer?.Bits ?? 0;
+
+        double ConvertBitsToUsd() {
+            
+            if (bits < 1500)
+                return (double)bits / 100.0 * 1.4;
+
+            if (bits < 5000)
+                return (double)bits / 1500.0 * 19.95;
+
+            if (bits < 10000)
+                return (double)bits / 5000.0 * 64.4;
+
+            if (bits < 25000)
+                return (double)bits / 10000.0 * 126.0;
+
+            return (double)bits / 25000.0 * 308.0;
+        }
+
+        var subBadge = modernMsg.Badges.FirstOrDefault(x => x.SetId.Equals("subscriber", StringComparison.InvariantCultureIgnoreCase));
+        var subBadgeInfo = subBadge?.Info ?? "0";
+        var cheerBadge = modernMsg.Badges.FirstOrDefault(x => x.SetId.Contains("cheer", StringComparison.InvariantCultureIgnoreCase));
+        var cheerBadgeInfo = cheerBadge?.Info ?? "0";
+        var badges = modernMsg.Badges.Select(x => new KeyValuePair<string, string>(x.SetId, x.Info)).ToList();
+
+        var udFlags = UserDetails.None;
+        if (modernMsg.IsModerator) udFlags |= UserDetails.Moderator;
+        if (modernMsg.IsStaff) udFlags |= UserDetails.Staff;
+        if (modernMsg.IsSubscriber) udFlags |= UserDetails.Subscriber;
+        if (modernMsg.IsVip) udFlags |= UserDetails.Vip;
+        if (modernMsg.Badges.Any(x => x.SetId.Contains("turbo", StringComparison.InvariantCultureIgnoreCase)))
+            udFlags |= UserDetails.Turbo;
+        if (modernMsg.Badges.Any(x => x.SetId.Contains("partner", StringComparison.InvariantCultureIgnoreCase)))
+            udFlags |= UserDetails.Partner;
+
+        if (_rules is TwitchRules { OnMessageReceived: { } legacyCallback })
+            await legacyCallback(new(
+                _client.TwitchUsername ?? "SubLink",
+                modernMsg.ChatterUserId,
+                modernMsg.ChatterUserLogin,
+                modernMsg.ChatterUserName,
+                modernMsg.Color,
+                new("", modernMsg.Message.Text),
+                modernMsg.Message.Text,
+                modernMsgToUserType(),
+                modernMsg.SourceBroadcasterUserName ?? modernMsg.BroadcasterUserName,
+                modernMsg.MessageId,
+                int.Parse(string.IsNullOrWhiteSpace(subBadgeInfo) ? "0" : subBadgeInfo),
+                "",
+                ChannelId!.Equals(modernMsg.ChatterUserId, StringComparison.InvariantCultureIgnoreCase),
+                modernMsg.IsBroadcaster,
+                Noisy.NotSet,
+                modernMsg.Message.Text,
+                modernMsg.Message.Text,
+                badges,
+                new(int.Parse(string.IsNullOrWhiteSpace(cheerBadgeInfo) ? "0" : cheerBadgeInfo)),
+                bits,
+                ConvertBitsToUsd(),
+                new UserDetail(udFlags)
+            ));
     }
 
     private async Task OnChannelCheer(object? sender, ChannelCheerArgs e) {
@@ -62,12 +146,10 @@ internal sealed partial class TwitchService {
             await callback(e.Payload.Event);
     }
 
-    /*
     private async Task OnChannelFollow(object? sender, ChannelFollowArgs e) {
         if (_rules is TwitchRules { OnFollow: { } callback })
             await callback(e.Payload.Event);
     }
-    */
 
     private async Task OnChannelHypeTrainBegin(object? sender, ChannelHypeTrainBeginV2Args e) {
         if (_rules is TwitchRules { OnHypeTrainBegin: { } callback })

@@ -16,13 +16,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Basic.Reference.Assemblies.Net80" Version="1.8.3" />
+      <PackageReference Include="Basic.Reference.Assemblies.Net80" Version="1.8.*" />
       <PackageReference Include="Figgle" Version="0.6.5" />
       <PackageReference Include="Figgle.Fonts" Version="0.6.5" />
-      <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.14.0" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.14.0" />
-      <PackageReference Include="System.Text.Json" Version="9.0.*" />
+      <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="5.0.0" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="5.0.0" />
+      <PackageReference Include="System.Text.Json" Version="10.0.*" />
       <PackageReference Include="VRCOscLib" Version="1.6.0" />
       <PackageReference Include="VRChat.OSCQuery" Version="0.0.7" />
 

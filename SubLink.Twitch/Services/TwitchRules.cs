@@ -14,6 +14,7 @@ public sealed class TwitchRules : IPlatformRules {
     internal Func<ChatMessage, Task>? OnMessageReceived;
     internal Func<ChannelBitsUse, Task>? OnChannelBitsUse;
     internal Func<ChannelCheer, Task>? OnCheer;
+    internal Func<ChannelChatMessage, Task>? OnChatMessage;
     internal Func<ChannelFollow, Task>? OnFollow;
     internal Func<HypeTrainBeginV2, Task>? OnHypeTrainBegin;
     internal Func<HypeTrainEndV2, Task>? OnHypeTrainEnd;
