@@ -38,6 +38,7 @@ twitch.ReactToJoinedChannel(async (channel, botUsername) => {
     logger.Information("User {BotUsername} joined channel {ChannelName}", botUsername, channel);
 });
 
+/* DEPRECATED ; Please use `ReactToChatMessage` instead */
 twitch.ReactToMessageReceived(async chatMessage => {
     if ("yewnyx".Equals(chatMessage.Username, StringComparison.InvariantCultureIgnoreCase)) {
         OscParameter.SendAvatarParameter("JacketToggle", false);
@@ -46,6 +47,18 @@ twitch.ReactToMessageReceived(async chatMessage => {
     logger.Information(
         "Username: {UserName}, Display name: {DisplayName}, User Type: {UserType}, Message: {Message}",
         chatMessage.Username, chatMessage.DisplayName, chatMessage.UserType, chatMessage.Message);
+});
+
+twitch.ReactToChatMessage(async message => {
+    if ("yewnyx".Equals(message.ChatterUserLogin, StringComparison.InvariantCultureIgnoreCase)) {
+        OscParameter.SendAvatarParameter("JacketToggle", false);
+        OscParameter.SendAvatarParameter("Sus", true);
+    }
+    logger.Information(
+        "Username: {UserLogin}, Display name: {UserName}, Broadcaster: {IsBroadcaster}, Staff: {IsStaff}, Moderator: {IsModerator}, Vip: {IsVip}, Subscriber: {IsSubscriber}, Message: {Text}",
+        message.ChatterUserLogin, message.ChatterUserName,
+        message.IsBroadcaster, message.IsStaff, message.IsModerator, message.IsVip, message.IsSubscriber,
+        message.Message.Text);
 });
 
 twitch.ReactToChannelBitsUse(async channelBitsUse => {

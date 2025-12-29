@@ -45,6 +45,8 @@ public sealed class TwitchRules : IPlatformRules {
 
     public void ReactToCheer(Func<ChannelCheer, Task> with) { OnCheer = with; }
 
+    public void ReactToChatMessage(Func<ChannelChatMessage, Task> with) { OnChatMessage = with; }
+
     public void ReactToFollow(Func<ChannelFollow, Task> with) { OnFollow = with; }
 
     public void ReactToHypeTrainBegin(Func<HypeTrainBeginV2, Task> with) { OnHypeTrainBegin = with; }
